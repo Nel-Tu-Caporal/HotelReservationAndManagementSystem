@@ -71,9 +71,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 40);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(258, 23);
+            this.label1.Size = new System.Drawing.Size(413, 23);
             this.label1.TabIndex = 0;
-            this.label1.Text = "© 2025 All rights reserved.";
+            this.label1.Text = "© 2025 All rights reserved Nel-Tu-Caporal.";
             // 
             // groupBox1
             // 
@@ -92,6 +92,7 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Please LogIn First";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // textBoxPassword
             // 
@@ -199,18 +200,19 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::HotelReservationAndManagementSystem.Properties.Resources.reception;
-            this.pictureBox1.Location = new System.Drawing.Point(840, 187);
+            this.pictureBox1.Location = new System.Drawing.Point(773, 154);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(471, 368);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // PictureBoxMinimize
             // 
             this.PictureBoxMinimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.PictureBoxMinimize.Image = global::HotelReservationAndManagementSystem.Properties.Resources.minimize_btn;
-            this.PictureBoxMinimize.Location = new System.Drawing.Point(1219, 7);
+            this.PictureBoxMinimize.Location = new System.Drawing.Point(1276, 7);
             this.PictureBoxMinimize.Name = "PictureBoxMinimize";
             this.PictureBoxMinimize.Size = new System.Drawing.Size(36, 36);
             this.PictureBoxMinimize.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -224,7 +226,7 @@
             this.PictureBoxClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.PictureBoxClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PictureBoxClose.Image = global::HotelReservationAndManagementSystem.Properties.Resources.exit_btn;
-            this.PictureBoxClose.Location = new System.Drawing.Point(1265, 7);
+            this.PictureBoxClose.Location = new System.Drawing.Point(1322, 7);
             this.PictureBoxClose.Name = "PictureBoxClose";
             this.PictureBoxClose.Size = new System.Drawing.Size(35, 35);
             this.PictureBoxClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -238,7 +240,7 @@
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(860, 506);
+            this.label2.Location = new System.Drawing.Point(882, 483);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(451, 49);
             this.label2.TabIndex = 4;
@@ -249,12 +251,11 @@
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Century Gothic", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(860, 558);
+            this.label3.Location = new System.Drawing.Point(893, 532);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(440, 49);
             this.label3.TabIndex = 5;
             this.label3.Text = "Management System";
-            
             // 
             // FormLogIn
             // 
@@ -276,7 +277,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "FormLogIn";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "FormLogIn";
+            this.Text = "Hotel_Reservation_and_Management_System |  Log In";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FormLogIn_Load);
             this.panel1.ResumeLayout(false);

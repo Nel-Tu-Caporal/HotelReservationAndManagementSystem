@@ -36,9 +36,6 @@
     <ApplicationIcon>hotel.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AMRConnector">
-      <HintPath>..\..\..\..\Downloads\AMRConnector.dll</HintPath>
-    </Reference>
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
       <HintPath>..\packages\BouncyCastle.Cryptography.2.6.2\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
     </Reference>
@@ -101,39 +98,60 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\FormDashboard.cs">
+    <Compile Include="Form\FormDashboard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Model\FormDashboard.Designer.cs">
+    <Compile Include="Form\FormDashboard.Designer.cs">
       <DependentUpon>FormDashboard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\FormLogIn.cs">
+    <Compile Include="Form\FormLogIn.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Model\FormLogIn.Designer.cs">
+    <Compile Include="Form\FormLogIn.Designer.cs">
       <DependentUpon>FormLogIn.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="References\DBConnector1.cs" />
-    <EmbeddedResource Include="Model\FormLogIn.resx">
+    <Compile Include="DAL\DBConnector1.cs" />
+    <Compile Include="User Control\UserControlClient.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User Control\UserControlClient.Designer.cs">
+      <DependentUpon>UserControlClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User Control\UserControlSetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User Control\UserControlSetting.Designer.cs">
+      <DependentUpon>UserControlSetting.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Form\FormDashboard.resx">
+      <DependentUpon>FormDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FormLogIn.resx">
       <DependentUpon>FormLogIn.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
+    <EmbeddedResource Include="User Control\UserControlClient.resx">
+      <DependentUpon>UserControlClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User Control\UserControlSetting.resx">
+      <DependentUpon>UserControlSetting.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -145,11 +163,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="hotel.ico" />
+    <None Include="Resources\download.png" />
+    <None Include="Resources\images.png" />
+    <None Include="Resources\yeah1.png" />
+    <None Include="Resources\yeah.png" />
+    <None Include="Resources\White House2.png" />
+    <None Include="Resources\White House1.png" />
+    <None Include="Resources\White House.png" />
+    <None Include="Resources\Profile Picture FB.jpg" />
     <None Include="Resources\reception.png" />
     <None Include="Resources\eye!.jpg" />
     <None Include="Resources\eye.png" />
     <None Include="Resources\minimize_btn.png" />
     <None Include="Resources\exit_btn.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,4 @@
-﻿using AMRConnector;
+﻿
 using HotelReservationAndManagementSystem.References;
 using System;
 using System.Collections.Generic;
@@ -62,7 +62,11 @@ namespace HotelReservationAndManagementSystem
             {
                 if (check)
                 {
-                    FormDashboard fd = new FormDashboard();
+                    Hotel fd = new Hotel();
+                    fd.Username = textBoxUserName.Text;
+                    textBoxUserName.Clear();
+                    textBoxPassword.Clear();
+
                     fd.Show();
                 }
                 else
@@ -95,6 +99,7 @@ namespace HotelReservationAndManagementSystem
         private void labelUserName_Click(object sender, EventArgs e)
         {
 
+
         }
 
         private void pictureBoxShow_Click(object sender, EventArgs e)
@@ -121,6 +126,14 @@ namespace HotelReservationAndManagementSystem
             pictureBoxShow.Show();
         }
 
-        
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

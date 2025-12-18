@@ -32,25 +32,57 @@ namespace HotelReservationAndManagementSystem.References
 
         public bool IsValidNamePass(string Username, string Password)
         {
+            // Fix: Initialize 'check' outside the try block so it is accessible for 'return'
+            bool check = false;
+
             try
             {
-                string cmdText = "SELECT User_Name, User_Password FROM User_Table WHERE User_Name = '" + Username + "' AND User_Password = '" + Password + "'";
+                // Use parameters for security (SQL Injection prevention)
+                string cmdText = "SELECT User_Name FROM User_Table WHERE User_Name = @Username AND User_Password = @Password";
+
+                // Get the connection object
                 SqlConnection connection = GetConnection();
-                SqlCommand selectCommand = new SqlCommand(cmdText, connection);
-                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(selectCommand);
-                DataTable dataTable = new DataTable();
-                sqlDataAdapter.Fill(dataTable);
-                connection.Close();
-                if (dataTable.Rows.Count > 0)
+
+                try // Inner try block (for database operations)
                 {
-                    check = true;
+                    // Create the command with the parameterized query
+                    SqlCommand selectCommand = new SqlCommand(cmdText, connection);
+
+                    // Add parameters and their values safely
+                    selectCommand.Parameters.AddWithValue("@Username", Username);
+                    selectCommand.Parameters.AddWithValue("@Password", Password);
+
+                    // Use SqlDataAdapter to fill a DataTable
+                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(selectCommand);
+                    DataTable dataTable = new DataTable();
+                    sqlDataAdapter.Fill(dataTable);
+
+                    // Check if any rows were returned
+                    if (dataTable.Rows.Count > 0)
+                    {
+                        check = true;
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    // Display error message for SQL issues
+                    MessageBox.Show("Error! \n" + ex.ToString(), "Username and Password", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+                finally
+                {
+                    // Ensure connection is closed even if an error occurs
+                    if (connection != null && connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
                 }
             }
-            catch (SqlException ex)
+            catch // Outer catch block (optional, but needed if you keep the outer try)
             {
-                MessageBox.Show("Error! \n" + ex.ToString(), "Username and Password", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                // Add specific handling for non-SQL errors here if needed
             }
 
+            // Now 'check' is accessible here
             return check;
         }
 
