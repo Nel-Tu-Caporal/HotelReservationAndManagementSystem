@@ -46,7 +46,7 @@
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Client_Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtBoxSearchPhone = new System.Windows.Forms.TextBox();
             this.lblPhone = new System.Windows.Forms.Label();
             this.lblSearchClient = new System.Windows.Forms.Label();
@@ -232,14 +232,15 @@
             this.Column2,
             this.Column3,
             this.Column4,
-            this.Client_Address});
+            this.Column5});
             this.dataGridViewClient.Location = new System.Drawing.Point(39, 117);
             this.dataGridViewClient.Name = "dataGridViewClient";
             this.dataGridViewClient.ReadOnly = true;
             this.dataGridViewClient.RowHeadersWidth = 62;
             this.dataGridViewClient.RowTemplate.Height = 28;
-            this.dataGridViewClient.Size = new System.Drawing.Size(944, 248);
+            this.dataGridViewClient.Size = new System.Drawing.Size(826, 248);
             this.dataGridViewClient.TabIndex = 9;
+            this.dataGridViewClient.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewClient_CellClick);
             this.dataGridViewClient.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewClient_CellContentClick);
             // 
             // Column1
@@ -268,18 +269,19 @@
             // 
             // Column4
             // 
-            this.Column4.DataPropertyName = "Client_PhoneNo";
+            this.Column4.DataPropertyName = "Client_Phone";
             this.Column4.HeaderText = "Phone no.";
             this.Column4.MinimumWidth = 8;
             this.Column4.Name = "Column4";
             this.Column4.ReadOnly = true;
             // 
-            // Client_Address
+            // Column5
             // 
-            this.Client_Address.HeaderText = "Address";
-            this.Client_Address.MinimumWidth = 8;
-            this.Client_Address.Name = "Client_Address";
-            this.Client_Address.ReadOnly = true;
+            this.Column5.DataPropertyName = "Client_Address";
+            this.Column5.HeaderText = "Address";
+            this.Column5.MinimumWidth = 8;
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
             // 
             // txtBoxSearchPhone
             // 
@@ -477,11 +479,6 @@
         private System.Windows.Forms.TextBox txtBoxSearchPhone;
         private System.Windows.Forms.Label lblPhone;
         private System.Windows.Forms.Label lblSearchClient;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Client_Address;
         private System.Windows.Forms.TextBox txtBoxAddress1;
         private System.Windows.Forms.Label lblAddress1;
         private System.Windows.Forms.TextBox txtBoxPhone1;
@@ -493,5 +490,10 @@
         private System.Windows.Forms.Label lblUpdateClient;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
     }
 }

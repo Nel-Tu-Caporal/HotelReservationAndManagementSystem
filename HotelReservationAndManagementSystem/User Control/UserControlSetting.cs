@@ -165,6 +165,7 @@ namespace HotelReservationAndManagementSystem.User_Control
                 ID = row.Cells[0].Value.ToString();
                 txtBoxUserName1.Text = row.Cells[1].Value.ToString();
                 txtBoxPassword1.Text = row.Cells[2].Value.ToString(); 
+                
             }
         }
 

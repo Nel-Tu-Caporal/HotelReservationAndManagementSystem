@@ -42,8 +42,8 @@ namespace HotelReservationAndManagementSystem.User_Control
             txtBoxLastName1.Clear();
             txtBoxPhone1.Clear();
             txtBoxAddress1.Clear();
-            ID = "";
-            
+            ID = ""
+            ;
         }
 
         private void tabPageAddClient_Click(object sender, EventArgs e)
@@ -123,7 +123,10 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void txtBoxSearchPhone_TextChanged(object sender, EventArgs e)
         {
-            db.DisplayAndSearch("SELECT * FROM User_Table WHERE Client_Phone LIKE '%" + txtBoxSearchPhone.Text + "%'", dataGridViewClient);
+            db.DisplayAndSearch(
+    "SELECT * FROM Client_Table WHERE Client_Phone LIKE '%" + txtBoxSearchPhone.Text + "%'",
+    dataGridViewClient
+);
         }
 
         private void tabControlClient_SelectedIndexChanged(object sender, EventArgs e)
@@ -161,14 +164,15 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void tabPageSearchClient_Enter(object sender, EventArgs e)
         {
-            db.DisplayAndSearch("SELECT * FROM User_Table", dataGridViewClient);
+            db.DisplayAndSearch("SELECT * FROM Client_Table",dataGridViewClient);
         }
 
         private void dataGridViewClient_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
+           
+            
         }
-
+        
         private void tabPageSearchClient_Leave(object sender, EventArgs e)
         {
             txtBoxPhoneNumber.Clear();
@@ -209,7 +213,7 @@ namespace HotelReservationAndManagementSystem.User_Control
                     DialogResult result = MessageBox.Show("Are you want to delete this client?", "Client delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (DialogResult.Yes == result)
                     {
-                        check = db.DeleteUser(ID);
+                        check = db.DeleteClient(ID);
                         if (check)
                             Clear1();
 
@@ -224,6 +228,21 @@ namespace HotelReservationAndManagementSystem.User_Control
         private void tabPageClientDeleteUpdate_Leave(object sender, EventArgs e)
         {
             Clear1();
+        }
+
+        private void dataGridViewClient_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dataGridViewClient.Rows[e.RowIndex];
+
+                ID = row.Cells[0].Value?.ToString();
+
+                txtBoxFirstName1.Text = row.Cells[1].Value?.ToString();
+                txtBoxLastName1.Text = row.Cells[2].Value?.ToString();
+                txtBoxPhone1.Text = row.Cells[3].Value?.ToString();
+                txtBoxAddress1.Text = row.Cells[4].Value?.ToString();
+            }
         }
     }
 }
