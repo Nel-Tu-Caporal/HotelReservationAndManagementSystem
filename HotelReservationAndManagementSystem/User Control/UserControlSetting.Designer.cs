@@ -37,13 +37,14 @@
             this.lblUserName = new System.Windows.Forms.Label();
             this.labelAddUserSetting = new System.Windows.Forms.Label();
             this.tabPageSearchUSer = new System.Windows.Forms.TabPage();
-            this.dataGridViewUser = new System.Windows.Forms.DataGridView();
+            this.dataGridViewRoom = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textBoxSearchUserName = new System.Windows.Forms.TextBox();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.textBoxSearchRoom = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.lblSearchUser = new System.Windows.Forms.Label();
+            this.lblSearchRoom = new System.Windows.Forms.Label();
             this.tabPageUpdateAndDeleteUser = new System.Windows.Forms.TabPage();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
@@ -55,7 +56,7 @@
             this.tabControlUser.SuspendLayout();
             this.tabPageAddUser.SuspendLayout();
             this.tabPageSearchUSer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUser)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRoom)).BeginInit();
             this.tabPageUpdateAndDeleteUser.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -152,10 +153,10 @@
             // 
             // tabPageSearchUSer
             // 
-            this.tabPageSearchUSer.Controls.Add(this.dataGridViewUser);
-            this.tabPageSearchUSer.Controls.Add(this.textBoxSearchUserName);
+            this.tabPageSearchUSer.Controls.Add(this.dataGridViewRoom);
+            this.tabPageSearchUSer.Controls.Add(this.textBoxSearchRoom);
             this.tabPageSearchUSer.Controls.Add(this.label1);
-            this.tabPageSearchUSer.Controls.Add(this.lblSearchUser);
+            this.tabPageSearchUSer.Controls.Add(this.lblSearchRoom);
             this.tabPageSearchUSer.Location = new System.Drawing.Point(4, 4);
             this.tabPageSearchUSer.Name = "tabPageSearchUSer";
             this.tabPageSearchUSer.Padding = new System.Windows.Forms.Padding(3);
@@ -166,58 +167,67 @@
             this.tabPageSearchUSer.Enter += new System.EventHandler(this.tabPageSearchUSer_Enter);
             this.tabPageSearchUSer.Leave += new System.EventHandler(this.tabPageSearchUSer_Leave);
             // 
-            // dataGridViewUser
+            // dataGridViewRoom
             // 
-            this.dataGridViewUser.AllowUserToAddRows = false;
-            this.dataGridViewUser.AllowUserToDeleteRows = false;
-            this.dataGridViewUser.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.dataGridViewUser.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewUser.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewUser.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewRoom.AllowUserToAddRows = false;
+            this.dataGridViewRoom.AllowUserToDeleteRows = false;
+            this.dataGridViewRoom.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.dataGridViewRoom.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewRoom.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewRoom.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
             this.Column2,
-            this.Column3});
-            this.dataGridViewUser.Location = new System.Drawing.Point(6, 105);
-            this.dataGridViewUser.Name = "dataGridViewUser";
-            this.dataGridViewUser.ReadOnly = true;
-            this.dataGridViewUser.RowHeadersWidth = 62;
-            this.dataGridViewUser.RowTemplate.Height = 28;
-            this.dataGridViewUser.Size = new System.Drawing.Size(824, 248);
-            this.dataGridViewUser.TabIndex = 5;
-            this.dataGridViewUser.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewUser_CellClick);
-            this.dataGridViewUser.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewUser_CellContentClick);
+            this.Column3,
+            this.Column4});
+            this.dataGridViewRoom.Location = new System.Drawing.Point(6, 105);
+            this.dataGridViewRoom.Name = "dataGridViewRoom";
+            this.dataGridViewRoom.ReadOnly = true;
+            this.dataGridViewRoom.RowHeadersWidth = 62;
+            this.dataGridViewRoom.RowTemplate.Height = 28;
+            this.dataGridViewRoom.Size = new System.Drawing.Size(824, 248);
+            this.dataGridViewRoom.TabIndex = 5;
+            this.dataGridViewRoom.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewUser_CellClick);
+            this.dataGridViewRoom.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewUser_CellContentClick);
             // 
             // Column1
             // 
-            this.Column1.DataPropertyName = "User_ID";
-            this.Column1.HeaderText = "ID";
+            this.Column1.DataPropertyName = "Room_Number";
+            this.Column1.HeaderText = "No.";
             this.Column1.MinimumWidth = 8;
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
             // 
             // Column2
             // 
-            this.Column2.DataPropertyName = "User_Name";
-            this.Column2.HeaderText = "Username";
+            this.Column2.DataPropertyName = "Room_Type";
+            this.Column2.HeaderText = "Type";
             this.Column2.MinimumWidth = 8;
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
             // 
             // Column3
             // 
-            this.Column3.DataPropertyName = "User_Password";
-            this.Column3.HeaderText = "Password";
+            this.Column3.DataPropertyName = "Room_Phone";
+            this.Column3.HeaderText = "Phone";
             this.Column3.MinimumWidth = 8;
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
             // 
-            // textBoxSearchUserName
+            // Column4
             // 
-            this.textBoxSearchUserName.Location = new System.Drawing.Point(104, 56);
-            this.textBoxSearchUserName.Name = "textBoxSearchUserName";
-            this.textBoxSearchUserName.Size = new System.Drawing.Size(254, 26);
-            this.textBoxSearchUserName.TabIndex = 4;
-            this.textBoxSearchUserName.TextChanged += new System.EventHandler(this.textBoxSearchUserName_TextChanged);
+            this.Column4.DataPropertyName = "Room_isFree";
+            this.Column4.HeaderText = "isFree?";
+            this.Column4.MinimumWidth = 8;
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            // 
+            // textBoxSearchRoom
+            // 
+            this.textBoxSearchRoom.Location = new System.Drawing.Point(104, 56);
+            this.textBoxSearchRoom.Name = "textBoxSearchRoom";
+            this.textBoxSearchRoom.Size = new System.Drawing.Size(254, 26);
+            this.textBoxSearchRoom.TabIndex = 4;
+            this.textBoxSearchRoom.TextChanged += new System.EventHandler(this.textBoxSearchUserName_TextChanged);
             // 
             // label1
             // 
@@ -228,16 +238,17 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "User Name:";
             // 
-            // lblSearchUser
+            // lblSearchRoom
             // 
-            this.lblSearchUser.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblSearchUser.AutoSize = true;
-            this.lblSearchUser.ForeColor = System.Drawing.Color.Brown;
-            this.lblSearchUser.Location = new System.Drawing.Point(6, 3);
-            this.lblSearchUser.Name = "lblSearchUser";
-            this.lblSearchUser.Size = new System.Drawing.Size(102, 20);
-            this.lblSearchUser.TabIndex = 0;
-            this.lblSearchUser.Text = "Search User:";
+            this.lblSearchRoom.AutoSize = true;
+            this.lblSearchRoom.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblSearchRoom.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.lblSearchRoom.ForeColor = System.Drawing.Color.Brown;
+            this.lblSearchRoom.Location = new System.Drawing.Point(3, 3);
+            this.lblSearchRoom.Name = "lblSearchRoom";
+            this.lblSearchRoom.Size = new System.Drawing.Size(107, 20);
+            this.lblSearchRoom.TabIndex = 0;
+            this.lblSearchRoom.Text = "Search Room";
             // 
             // tabPageUpdateAndDeleteUser
             // 
@@ -255,6 +266,7 @@
             this.tabPageUpdateAndDeleteUser.TabIndex = 2;
             this.tabPageUpdateAndDeleteUser.Text = "Update and Delete User";
             this.tabPageUpdateAndDeleteUser.UseVisualStyleBackColor = true;
+            this.tabPageUpdateAndDeleteUser.Click += new System.EventHandler(this.tabPageUpdateAndDeleteUser_Click);
             this.tabPageUpdateAndDeleteUser.Leave += new System.EventHandler(this.tabPageUpdateAndDeleteUser_Leave);
             // 
             // btnDelete
@@ -276,7 +288,7 @@
             this.btnUpdate.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.btnUpdate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUpdate.ForeColor = System.Drawing.Color.Black;
+            this.btnUpdate.ForeColor = System.Drawing.Color.White;
             this.btnUpdate.Location = new System.Drawing.Point(163, 175);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(144, 52);
@@ -340,7 +352,7 @@
             this.tabPageAddUser.PerformLayout();
             this.tabPageSearchUSer.ResumeLayout(false);
             this.tabPageSearchUSer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUser)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRoom)).EndInit();
             this.tabPageUpdateAndDeleteUser.ResumeLayout(false);
             this.tabPageUpdateAndDeleteUser.PerformLayout();
             this.ResumeLayout(false);
@@ -358,13 +370,10 @@
         private System.Windows.Forms.Label lblUserPassword;
         private System.Windows.Forms.TextBox txtBoxUserName;
         private System.Windows.Forms.Label lblUserName;
-        private System.Windows.Forms.Label lblSearchUser;
-        private System.Windows.Forms.DataGridView dataGridViewUser;
-        private System.Windows.Forms.TextBox textBoxSearchUserName;
+        private System.Windows.Forms.Label lblSearchRoom;
+        private System.Windows.Forms.DataGridView dataGridViewRoom;
+        private System.Windows.Forms.TextBox textBoxSearchRoom;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.TabPage tabPageUpdateAndDeleteUser;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.TextBox txtBoxPassword1;
@@ -373,5 +382,9 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
     }
 }

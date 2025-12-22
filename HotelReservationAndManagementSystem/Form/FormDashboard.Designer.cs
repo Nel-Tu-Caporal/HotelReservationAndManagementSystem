@@ -59,6 +59,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.userControlClient1 = new HotelReservationAndManagementSystem.User_Control.UserControlClient();
             this.userControlSetting1 = new HotelReservationAndManagementSystem.User_Control.UserControlSetting();
+            this.userControlRoom1 = new HotelReservationAndManagementSystem.User_Control.UserControlRoom();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.lblLogoLabel.SuspendLayout();
@@ -405,12 +406,25 @@
             this.userControlSetting1.Visible = false;
             this.userControlSetting1.Load += new System.EventHandler(this.userControlSetting1_Load_1);
             // 
+            // userControlRoom1
+            // 
+            this.userControlRoom1.BackColor = System.Drawing.Color.White;
+            this.userControlRoom1.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userControlRoom1.Location = new System.Drawing.Point(315, 153);
+            this.userControlRoom1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.userControlRoom1.Name = "userControlRoom1";
+            this.userControlRoom1.Size = new System.Drawing.Size(1074, 464);
+            this.userControlRoom1.TabIndex = 0;
+            this.userControlRoom1.Visible = false;
+            this.userControlRoom1.Load += new System.EventHandler(this.userControlRoom1_Load);
+            // 
             // Hotel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 26F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1480, 814);
+            this.Controls.Add(this.userControlRoom1);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
@@ -471,5 +485,6 @@
         private System.Windows.Forms.Label lblLogoLabel2;
         private User_Control.UserControlSetting userControlSetting1;
         private User_Control.UserControlClient userControlClient1;
+        private User_Control.UserControlRoom userControlRoom1;
     }
 }
