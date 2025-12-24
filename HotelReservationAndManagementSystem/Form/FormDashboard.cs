@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -68,6 +69,7 @@ namespace HotelReservationAndManagementSystem
             userControlClient1.Clear();
             userControlClient1.Show();
             userControlRoom1.Hide();
+            userControlReservation1.Hide();
         }
 
         private void buttonDashboard_Click(object sender, EventArgs e)
@@ -77,6 +79,9 @@ namespace HotelReservationAndManagementSystem
              userControlSetting1.Hide();
             userControlClient1.Hide();
             userControlRoom1.Hide();
+            userControlReservation1.Hide();
+            userControlReservation1.Hide();
+
         }
 
         private void buttonRoom_Click(object sender, EventArgs e)
@@ -87,6 +92,8 @@ namespace HotelReservationAndManagementSystem
             userControlClient1.Hide();
             userControlRoom1.Clear();
             userControlRoom1.Show();
+            userControlReservation1.Hide();
+            userControlReservation1.Hide();
         }
 
         private void buttonReservation_Click(object sender, EventArgs e)
@@ -96,6 +103,8 @@ namespace HotelReservationAndManagementSystem
              userControlSetting1.Hide();
             userControlClient1.Hide();
             userControlRoom1.Hide();
+            userControlReservation1.Clear();  
+            userControlReservation1.Show();
         }
 
         private void buttonCheckInCheckOut_Click(object sender, EventArgs e)
@@ -105,6 +114,8 @@ namespace HotelReservationAndManagementSystem
              userControlSetting1.Hide();
             userControlClient1.Hide();
             userControlRoom1.Hide();
+            userControlReservation1.Hide();
+            userControlReservation1.Hide();
         }
 
         private void buttonBillAndPayment_Click(object sender, EventArgs e)
@@ -114,6 +125,8 @@ namespace HotelReservationAndManagementSystem
               userControlSetting1.Hide();
             userControlClient1.Hide();
             userControlRoom1.Hide();
+            userControlReservation1.Hide();
+            userControlReservation1.Hide();
         }
 
         private void buttonSetting_Click(object sender, EventArgs e)
@@ -124,6 +137,8 @@ namespace HotelReservationAndManagementSystem
             userControlSetting1.Show();
             userControlClient1.Hide();
             userControlRoom1.Hide();
+            userControlReservation1.Hide();
+            userControlReservation1.Show();
 
         }
 
@@ -205,6 +220,11 @@ namespace HotelReservationAndManagementSystem
         }
 
         private void userControlRoom1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void userControlReservation1_Load(object sender, EventArgs e)
         {
 
         }

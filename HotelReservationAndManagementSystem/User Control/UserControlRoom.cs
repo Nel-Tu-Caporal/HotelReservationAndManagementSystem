@@ -26,7 +26,7 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         public void Clear()
         {
-            comboBoxType.SelectedIndex = -1;
+            comboBoxType.SelectedIndex = 0;
             txtBoxPhoneNo.Clear();
             radioButtonYes.Checked = false;
             radioButtonNo.Checked = false;
@@ -35,7 +35,7 @@ namespace HotelReservationAndManagementSystem.User_Control
         }
         private void Clear1()
         {
-            comboBoxType1.SelectedIndex = -1;
+            comboBoxType1.SelectedIndex = 0;
             txtBoxPhoneNo1.Clear();
             radioButtonYes1.Checked = false;
             radioButtonNo1.Checked = false;
@@ -76,7 +76,7 @@ namespace HotelReservationAndManagementSystem.User_Control
             if (radioButtonNo.Checked)
                 Free = "No";
             bool check;
-            if (comboBoxType.SelectedIndex == -1 || txtBoxPhoneNo.Text.Trim() == string.Empty || Free== "")
+            if (comboBoxType.SelectedIndex == 0 || txtBoxPhoneNo.Text.Trim() == string.Empty || Free== "")
 
                 MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -192,7 +192,7 @@ namespace HotelReservationAndManagementSystem.User_Control
             bool check;
             if (No != "")
             {
-                if (comboBoxType.SelectedIndex == -1 || txtBoxPhoneNo.Text.Trim() == string.Empty || Free == "")
+                if (comboBoxType1.SelectedIndex == 0 || txtBoxPhoneNo1.Text.Trim() == string.Empty || Free == "")
 
                     MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK, MessageBoxIcon.Information);
            
@@ -219,7 +219,7 @@ namespace HotelReservationAndManagementSystem.User_Control
             bool check;
             if (No != "")
             {
-                if (comboBoxType.SelectedIndex == -1 || txtBoxPhoneNo.Text.Trim() == string.Empty || Free == "")
+                if (comboBoxType1.SelectedIndex == 0 || txtBoxPhoneNo1.Text.Trim() == string.Empty || Free == "")
 
                     MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -240,6 +240,22 @@ namespace HotelReservationAndManagementSystem.User_Control
             else
                 MessageBox.Show("Please first select row from table.", "Selection of row.", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+        }
+
+        private void dataGridViewRoom_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void UserControlRoom_Load(object sender, EventArgs e)
+        {
+            comboBoxType.SelectedIndex = 0;
+            comboBoxType1.SelectedIndex = 0;
+        }
+
+        private void tabPageUpdateDelete_Leave(object sender, EventArgs e)
+        {
+            Clear1();
         }
 
         private void tabPageSearchRoom_Click(object sender, EventArgs e)

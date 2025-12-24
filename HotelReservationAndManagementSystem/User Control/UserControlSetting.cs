@@ -59,7 +59,7 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void textBoxSearchUserName_TextChanged(object sender, EventArgs e)
         {
-            db.DisplayAndSearch("SELECT * FROM User_Table WHERE User_Name LIKE '%" + textBoxSearchRoom.Text + "%'", dataGridViewRoom);
+            db.DisplayAndSearch("SELECT * FROM User_Table WHERE User_Name LIKE '%" + textBoxSearchRoom.Text + "%'", dataGridViewUser);
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -127,7 +127,7 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void tabPageSearchUSer_Enter(object sender, EventArgs e)
         {
-            db.DisplayAndSearch("SELECT * FROM User_Table", dataGridViewRoom);
+            db.DisplayAndSearch("SELECT * FROM User_Table", dataGridViewUser);
         }
 
         private void tabPageSearchUSer_Leave(object sender, EventArgs e)
@@ -161,7 +161,7 @@ namespace HotelReservationAndManagementSystem.User_Control
         {
             if(e.RowIndex != - 1)
             {
-               DataGridViewRow row = dataGridViewRoom.Rows[e.RowIndex]; 
+               DataGridViewRow row = dataGridViewUser.Rows[e.RowIndex]; 
                 ID = row.Cells[0].Value.ToString();
                 txtBoxUserName1.Text = row.Cells[1].Value.ToString();
                 txtBoxPassword1.Text = row.Cells[2].Value.ToString(); 

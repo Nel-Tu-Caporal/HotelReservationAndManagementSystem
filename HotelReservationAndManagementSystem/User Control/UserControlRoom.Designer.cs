@@ -44,6 +44,7 @@
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtBoxSearchRoomNo = new System.Windows.Forms.TextBox();
             this.labelRoom = new System.Windows.Forms.Label();
             this.lblSearchRoom = new System.Windows.Forms.Label();
@@ -140,6 +141,7 @@
             this.comboBoxType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBoxType.FormattingEnabled = true;
             this.comboBoxType.Items.AddRange(new object[] {
+            "Please Select...",
             "Single ",
             "Double",
             "Family",
@@ -225,7 +227,8 @@
             this.dataGridViewRoom.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
             this.Column2,
-            this.Column3});
+            this.Column3,
+            this.Column4});
             this.dataGridViewRoom.Location = new System.Drawing.Point(6, 113);
             this.dataGridViewRoom.Name = "dataGridViewRoom";
             this.dataGridViewRoom.ReadOnly = true;
@@ -234,31 +237,40 @@
             this.dataGridViewRoom.Size = new System.Drawing.Size(824, 248);
             this.dataGridViewRoom.TabIndex = 9;
             this.dataGridViewRoom.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoom_CellClick);
+            this.dataGridViewRoom.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoom_CellContentClick);
             this.dataGridViewRoom.Leave += new System.EventHandler(this.dataGridViewRoom_Leave);
             // 
             // Column1
             // 
-            this.Column1.DataPropertyName = "User_ID";
-            this.Column1.HeaderText = "ID";
+            this.Column1.DataPropertyName = "Room_Number";
+            this.Column1.HeaderText = "No.";
             this.Column1.MinimumWidth = 8;
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
             // 
             // Column2
             // 
-            this.Column2.DataPropertyName = "User_Name";
-            this.Column2.HeaderText = "Username";
+            this.Column2.DataPropertyName = "Room_Type";
+            this.Column2.HeaderText = "Type";
             this.Column2.MinimumWidth = 8;
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
             // 
             // Column3
             // 
-            this.Column3.DataPropertyName = "User_Password";
-            this.Column3.HeaderText = "Password";
+            this.Column3.DataPropertyName = "Room_Phone";
+            this.Column3.HeaderText = "Phone";
             this.Column3.MinimumWidth = 8;
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
+            // 
+            // Column4
+            // 
+            this.Column4.DataPropertyName = "Room_Free";
+            this.Column4.HeaderText = "isFree?";
+            this.Column4.MinimumWidth = 8;
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
             // 
             // txtBoxSearchRoomNo
             // 
@@ -309,6 +321,7 @@
             this.tabPageUpdateDelete.Text = "Update and Delete Room";
             this.tabPageUpdateDelete.UseVisualStyleBackColor = true;
             this.tabPageUpdateDelete.Click += new System.EventHandler(this.tabPage1_Click);
+            this.tabPageUpdateDelete.Leave += new System.EventHandler(this.tabPageUpdateDelete_Leave);
             // 
             // btnDelete
             // 
@@ -363,6 +376,7 @@
             this.comboBoxType1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBoxType1.FormattingEnabled = true;
             this.comboBoxType1.Items.AddRange(new object[] {
+            "Please Select...",
             "Single ",
             "Double",
             "Family",
@@ -432,6 +446,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "UserControlRoom";
             this.Size = new System.Drawing.Size(1102, 462);
+            this.Load += new System.EventHandler(this.UserControlRoom_Load);
             this.tabControlRoom.ResumeLayout(false);
             this.tabPageAddRoom.ResumeLayout(false);
             this.tabPageAddRoom.PerformLayout();
@@ -460,9 +475,6 @@
         private System.Windows.Forms.RadioButton radioButtonNo;
         private System.Windows.Forms.RadioButton radioButtonYes;
         private System.Windows.Forms.DataGridView dataGridViewRoom;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.TextBox txtBoxSearchRoomNo;
         private System.Windows.Forms.Label labelRoom;
         private System.Windows.Forms.Label lblSearchRoom;
@@ -476,5 +488,9 @@
         private System.Windows.Forms.Label lblType1;
         private System.Windows.Forms.Label lblUpdateDelete;
         private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
     }
 }
