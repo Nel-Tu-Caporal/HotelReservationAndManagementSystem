@@ -150,6 +150,7 @@
             this.comboBoxType.Name = "comboBoxType";
             this.comboBoxType.Size = new System.Drawing.Size(291, 31);
             this.comboBoxType.TabIndex = 19;
+            this.comboBoxType.SelectedIndexChanged += new System.EventHandler(this.comboBoxType_SelectedIndexChanged_1);
             // 
             // btnAddRoom
             // 

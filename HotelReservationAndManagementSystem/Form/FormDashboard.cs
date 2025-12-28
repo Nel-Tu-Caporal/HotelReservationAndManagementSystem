@@ -70,6 +70,7 @@ namespace HotelReservationAndManagementSystem
             userControlClient1.Show();
             userControlRoom1.Hide();
             userControlReservation1.Hide();
+            userControlCheckInAndCheckOut1.Hide();
         }
 
         private void buttonDashboard_Click(object sender, EventArgs e)
@@ -81,6 +82,7 @@ namespace HotelReservationAndManagementSystem
             userControlRoom1.Hide();
             userControlReservation1.Hide();
             userControlReservation1.Hide();
+            userControlCheckInAndCheckOut1.Hide();
 
         }
 
@@ -94,6 +96,7 @@ namespace HotelReservationAndManagementSystem
             userControlRoom1.Show();
             userControlReservation1.Hide();
             userControlReservation1.Hide();
+            userControlCheckInAndCheckOut1.Hide();
         }
 
         private void buttonReservation_Click(object sender, EventArgs e)
@@ -105,6 +108,7 @@ namespace HotelReservationAndManagementSystem
             userControlRoom1.Hide();
             userControlReservation1.Clear();  
             userControlReservation1.Show();
+            userControlCheckInAndCheckOut1.Hide();
         }
 
         private void buttonCheckInCheckOut_Click(object sender, EventArgs e)
@@ -116,6 +120,8 @@ namespace HotelReservationAndManagementSystem
             userControlRoom1.Hide();
             userControlReservation1.Hide();
             userControlReservation1.Hide();
+            userControlCheckInAndCheckOut1.Clear();
+            userControlCheckInAndCheckOut1.Show();
         }
 
         private void buttonBillAndPayment_Click(object sender, EventArgs e)
@@ -127,6 +133,7 @@ namespace HotelReservationAndManagementSystem
             userControlRoom1.Hide();
             userControlReservation1.Hide();
             userControlReservation1.Hide();
+            userControlCheckInAndCheckOut1.Hide();
         }
 
         private void buttonSetting_Click(object sender, EventArgs e)
@@ -139,6 +146,7 @@ namespace HotelReservationAndManagementSystem
             userControlRoom1.Hide();
             userControlReservation1.Hide();
             userControlReservation1.Show();
+            userControlCheckInAndCheckOut1.Hide();
 
         }
 

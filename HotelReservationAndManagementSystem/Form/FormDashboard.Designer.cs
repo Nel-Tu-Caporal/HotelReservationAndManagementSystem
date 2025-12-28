@@ -57,10 +57,11 @@
             this.labelDateAndTime = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.userControlReservation1 = new HotelReservationAndManagementSystem.User_Control.UserControlReservation();
+            this.userControlCheckInAndCheckOut1 = new HotelReservationAndManagementSystem.User_Control.UserControlCheckInAndCheckOut();
             this.userControlSetting1 = new HotelReservationAndManagementSystem.User_Control.UserControlSetting();
             this.userControlClient1 = new HotelReservationAndManagementSystem.User_Control.UserControlClient();
             this.userControlRoom1 = new HotelReservationAndManagementSystem.User_Control.UserControlRoom();
+            this.userControlReservation1 = new HotelReservationAndManagementSystem.User_Control.UserControlReservation();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.lblLogoLabel.SuspendLayout();
@@ -385,18 +386,16 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // userControlReservation1
+            // userControlCheckInAndCheckOut1
             // 
-            this.userControlReservation1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.userControlReservation1.BackColor = System.Drawing.Color.White;
-            this.userControlReservation1.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.userControlReservation1.Location = new System.Drawing.Point(355, 198);
-            this.userControlReservation1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.userControlReservation1.Name = "userControlReservation1";
-            this.userControlReservation1.Size = new System.Drawing.Size(1102, 462);
-            this.userControlReservation1.TabIndex = 0;
-            this.userControlReservation1.Visible = false;
-            this.userControlReservation1.Load += new System.EventHandler(this.userControlReservation1_Load);
+            this.userControlCheckInAndCheckOut1.BackColor = System.Drawing.Color.White;
+            this.userControlCheckInAndCheckOut1.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userControlCheckInAndCheckOut1.Location = new System.Drawing.Point(313, 247);
+            this.userControlCheckInAndCheckOut1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.userControlCheckInAndCheckOut1.Name = "userControlCheckInAndCheckOut1";
+            this.userControlCheckInAndCheckOut1.Size = new System.Drawing.Size(1469, 494);
+            this.userControlCheckInAndCheckOut1.TabIndex = 1;
+            this.userControlCheckInAndCheckOut1.Visible = false;
             // 
             // userControlSetting1
             // 
@@ -433,19 +432,33 @@
             this.userControlRoom1.Visible = false;
             this.userControlRoom1.Load += new System.EventHandler(this.userControlRoom1_Load);
             // 
+            // userControlReservation1
+            // 
+            this.userControlReservation1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.userControlReservation1.BackColor = System.Drawing.Color.White;
+            this.userControlReservation1.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userControlReservation1.Location = new System.Drawing.Point(420, 211);
+            this.userControlReservation1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.userControlReservation1.Name = "userControlReservation1";
+            this.userControlReservation1.Size = new System.Drawing.Size(1102, 462);
+            this.userControlReservation1.TabIndex = 0;
+            this.userControlReservation1.Visible = false;
+            this.userControlReservation1.Load += new System.EventHandler(this.userControlReservation1_Load);
+            // 
             // Hotel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 26F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1480, 814);
-            this.Controls.Add(this.userControlReservation1);
+            this.Controls.Add(this.userControlCheckInAndCheckOut1);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.userControlSetting1);
             this.Controls.Add(this.userControlClient1);
             this.Controls.Add(this.userControlRoom1);
+            this.Controls.Add(this.userControlReservation1);
             this.Font = new System.Drawing.Font("Century Gothic", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -503,5 +516,6 @@
         private User_Control.UserControlClient userControlClient1;
         private User_Control.UserControlRoom userControlRoom1;
         private User_Control.UserControlReservation userControlReservation1;
+        private User_Control.UserControlCheckInAndCheckOut userControlCheckInAndCheckOut1;
     }
 }

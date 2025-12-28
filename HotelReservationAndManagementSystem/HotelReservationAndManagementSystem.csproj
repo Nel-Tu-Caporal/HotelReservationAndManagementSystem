@@ -113,11 +113,23 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DAL\DBConnector1.cs" />
+    <Compile Include="User Control\UserControlCheckInAndCheckOut.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User Control\UserControlCheckInAndCheckOut.Designer.cs">
+      <DependentUpon>UserControlCheckInAndCheckOut.cs</DependentUpon>
+    </Compile>
     <Compile Include="User Control\UserControlClient.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="User Control\UserControlClient.Designer.cs">
       <DependentUpon>UserControlClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User Control\UserControlDashboard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User Control\UserControlDashboard.Designer.cs">
+      <DependentUpon>UserControlDashboard.cs</DependentUpon>
     </Compile>
     <Compile Include="User Control\UserControlReservation.cs">
       <SubType>UserControl</SubType>
@@ -148,8 +160,14 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="User Control\UserControlCheckInAndCheckOut.resx">
+      <DependentUpon>UserControlCheckInAndCheckOut.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="User Control\UserControlClient.resx">
       <DependentUpon>UserControlClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User Control\UserControlDashboard.resx">
+      <DependentUpon>UserControlDashboard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="User Control\UserControlReservation.resx">
       <DependentUpon>UserControlReservation.cs</DependentUpon>

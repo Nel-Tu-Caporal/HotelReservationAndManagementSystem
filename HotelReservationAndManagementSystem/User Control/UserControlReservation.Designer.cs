@@ -67,6 +67,7 @@
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControlReservation.SuspendLayout();
             this.tabPageAddReservation.SuspendLayout();
             this.tabPageSearchRervation.SuspendLayout();
@@ -182,6 +183,7 @@
             this.txtBoxClientID.Name = "txtBoxClientID";
             this.txtBoxClientID.Size = new System.Drawing.Size(254, 32);
             this.txtBoxClientID.TabIndex = 21;
+            this.txtBoxClientID.TextChanged += new System.EventHandler(this.txtBoxClientID_TextChanged);
             // 
             // lblClientID
             // 
@@ -264,7 +266,8 @@
             this.Column3,
             this.Column4,
             this.Column5,
-            this.Column6});
+            this.Column6,
+            this.Column7});
             this.dataGridViewReservation.Location = new System.Drawing.Point(23, 88);
             this.dataGridViewReservation.Name = "dataGridViewReservation";
             this.dataGridViewReservation.ReadOnly = true;
@@ -273,6 +276,7 @@
             this.dataGridViewReservation.Size = new System.Drawing.Size(816, 248);
             this.dataGridViewReservation.TabIndex = 13;
             this.dataGridViewReservation.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewReservation_CellClick);
+            this.dataGridViewReservation.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewReservation_CellContentClick);
             // 
             // txtBoxSearchClientID
             // 
@@ -474,7 +478,7 @@
             // 
             // Column2
             // 
-            this.Column2.DataPropertyName = "Reservation_Room_Type";
+            this.Column2.DataPropertyName = "Room_Type";
             this.Column2.HeaderText = "Room Type";
             this.Column2.MinimumWidth = 8;
             this.Column2.Name = "Column2";
@@ -482,7 +486,7 @@
             // 
             // Column3
             // 
-            this.Column3.DataPropertyName = "Reservation_Room_Number";
+            this.Column3.DataPropertyName = "Room_Number";
             this.Column3.HeaderText = "Room No.";
             this.Column3.MinimumWidth = 8;
             this.Column3.Name = "Column3";
@@ -490,7 +494,7 @@
             // 
             // Column4
             // 
-            this.Column4.DataPropertyName = "Reservation_Client_ID";
+            this.Column4.DataPropertyName = "Client_ID";
             this.Column4.HeaderText = "Client ID";
             this.Column4.MinimumWidth = 8;
             this.Column4.Name = "Column4";
@@ -511,6 +515,14 @@
             this.Column6.MinimumWidth = 8;
             this.Column6.Name = "Column6";
             this.Column6.ReadOnly = true;
+            // 
+            // Column7
+            // 
+            this.Column7.DataPropertyName = "Reservation_Status";
+            this.Column7.HeaderText = "Status";
+            this.Column7.MinimumWidth = 8;
+            this.Column7.Name = "Column7";
+            this.Column7.ReadOnly = true;
             // 
             // UserControlReservation
             // 
@@ -576,5 +588,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
     }
 }

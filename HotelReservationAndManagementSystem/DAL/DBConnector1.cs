@@ -365,9 +365,11 @@ namespace HotelReservationAndManagementSystem.References
             cb.Items.Clear();
             cb.Items.Add("Please select ...");
             cb.SelectedIndex = 0;
+
             while (sqlDataReader.Read())
             {
-                cb.Items.Add(sqlDataReader[0]);
+                // convert to string explicitly to match database
+                cb.Items.Add(sqlDataReader[0].ToString());
             }
         }
 
@@ -379,9 +381,12 @@ namespace HotelReservationAndManagementSystem.References
             sqlCommand.CommandType = CommandType.Text;
             sqlCommand.Parameters.Add("@RoomNumber", SqlDbType.Int).Value = No;
             sqlCommand.Parameters.Add("@RoomFree", SqlDbType.VarChar).Value = Free;
+
             try
             {
-                sqlCommand.ExecuteNonQuery();
+                int rows = sqlCommand.ExecuteNonQuery(); 
+                if (rows == 0)
+                    MessageBox.Show("Room update failed: No matching Room_Number in Room_Table (" + No + ")");
             }
             catch (SqlException ex)
             {
@@ -393,7 +398,9 @@ namespace HotelReservationAndManagementSystem.References
 
         public bool AddReservation(string Type, string No, string CID, string In, string Out)
         {
-            string cmdText = "INSERT INTO Reservation_Table VALUES (@Type, @No, @CID, @In, @Out)";
+            string cmdText = @"INSERT INTO Reservation_Table
+(Room_Number, Room_Type, Client_ID, Reservation_In, Reservation_Out)
+VALUES (@No, @Type, @CID, @In, @Out)";
             SqlConnection connection = GetConnection();
             SqlCommand sqlCommand = new SqlCommand(cmdText, connection);
             sqlCommand.CommandType = CommandType.Text;
@@ -488,5 +495,138 @@ namespace HotelReservationAndManagementSystem.References
             SqlCommand sqlCommand = new SqlCommand(query, connection);
             return (int)sqlCommand.ExecuteScalar();
         }
+
+        public bool CheckInReservation(string ReservationID)
+        {
+            //  Get room number and rate for this reservation
+            string cmdRoom = "SELECT Reservation_Room_Number, Room_Rate FROM Reservation_Table " +
+                             "INNER JOIN Room_Table ON Reservation_Room_Number = Room_Number " +
+                             "WHERE Reservation_ID = @ReservationID";
+
+            SqlConnection connection = GetConnection();
+            SqlCommand sqlCmdRoom = new SqlCommand(cmdRoom, connection);
+            sqlCmdRoom.Parameters.Add("@ReservationID", SqlDbType.Int).Value = ReservationID;
+
+            int RoomNumber = 0;
+            decimal RoomRate = 0;
+
+            try
+            {
+                SqlDataReader reader = sqlCmdRoom.ExecuteReader();
+                if (reader.Read())
+                {
+                    RoomNumber = Convert.ToInt32(reader["Reservation_Room_Number"]);
+                    RoomRate = Convert.ToDecimal(reader["Room_Rate"]);
+                }
+                reader.Close();
+
+                // Insert into CheckInOut_Table
+                string cmdInsert = "INSERT INTO CheckInOut_Table (Reservation_ID, CheckInDate, RoomRate, PaymentStatus) " +
+                                   "VALUES (@ReservationID, @CheckInDate, @RoomRate, 'Pending')";
+
+                SqlCommand sqlInsert = new SqlCommand(cmdInsert, connection);
+                sqlInsert.Parameters.Add("@ReservationID", SqlDbType.Int).Value = ReservationID;
+                sqlInsert.Parameters.Add("@CheckInDate", SqlDbType.DateTime).Value = DateTime.Now;
+                sqlInsert.Parameters.Add("@RoomRate", SqlDbType.Decimal).Value = RoomRate;
+
+                sqlInsert.ExecuteNonQuery();
+
+                //  Update room availability to "No"
+                UpdateReservationRoom(RoomNumber.ToString(), "No");
+
+                MessageBox.Show("Check-In Successful!", "Check-In", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error! \n" + ex.ToString(), "Check-In", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return true;
+        }
+        public bool CheckOutReservation(string ReservationID)
+        {
+            SqlConnection connection = GetConnection();
+
+            try
+            {
+                //  Get the check-in record and room number
+                string cmdSelect = "SELECT CheckInOut_ID, CheckInDate, RoomRate, Reservation_Room_Number " +
+                                   "FROM CheckInOut_Table " +
+                                   "INNER JOIN Reservation_Table ON CheckInOut_Table.Reservation_ID = Reservation_Table.Reservation_ID " +
+                                   "WHERE CheckInOut_Table.Reservation_ID = @ReservationID";
+
+                SqlCommand sqlSelect = new SqlCommand(cmdSelect, connection);
+                sqlSelect.Parameters.Add("@ReservationID", SqlDbType.Int).Value = ReservationID;
+
+                int RoomNumber = 0;
+                decimal RoomRate = 0;
+                DateTime CheckInDate = DateTime.Now;
+                int CheckInOutID = 0;
+
+                SqlDataReader reader = sqlSelect.ExecuteReader();
+                if (reader.Read())
+                {
+                    CheckInOutID = Convert.ToInt32(reader["CheckInOut_ID"]);
+                    CheckInDate = Convert.ToDateTime(reader["CheckInDate"]);
+                    RoomRate = Convert.ToDecimal(reader["RoomRate"]);
+                    RoomNumber = Convert.ToInt32(reader["Reservation_Room_Number"]);
+                }
+                reader.Close();
+
+                //  Calculate total days
+                DateTime checkOutDate = DateTime.Now;
+                int totalDays = (int)Math.Ceiling((checkOutDate - CheckInDate).TotalDays);
+                if (totalDays == 0) totalDays = 1; // minimum 1 day
+
+                decimal totalAmount = totalDays * RoomRate;
+
+                //  Update CheckInOut_Table with checkout info
+                string cmdUpdate = "UPDATE CheckInOut_Table SET CheckOutDate = @CheckOutDate, TotalDays = @TotalDays, TotalAmount = @TotalAmount, PaymentStatus = 'Pending' " +
+                                   "WHERE CheckInOut_ID = @CheckInOutID";
+
+                SqlCommand sqlUpdate = new SqlCommand(cmdUpdate, connection);
+                sqlUpdate.Parameters.Add("@CheckOutDate", SqlDbType.DateTime).Value = checkOutDate;
+                sqlUpdate.Parameters.Add("@TotalDays", SqlDbType.Int).Value = totalDays;
+                sqlUpdate.Parameters.Add("@TotalAmount", SqlDbType.Decimal).Value = totalAmount;
+                sqlUpdate.Parameters.Add("@CheckInOutID", SqlDbType.Int).Value = CheckInOutID;
+
+                sqlUpdate.ExecuteNonQuery();
+
+                //  Update room availability to "Yes"
+                UpdateReservationRoom(RoomNumber.ToString(), "Yes");
+
+                MessageBox.Show("Check-Out Successful!", "Check-Out", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error! \n" + ex.ToString(), "Check-Out", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return true;
+        }
+
+         // this check if ClientID exist if not i can't add reservation
+        public bool ClientExists(string clientId)
+        {
+            string query = "SELECT COUNT(*) FROM Client_Table WHERE Client_ID = @CID";
+            using (SqlConnection con = GetConnection())
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.Add("@CID", SqlDbType.Int).Value = clientId;
+                return (int)cmd.ExecuteScalar() > 0;
+            }
+        }
+
     }
+
 }

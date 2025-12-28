@@ -30,7 +30,7 @@ namespace HotelReservationAndManagementSystem.User_Control
             txtBoxPhoneNo.Clear();
             radioButtonYes.Checked = false;
             radioButtonNo.Checked = false;
-            tabControlRoom.SelectedTab = tabPageAddRoom;
+            
 
         }
         private void Clear1()
@@ -39,7 +39,7 @@ namespace HotelReservationAndManagementSystem.User_Control
             txtBoxPhoneNo1.Clear();
             radioButtonYes1.Checked = false;
             radioButtonNo1.Checked = false;
-            tabControlRoom.SelectedTab = tabPageAddRoom;
+            
             No = "";
         } 
 
@@ -85,7 +85,7 @@ namespace HotelReservationAndManagementSystem.User_Control
                 check = db.AddRoom(comboBoxType.SelectedItem.ToString(), txtBoxPhoneNo.Text.Trim(),Free);
                 if (check)
                     Clear();
-
+                tabControlRoom.SelectedTab = tabPageAddRoom;
 
             }
         }
@@ -149,7 +149,7 @@ namespace HotelReservationAndManagementSystem.User_Control
         private void tabPageAddRoom_Leave(object sender, EventArgs e)
         {
             Clear();
-            Clear1();
+            
         }
 
         private void tabPageSearchRoom_Enter(object sender, EventArgs e)
@@ -256,6 +256,11 @@ namespace HotelReservationAndManagementSystem.User_Control
         private void tabPageUpdateDelete_Leave(object sender, EventArgs e)
         {
             Clear1();
+        }
+
+        private void comboBoxType_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
         }
 
         private void tabPageSearchRoom_Click(object sender, EventArgs e)
