@@ -64,7 +64,7 @@
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Client_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -264,7 +264,7 @@
             this.Column1,
             this.Column2,
             this.Column3,
-            this.Column4,
+            this.Client_ID,
             this.Column5,
             this.Column6,
             this.Column7});
@@ -329,6 +329,7 @@
             this.tabPageUpdateAndCancelReservation.Text = "Update and Cancel Reservation";
             this.tabPageUpdateAndCancelReservation.UseVisualStyleBackColor = true;
             this.tabPageUpdateAndCancelReservation.Click += new System.EventHandler(this.tabPageUpdateAndCancelReservation_Click);
+            this.tabPageUpdateAndCancelReservation.Enter += new System.EventHandler(this.tabPageUpdateAndCancelReservation_Enter);
             this.tabPageUpdateAndCancelReservation.Leave += new System.EventHandler(this.tabPageUpdateAndCancelReservation_Leave);
             // 
             // btnCancelReservation
@@ -492,13 +493,13 @@
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
             // 
-            // Column4
+            // Client_ID
             // 
-            this.Column4.DataPropertyName = "Client_ID";
-            this.Column4.HeaderText = "Client ID";
-            this.Column4.MinimumWidth = 8;
-            this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
+            this.Client_ID.DataPropertyName = "Client_ID";
+            this.Client_ID.HeaderText = "Client ID";
+            this.Client_ID.MinimumWidth = 8;
+            this.Client_ID.Name = "Client_ID";
+            this.Client_ID.ReadOnly = true;
             // 
             // Column5
             // 
@@ -585,7 +586,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Client_ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;

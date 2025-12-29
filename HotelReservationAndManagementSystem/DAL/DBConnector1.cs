@@ -384,7 +384,7 @@ namespace HotelReservationAndManagementSystem.References
 
             try
             {
-                int rows = sqlCommand.ExecuteNonQuery(); 
+                int rows = sqlCommand.ExecuteNonQuery();
                 if (rows == 0)
                     MessageBox.Show("Room update failed: No matching Room_Number in Room_Table (" + No + ")");
             }
@@ -434,7 +434,9 @@ VALUES (@No, @Type, @CID, @In, @Out)";
 
         public bool UpdateReservation(string RID, string Type, string No, string CID, string In, string Out)
         {
-            string cmdText = "UPDATE Reservation_Table SET Reservation_Room_Type = @ReservationRoomType, Reservation_Room_Number = @ReservationRoomNumber, Reservation_Client_ID = @ReservationClientID, Reservation_In = @ReservationIn, Reservation_Out = @ReservationOut WHERE Reservation_ID = @ReservationID";
+
+            string cmdText = "UPDATE Reservation_Table SET Room_Type = @ReservationRoomType, Room_Number = @ReservationRoomNumber, Client_ID = @ReservationClientID, Reservation_In = @ReservationIn, Reservation_Out = @ReservationOut WHERE Reservation_ID = @ReservationID";
+
             SqlConnection connection = GetConnection();
             SqlCommand sqlCommand = new SqlCommand(cmdText, connection);
             sqlCommand.CommandType = CommandType.Text;
@@ -444,6 +446,7 @@ VALUES (@No, @Type, @CID, @In, @Out)";
             sqlCommand.Parameters.Add("@ReservationClientID", SqlDbType.Int).Value = CID;
             sqlCommand.Parameters.Add("@ReservationIn", SqlDbType.VarChar).Value = In;
             sqlCommand.Parameters.Add("@ReservationOut", SqlDbType.VarChar).Value = Out;
+
             try
             {
                 sqlCommand.ExecuteNonQuery();
@@ -459,7 +462,6 @@ VALUES (@No, @Type, @CID, @In, @Out)";
                 {
                     MessageBox.Show("Error! \n" + ex.ToString(), "Update Reservation", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 }
-
                 return false;
             }
 
@@ -548,14 +550,15 @@ VALUES (@No, @Type, @CID, @In, @Out)";
 
             return true;
         }
+     
+
         public bool CheckOutReservation(string ReservationID)
         {
             SqlConnection connection = GetConnection();
-
             try
             {
-                //  Get the check-in record and room number
-                string cmdSelect = "SELECT CheckInOut_ID, CheckInDate, RoomRate, Reservation_Room_Number " +
+                // FIX: Changed Reservation_Room_Number to Room_Number
+                string cmdSelect = "SELECT CheckInOut_ID, CheckInDate, RoomRate, Room_Number " +
                                    "FROM CheckInOut_Table " +
                                    "INNER JOIN Reservation_Table ON CheckInOut_Table.Reservation_ID = Reservation_Table.Reservation_ID " +
                                    "WHERE CheckInOut_Table.Reservation_ID = @ReservationID";
@@ -574,59 +577,30 @@ VALUES (@No, @Type, @CID, @In, @Out)";
                     CheckInOutID = Convert.ToInt32(reader["CheckInOut_ID"]);
                     CheckInDate = Convert.ToDateTime(reader["CheckInDate"]);
                     RoomRate = Convert.ToDecimal(reader["RoomRate"]);
-                    RoomNumber = Convert.ToInt32(reader["Reservation_Room_Number"]);
+                    // FIX: Changed reader key to Room_Number
+                    RoomNumber = Convert.ToInt32(reader["Room_Number"]);
                 }
                 reader.Close();
 
-                //  Calculate total days
                 DateTime checkOutDate = DateTime.Now;
                 int totalDays = (int)Math.Ceiling((checkOutDate - CheckInDate).TotalDays);
-                if (totalDays == 0) totalDays = 1; // minimum 1 day
-
+                if (totalDays == 0) totalDays = 1;
                 decimal totalAmount = totalDays * RoomRate;
 
-                //  Update CheckInOut_Table with checkout info
-                string cmdUpdate = "UPDATE CheckInOut_Table SET CheckOutDate = @CheckOutDate, TotalDays = @TotalDays, TotalAmount = @TotalAmount, PaymentStatus = 'Pending' " +
-                                   "WHERE CheckInOut_ID = @CheckInOutID";
-
+                string cmdUpdate = "UPDATE CheckInOut_Table SET CheckOutDate = @CheckOutDate, TotalDays = @TotalDays, TotalAmount = @TotalAmount, PaymentStatus = 'Pending' WHERE CheckInOut_ID = @CheckInOutID";
                 SqlCommand sqlUpdate = new SqlCommand(cmdUpdate, connection);
                 sqlUpdate.Parameters.Add("@CheckOutDate", SqlDbType.DateTime).Value = checkOutDate;
                 sqlUpdate.Parameters.Add("@TotalDays", SqlDbType.Int).Value = totalDays;
                 sqlUpdate.Parameters.Add("@TotalAmount", SqlDbType.Decimal).Value = totalAmount;
                 sqlUpdate.Parameters.Add("@CheckInOutID", SqlDbType.Int).Value = CheckInOutID;
-
                 sqlUpdate.ExecuteNonQuery();
 
-                //  Update room availability to "Yes"
                 UpdateReservationRoom(RoomNumber.ToString(), "Yes");
-
                 MessageBox.Show("Check-Out Successful!", "Check-Out", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("Error! \n" + ex.ToString(), "Check-Out", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                return false;
-            }
-            finally
-            {
-                connection.Close();
-            }
-
+            catch (SqlException ex) { MessageBox.Show("Error! \n" + ex.ToString()); return false; }
+            finally { connection.Close(); }
             return true;
         }
-
-         // this check if ClientID exist if not i can't add reservation
-        public bool ClientExists(string clientId)
-        {
-            string query = "SELECT COUNT(*) FROM Client_Table WHERE Client_ID = @CID";
-            using (SqlConnection con = GetConnection())
-            using (SqlCommand cmd = new SqlCommand(query, con))
-            {
-                cmd.Parameters.Add("@CID", SqlDbType.Int).Value = clientId;
-                return (int)cmd.ExecuteScalar() > 0;
-            }
-        }
-
     }
-
 }

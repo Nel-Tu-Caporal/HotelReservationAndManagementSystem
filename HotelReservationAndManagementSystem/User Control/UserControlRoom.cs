@@ -41,7 +41,9 @@ namespace HotelReservationAndManagementSystem.User_Control
             radioButtonNo1.Checked = false;
             
             No = "";
-        } 
+        }
+
+       
 
         private void tabPageRoom_Click(object sender, EventArgs e)
         {
@@ -154,7 +156,8 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void tabPageSearchRoom_Enter(object sender, EventArgs e)
         {
-            db.DisplayAndSearch("SELECT * FROM Room_Table",dataGridViewRoom);
+            
+            db.DisplayAndSearch("SELECT * FROM Room_Table", dataGridViewRoom);
         }
 
         private void dataGridViewRoom_Leave(object sender, EventArgs e)

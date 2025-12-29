@@ -244,5 +244,10 @@ namespace HotelReservationAndManagementSystem.User_Control
                 txtBoxAddress1.Text = row.Cells[4].Value?.ToString();
             }
         }
+
+        private void tabPageClientDeleteUpdate_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

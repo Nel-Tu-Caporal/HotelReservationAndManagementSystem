@@ -331,6 +331,7 @@
             this.tabPageClientDeleteUpdate.TabIndex = 2;
             this.tabPageClientDeleteUpdate.Text = "Update and Delete Client:";
             this.tabPageClientDeleteUpdate.UseVisualStyleBackColor = true;
+            this.tabPageClientDeleteUpdate.Enter += new System.EventHandler(this.tabPageClientDeleteUpdate_Enter);
             this.tabPageClientDeleteUpdate.Leave += new System.EventHandler(this.tabPageClientDeleteUpdate_Leave);
             // 
             // btnDelete
