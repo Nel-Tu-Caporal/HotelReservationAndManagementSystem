@@ -23,6 +23,11 @@ namespace HotelReservationAndManagementSystem.User_Control
         private decimal SelectedRoomRate = 0;
         private DateTime SelectedCheckInDate;
 
+        private int selectedCheckInOutID = 0;
+        private int selectedRoomNumber = 0;
+
+        private string checkInID = "";
+
 
         public UserControlCheckInAndCheckOut()
         {
@@ -33,12 +38,8 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         public void Clear()
         {
-            comboBoxRoomType.SelectedIndex = 0;
-            comboBoxRoomNo.SelectedIndex = 0;
-            txtBoxClientID.Clear();
-            dateTimePickerIn.Value = DateTime.Now;
-            dateTimePickerOut.Value = DateTime.Now;
-            tabControlCheckInCheckOut.SelectedTab = tabPageCheckIn;
+            
+           
         }
 
         private void Clear1()
@@ -56,23 +57,23 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void LoadCheckInList()
         {
-            string query = @"SELECT c.CheckInOut_ID, cl.Client_FirstName + ' ' + cl.Client_LastName AS GuestName, 
-                                    r.Room_Number, r.Room_Type, c.CheckInDate, res.Reservation_Out AS ExpectedCheckOut, 
-                                    c.PaymentStatus AS Status, res.Reservation_ID 
-                             FROM CheckInOut_Table c
-                             INNER JOIN Reservation_Table res ON c.Reservation_ID = res.Reservation_ID
-                             INNER JOIN Room_Table r ON res.Reservation_Room_Number = r.Room_Number
-                             INNER JOIN Client_Table cl ON res.Reservation_Client_ID = cl.Client_ID";
+            string query =
+                "SELECT c.CheckInOut_ID, c.Reservation_ID, " +
+                "cl.Client_FirstName + ' ' + cl.Client_LastName AS ClientName, " +
+                "r.Room_Number, r.Room_Type, " +
+                "c.CheckInDate, c.ExpectedCheckOutDate, c.RoomRate, c.Status " +
+                "FROM CheckInOut_Table c " +
+                "JOIN Reservation_Table r ON c.Reservation_ID = r.Reservation_ID " +
+                "JOIN Client_Table cl ON r.Client_ID = cl.Client_ID " +
+                "WHERE c.Status = 'CheckedIn'";
 
             db.DisplayAndSearch(query, dataGridViewCheckInList);
-
-            dataGridViewCheckInList.Columns[0].Visible = false; 
-            dataGridViewCheckInList.Columns[7].Visible = false;
         }
+
 
         private void dataGridViewReservation_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
+            
         }
 
         private void tabPageCheckOut_Click(object sender, EventArgs e)
@@ -125,103 +126,153 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         }
 
-        private void btnCheckIn_Click(object sender, EventArgs e)
-        {
 
-            bool check;
-            if (comboBoxRoomType.SelectedIndex == 0 || comboBoxRoomNo.SelectedIndex == 0 || txtBoxClientID.Text.Trim() == string.Empty)
-
-                MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            else
-            {
-                check = db.AddReservation(comboBoxRoomType.SelectedItem.ToString(), comboBoxRoomNo.SelectedItem.ToString(), txtBoxClientID.Text.ToString(), dateTimePickerIn.Text, dateTimePickerOut.Text);
-                db.UpdateReservationRoom(comboBoxRoomNo.SelectedItem.ToString(), "No");
-                if (check)
-                    LoadCheckInList();
-                Clear();
-
-            }
-        }
 
         private void dataGridViewCheckInList_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex != -1)
-            {
-                DataGridViewRow row = dataGridViewCheckInList.Rows[e.RowIndex];
-                SelectedCheckInID = row.Cells[0].Value.ToString();
-                SelectedReservationID = row.Cells[7].Value.ToString();
-                SelectedRoomNumber = Convert.ToInt32(row.Cells[2].Value);
-                SelectedCheckInDate = Convert.ToDateTime(row.Cells[4].Value);
-                SelectedRoomRate = db.Count("SELECT Room_Rate FROM Room_Table WHERE Room_Number = " + SelectedRoomNumber);
-            }
+            if (e.RowIndex < 0) return;
+
+            DataGridViewRow row = dataGridViewCheckInList.Rows[e.RowIndex];
+
+            selectedCheckInOutID = Convert.ToInt32(row.Cells["CheckInOut_ID"].Value);
+            selectedRoomNumber = Convert.ToInt32(row.Cells["Room_Number"].Value);
+
+            // ✅ REQUIRED FOR CHECK-OUT
+            SelectedReservationID = row.Cells["Reservation_ID"].Value.ToString();
+
+            DateTime checkInDate = Convert.ToDateTime(row.Cells["CheckInDate"].Value);
+            DateTime today = DateTime.Today;
+
+            int totalDays = Math.Max(1, (today - checkInDate).Days);
+            decimal roomRate = Convert.ToDecimal(row.Cells["RoomRate"].Value);
+
+            lblCheckInOutDate.Text = today.ToString("dd/MM/yyyy");
+            lblTotalDaysStayed.Text = totalDays.ToString();
+            lblRoomRates.Text = roomRate.ToString("0.00");
+            lblTotalAmount.Text = (totalDays * roomRate).ToString("0.00");
+
+
         }
+
+        
 
         private void tabPageCheckOut_Enter(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(SelectedCheckInID))
-            {
-                MessageBox.Show("Please select a guest from Check-In List first.", "Check-Out", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            DateTime actualCheckOut = DateTime.Now;
-            lblCheckInOutDate.Text = actualCheckOut.ToString("MM/dd/yyyy");
-
-            int totalDays = (int)Math.Ceiling((actualCheckOut - SelectedCheckInDate).TotalDays);
-            if (totalDays == 0) totalDays = 1;
-
-            lblTotalDaysStayed.Text = totalDays.ToString();
-            lblRoomRates.Text = SelectedRoomRate.ToString("C");
-            lblTotalAmount.Text = (totalDays * SelectedRoomRate).ToString("C");
+           
         }
 
         private void btnCheckOut_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(SelectedReservationID))
             {
-                MessageBox.Show("Please select a guest from Check-In List first.", "Check-Out", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Select a checked-in record first.");
                 return;
             }
 
-            bool check = db.CheckOutReservation(SelectedReservationID);
-            db.UpdateReservationRoom(SelectedRoomNumber.ToString(), "Yes"); // Mark room available
+            int reservationId = Convert.ToInt32(SelectedReservationID);
 
-            if (check)
+            bool success = db.CheckOutReservation(reservationId);
+
+            if (success)
             {
-                MessageBox.Show("Check-Out Successful!", "Check-Out", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 LoadCheckInList();
-                Clear1();
+
+                // reset UI
+                SelectedReservationID = "";
+                selectedCheckInOutID = 0;
+                selectedRoomNumber = 0;
+
+                lblCheckInOutDate.Text = "?";
+                lblTotalDaysStayed.Text = "?";
+                lblRoomRates.Text = "?";
+                lblTotalAmount.Text = "?";
             }
         }
 
+
+
         private void UserControlCheckInAndCheckOut_Load(object sender, EventArgs e)
         {
-            dataGridViewCheckInList.AutoGenerateColumns = true;
-            dataGridViewCheckInList.Columns.Clear();
             LoadCheckInList();
         }
 
         private void comboBoxRoomType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string query = @"SELECT Reservation_Room_Number 
-                             FROM Reservation_Table r
-                             LEFT JOIN CheckInOut_Table c ON r.Reservation_ID = c.Reservation_ID
-                             WHERE r.Reservation_Room_Type = '" + comboBoxRoomType.SelectedItem + @"' 
-                               AND c.Reservation_ID IS NULL
-                             ORDER BY Reservation_Room_Number";
-
-            db.RoomTypeAndNo(query, comboBoxRoomNo);
+            
         }
 
         private void dataGridViewCheckInList_Enter(object sender, EventArgs e)
         {
-            LoadCheckInList();
+           
         }
+
 
         private void tabPageCheckInList_Click(object sender, EventArgs e)
         {
 
         }
+
+        private void UserControlCheckInAndCheckOut_Enter(object sender, EventArgs e)
+        {
+            LoadCheckInList();
+        }
+
+        private void tabControlCheckInCheckOut_Enter(object sender, EventArgs e)
+        {
+        }
+
+        private void btnUpdateCheckIn_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void btnCancelCheckIn_Click(object sender, EventArgs e)
+        {
+            if (selectedCheckInOutID == 0)
+            {
+                MessageBox.Show("Select a check-in first.");
+                return;
+            }
+
+            bool success = db.CancelCheckIn(
+                selectedCheckInOutID,
+                selectedRoomNumber
+            );
+
+            if (success)
+            {
+                MessageBox.Show(
+                    $"Check-in cancelled successfully.\nRoom {selectedRoomNumber}");
+
+                
+                LoadCheckInList();
+
+                // reset state
+                selectedCheckInOutID = 0;
+                selectedRoomNumber = 0;
+
+                lblCheckInOutDate.Text = "?";
+                lblTotalDaysStayed.Text = "?";
+                lblRoomRates.Text = "?";
+                lblTotalAmount.Text = "?";
+            }
+        }
+
+
+        private void comboBoxRoomNo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void tabPageCheckIn_Enter(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void tabPageCheckInList_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
+    
 }

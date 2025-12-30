@@ -44,6 +44,13 @@
             this.labelAddReservation = new System.Windows.Forms.Label();
             this.tabPageSearchRervation = new System.Windows.Forms.TabPage();
             this.dataGridViewReservation = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Client_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtBoxSearchClientID = new System.Windows.Forms.TextBox();
             this.lblId = new System.Windows.Forms.Label();
             this.lblSearchReservation = new System.Windows.Forms.Label();
@@ -61,13 +68,7 @@
             this.lblRoomNo1 = new System.Windows.Forms.Label();
             this.lblRoomType1 = new System.Windows.Forms.Label();
             this.lblUpdateCancel = new System.Windows.Forms.Label();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Client_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnCheckInReservation = new System.Windows.Forms.Button();
             this.tabControlReservation.SuspendLayout();
             this.tabPageAddReservation.SuspendLayout();
             this.tabPageSearchRervation.SuspendLayout();
@@ -273,10 +274,66 @@
             this.dataGridViewReservation.ReadOnly = true;
             this.dataGridViewReservation.RowHeadersWidth = 62;
             this.dataGridViewReservation.RowTemplate.Height = 28;
-            this.dataGridViewReservation.Size = new System.Drawing.Size(816, 248);
+            this.dataGridViewReservation.Size = new System.Drawing.Size(816, 210);
             this.dataGridViewReservation.TabIndex = 13;
             this.dataGridViewReservation.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewReservation_CellClick);
             this.dataGridViewReservation.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewReservation_CellContentClick);
+            // 
+            // Column1
+            // 
+            this.Column1.DataPropertyName = "Reservation_ID";
+            this.Column1.HeaderText = "ID";
+            this.Column1.MinimumWidth = 8;
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            // 
+            // Column2
+            // 
+            this.Column2.DataPropertyName = "Room_Type";
+            this.Column2.HeaderText = "Room Type";
+            this.Column2.MinimumWidth = 8;
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            // 
+            // Column3
+            // 
+            this.Column3.DataPropertyName = "Room_Number";
+            this.Column3.HeaderText = "Room No.";
+            this.Column3.MinimumWidth = 8;
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            // 
+            // Client_ID
+            // 
+            this.Client_ID.DataPropertyName = "Client_ID";
+            this.Client_ID.HeaderText = "Client ID";
+            this.Client_ID.MinimumWidth = 8;
+            this.Client_ID.Name = "Client_ID";
+            this.Client_ID.ReadOnly = true;
+            // 
+            // Column5
+            // 
+            this.Column5.DataPropertyName = "Reservation_In";
+            this.Column5.HeaderText = "In";
+            this.Column5.MinimumWidth = 8;
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            // 
+            // Column6
+            // 
+            this.Column6.DataPropertyName = "Reservation_Out";
+            this.Column6.HeaderText = "Out";
+            this.Column6.MinimumWidth = 8;
+            this.Column6.Name = "Column6";
+            this.Column6.ReadOnly = true;
+            // 
+            // Column7
+            // 
+            this.Column7.DataPropertyName = "Reservation_Status";
+            this.Column7.HeaderText = "Status";
+            this.Column7.MinimumWidth = 8;
+            this.Column7.Name = "Column7";
+            this.Column7.ReadOnly = true;
             // 
             // txtBoxSearchClientID
             // 
@@ -308,6 +365,7 @@
             // 
             // tabPageUpdateAndCancelReservation
             // 
+            this.tabPageUpdateAndCancelReservation.Controls.Add(this.btnCheckInReservation);
             this.tabPageUpdateAndCancelReservation.Controls.Add(this.btnCancelReservation);
             this.tabPageUpdateAndCancelReservation.Controls.Add(this.label1);
             this.tabPageUpdateAndCancelReservation.Controls.Add(this.dateTimePickerOut1);
@@ -469,61 +527,19 @@
             this.lblUpdateCancel.TabIndex = 28;
             this.lblUpdateCancel.Text = "Updat And Cancel Reservation";
             // 
-            // Column1
+            // btnCheckInReservation
             // 
-            this.Column1.DataPropertyName = "Reservation_ID";
-            this.Column1.HeaderText = "ID";
-            this.Column1.MinimumWidth = 8;
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            // 
-            // Column2
-            // 
-            this.Column2.DataPropertyName = "Room_Type";
-            this.Column2.HeaderText = "Room Type";
-            this.Column2.MinimumWidth = 8;
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            // 
-            // Column3
-            // 
-            this.Column3.DataPropertyName = "Room_Number";
-            this.Column3.HeaderText = "Room No.";
-            this.Column3.MinimumWidth = 8;
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            // 
-            // Client_ID
-            // 
-            this.Client_ID.DataPropertyName = "Client_ID";
-            this.Client_ID.HeaderText = "Client ID";
-            this.Client_ID.MinimumWidth = 8;
-            this.Client_ID.Name = "Client_ID";
-            this.Client_ID.ReadOnly = true;
-            // 
-            // Column5
-            // 
-            this.Column5.DataPropertyName = "Reservation_In";
-            this.Column5.HeaderText = "In";
-            this.Column5.MinimumWidth = 8;
-            this.Column5.Name = "Column5";
-            this.Column5.ReadOnly = true;
-            // 
-            // Column6
-            // 
-            this.Column6.DataPropertyName = "Reservation_Out";
-            this.Column6.HeaderText = "Out";
-            this.Column6.MinimumWidth = 8;
-            this.Column6.Name = "Column6";
-            this.Column6.ReadOnly = true;
-            // 
-            // Column7
-            // 
-            this.Column7.DataPropertyName = "Reservation_Status";
-            this.Column7.HeaderText = "Status";
-            this.Column7.MinimumWidth = 8;
-            this.Column7.Name = "Column7";
-            this.Column7.ReadOnly = true;
+            this.btnCheckInReservation.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnCheckInReservation.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCheckInReservation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCheckInReservation.ForeColor = System.Drawing.Color.White;
+            this.btnCheckInReservation.Location = new System.Drawing.Point(635, 278);
+            this.btnCheckInReservation.Name = "btnCheckInReservation";
+            this.btnCheckInReservation.Size = new System.Drawing.Size(172, 52);
+            this.btnCheckInReservation.TabIndex = 41;
+            this.btnCheckInReservation.Text = "Check In Reservation";
+            this.btnCheckInReservation.UseVisualStyleBackColor = false;
+            this.btnCheckInReservation.Click += new System.EventHandler(this.btnCheckInReservation_Click);
             // 
             // UserControlReservation
             // 
@@ -590,5 +606,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
+        private System.Windows.Forms.Button btnCheckInReservation;
     }
 }
