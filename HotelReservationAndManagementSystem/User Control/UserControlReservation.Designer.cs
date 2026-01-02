@@ -55,6 +55,7 @@
             this.lblId = new System.Windows.Forms.Label();
             this.lblSearchReservation = new System.Windows.Forms.Label();
             this.tabPageUpdateAndCancelReservation = new System.Windows.Forms.TabPage();
+            this.btnCheckInReservation = new System.Windows.Forms.Button();
             this.btnCancelReservation = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.dateTimePickerOut1 = new System.Windows.Forms.DateTimePicker();
@@ -68,7 +69,6 @@
             this.lblRoomNo1 = new System.Windows.Forms.Label();
             this.lblRoomType1 = new System.Windows.Forms.Label();
             this.lblUpdateCancel = new System.Windows.Forms.Label();
-            this.btnCheckInReservation = new System.Windows.Forms.Button();
             this.tabControlReservation.SuspendLayout();
             this.tabPageAddReservation.SuspendLayout();
             this.tabPageSearchRervation.SuspendLayout();
@@ -390,6 +390,20 @@
             this.tabPageUpdateAndCancelReservation.Enter += new System.EventHandler(this.tabPageUpdateAndCancelReservation_Enter);
             this.tabPageUpdateAndCancelReservation.Leave += new System.EventHandler(this.tabPageUpdateAndCancelReservation_Leave);
             // 
+            // btnCheckInReservation
+            // 
+            this.btnCheckInReservation.BackColor = System.Drawing.Color.ForestGreen;
+            this.btnCheckInReservation.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCheckInReservation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCheckInReservation.ForeColor = System.Drawing.Color.White;
+            this.btnCheckInReservation.Location = new System.Drawing.Point(635, 278);
+            this.btnCheckInReservation.Name = "btnCheckInReservation";
+            this.btnCheckInReservation.Size = new System.Drawing.Size(172, 52);
+            this.btnCheckInReservation.TabIndex = 41;
+            this.btnCheckInReservation.Text = "Check In Reservation";
+            this.btnCheckInReservation.UseVisualStyleBackColor = false;
+            this.btnCheckInReservation.Click += new System.EventHandler(this.btnCheckInReservation_Click);
+            // 
             // btnCancelReservation
             // 
             this.btnCancelReservation.BackColor = System.Drawing.Color.Brown;
@@ -523,23 +537,9 @@
             this.lblUpdateCancel.ForeColor = System.Drawing.Color.Brown;
             this.lblUpdateCancel.Location = new System.Drawing.Point(15, 14);
             this.lblUpdateCancel.Name = "lblUpdateCancel";
-            this.lblUpdateCancel.Size = new System.Drawing.Size(318, 23);
+            this.lblUpdateCancel.Size = new System.Drawing.Size(336, 23);
             this.lblUpdateCancel.TabIndex = 28;
-            this.lblUpdateCancel.Text = "Updat And Cancel Reservation";
-            // 
-            // btnCheckInReservation
-            // 
-            this.btnCheckInReservation.BackColor = System.Drawing.Color.ForestGreen;
-            this.btnCheckInReservation.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnCheckInReservation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCheckInReservation.ForeColor = System.Drawing.Color.White;
-            this.btnCheckInReservation.Location = new System.Drawing.Point(635, 278);
-            this.btnCheckInReservation.Name = "btnCheckInReservation";
-            this.btnCheckInReservation.Size = new System.Drawing.Size(172, 52);
-            this.btnCheckInReservation.TabIndex = 41;
-            this.btnCheckInReservation.Text = "Check In Reservation";
-            this.btnCheckInReservation.UseVisualStyleBackColor = false;
-            this.btnCheckInReservation.Click += new System.EventHandler(this.btnCheckInReservation_Click);
+            this.lblUpdateCancel.Text = "Update And Cancel Reservation:";
             // 
             // UserControlReservation
             // 

@@ -71,6 +71,7 @@ namespace HotelReservationAndManagementSystem
             userControlRoom1.Hide();
             userControlReservation1.Hide();
             userControlCheckInAndCheckOut1.Hide();
+            userControlBillsAndPayment1.Hide();
         }
 
         private void buttonDashboard_Click(object sender, EventArgs e)
@@ -83,6 +84,8 @@ namespace HotelReservationAndManagementSystem
             userControlReservation1.Hide();
             userControlReservation1.Hide();
             userControlCheckInAndCheckOut1.Hide();
+            userControlBillsAndPayment1.Hide();
+
 
         }
 
@@ -97,6 +100,7 @@ namespace HotelReservationAndManagementSystem
             userControlReservation1.Hide();
             userControlReservation1.Hide();
             userControlCheckInAndCheckOut1.Hide();
+            userControlBillsAndPayment1.Hide();
         }
 
         private void buttonReservation_Click(object sender, EventArgs e)
@@ -109,6 +113,7 @@ namespace HotelReservationAndManagementSystem
             userControlReservation1.Clear();  
             userControlReservation1.Show();
             userControlCheckInAndCheckOut1.Hide();
+            userControlBillsAndPayment1.Hide();
         }
 
         private void buttonCheckInCheckOut_Click(object sender, EventArgs e)
@@ -122,6 +127,7 @@ namespace HotelReservationAndManagementSystem
             userControlReservation1.Hide();
             userControlCheckInAndCheckOut1.Clear();
             userControlCheckInAndCheckOut1.Show();
+            userControlBillsAndPayment1.Hide();
         }
 
         private void buttonBillAndPayment_Click(object sender, EventArgs e)
@@ -134,6 +140,8 @@ namespace HotelReservationAndManagementSystem
             userControlReservation1.Hide();
             userControlReservation1.Hide();
             userControlCheckInAndCheckOut1.Hide();
+            userControlBillsAndPayment1.Clear();
+            userControlBillsAndPayment1.Show();
         }
 
         private void buttonSetting_Click(object sender, EventArgs e)
@@ -147,6 +155,7 @@ namespace HotelReservationAndManagementSystem
             userControlReservation1.Hide();
             userControlReservation1.Show();
             userControlCheckInAndCheckOut1.Hide();
+            userControlBillsAndPayment1.Clear();
 
         }
 
@@ -233,6 +242,11 @@ namespace HotelReservationAndManagementSystem
         }
 
         private void userControlReservation1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void userControlCheckInAndCheckOut1_Load(object sender, EventArgs e)
         {
 
         }

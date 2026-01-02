@@ -834,6 +834,104 @@ VALUES (@No, @Type, @CID, @In, @Out)";
             }
         }
 
+        public bool AddPayment(
+    int checkInOutId,
+    int reservationId,
+    int clientId,
+    decimal totalAmount,
+    decimal amountPaid,
+    decimal changeAmount,
+    string paymentMethod
+)
+        {
+            string query = @"
+INSERT INTO Payment_Table
+(CheckInOut_ID, Reservation_ID, Client_ID,
+ TotalAmount, AmountPaid, ChangeAmount,
+ PaymentMethod, PaymentDate, PaymentStatus)
+VALUES
+(@CheckInOutID, @ReservationID, @ClientID,
+ @TotalAmount, @AmountPaid, @ChangeAmount,
+ @PaymentMethod, GETDATE(), 'Paid')";
 
+            using (SqlConnection connection = GetConnection())
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                cmd.Parameters.Add("@CheckInOutID", SqlDbType.Int).Value = checkInOutId;
+                cmd.Parameters.Add("@ReservationID", SqlDbType.Int).Value = reservationId;
+                cmd.Parameters.Add("@ClientID", SqlDbType.Int).Value = clientId;
+                cmd.Parameters.Add("@TotalAmount", SqlDbType.Decimal).Value = totalAmount;
+                cmd.Parameters.Add("@AmountPaid", SqlDbType.Decimal).Value = amountPaid;
+                cmd.Parameters.Add("@ChangeAmount", SqlDbType.Decimal).Value = changeAmount;
+                cmd.Parameters.Add("@PaymentMethod", SqlDbType.VarChar, 30).Value = paymentMethod;
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+
+                    MessageBox.Show(
+                        "Payment Successful!",
+                        "Payment",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+
+                    return true;
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show(
+                        "Payment failed!\n" + ex.Message,
+                        "Payment Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                    return false;
+                }
+            }
+        }
+        public void UpdateCheckInOutPaymentStatus(int checkInOutId)
+        {
+            string query =
+                "UPDATE CheckInOut_Table " +
+                "SET PaymentStatus = 'Paid' " +
+                "WHERE CheckInOut_ID = @ID";
+
+            using (SqlConnection connection = GetConnection())
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            {
+                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = checkInOutId;
+                cmd.ExecuteNonQuery();
+            }
+        }
+        public DataTable GetBillingDetails(int reservationId)
+        {
+            DataTable table = new DataTable();
+
+            string query = @"
+SELECT
+    c.CheckInOut_ID,
+    c.ClientName,
+    c.Room_Number,
+    c.Room_Type,
+    c.CheckInDate,
+    c.ExpectedCheckOutDate,
+    c.TotalDays,
+    c.RoomRate,
+    c.TotalAmount,
+    c.PaymentStatus
+FROM CheckInOut_Table c
+WHERE c.Reservation_ID = @ReservationID";
+
+            using (SqlConnection connection = GetConnection())
+            using (SqlCommand cmd = new SqlCommand(query, connection))
+            using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+            {
+                cmd.Parameters.Add("@ReservationID", SqlDbType.Int).Value = reservationId;
+                adapter.Fill(table);
+            }
+
+            return table;
+        }
     }
 }
