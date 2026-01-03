@@ -165,17 +165,40 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void txtBoxSearchClientID_TextChanged(object sender, EventArgs e)
         {
+            string query;
 
-            string query = @"
-    SELECT 
-        Reservation_ID,
-        Client_ID,
-        Room_Number,
-        Room_Type,
-        Reservation_In,
-        Reservation_Out,
-        Reservation_Status
-    FROM Reservation_Table";
+           
+            if (string.IsNullOrWhiteSpace(txtBoxSearchClientID.Text))
+            {
+                query = @"
+SELECT 
+    Reservation_ID,
+    Client_ID,
+    Room_Number,
+    Room_Type,
+    Reservation_In,
+    Reservation_Out,
+    Reservation_Status
+FROM Reservation_Table";
+            }
+            else
+            {
+                
+                if (!int.TryParse(txtBoxSearchClientID.Text, out _))
+                    return;
+
+                query = @"
+SELECT 
+    Reservation_ID,
+    Client_ID,
+    Room_Number,
+    Room_Type,
+    Reservation_In,
+    Reservation_Out,
+    Reservation_Status
+FROM Reservation_Table
+WHERE Client_ID = " + txtBoxSearchClientID.Text;
+            }
 
             db.DisplayAndSearch(query, dataGridViewReservation);
         }
@@ -225,36 +248,64 @@ namespace HotelReservationAndManagementSystem.User_Control
         } 
             private void btnCancelReservation_Click(object sender, EventArgs e)
             {
-                if (string.IsNullOrEmpty(RID))
-                {
-                    MessageBox.Show(
-                        "Please first select a reservation.",
-                        "No Selection",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
-                    );
-                    return;
-                }
-
-                DialogResult result = MessageBox.Show(
-                    "Do you want to cancel this reservation?",
-                    "Cancel Reservation",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question
+            if (string.IsNullOrEmpty(RID))
+            {
+                MessageBox.Show(
+                    "Please first select a reservation.",
+                    "No Selection",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
                 );
+                return;
+            }
 
-                if (result == DialogResult.Yes)
-                {
-                    bool check = db.DeleteReservation(RID);// this is error
+            // 🔒 Allow cancel ONLY if status is Reserved
+            string status = selectedReservationRow.Cells[6].Value?.ToString();
+            if (status != "Reserved")
+            {
+                MessageBox.Show(
+                    "Only RESERVED reservations can be cancelled.",
+                    "Cancel Not Allowed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
 
-                    // ⭐ Only update room if delete succeeded
-                    if (check && !string.IsNullOrEmpty(No))
-                    {
-                        db.UpdateReservationRoom(No, "Yes");
-                        Clear1();
-                    }
+            DialogResult result = MessageBox.Show(
+                "Do you want to cancel this reservation?",
+                "Cancel Reservation",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (result != DialogResult.Yes)
+                return;
+
+            // ✅ CORRECT: cancel (update status), not delete
+            bool success = db.CancelReservation(int.Parse(RID));
+
+            if (success)
+            {
+                // Free the room
+                if (!string.IsNullOrEmpty(No))
+                    db.UpdateReservationRoom(No, "Yes");
+
+                MessageBox.Show("Reservation cancelled successfully.");
+
+                Clear1();
+                tabControlReservation.SelectedTab = tabPageSearchRervation;
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Reservation could not be cancelled.",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
                 }
-        }
+            }
         private void tabPageUpdateAndCancelReservation_Leave(object sender, EventArgs e)
         {
             Clear1();
@@ -338,7 +389,6 @@ namespace HotelReservationAndManagementSystem.User_Control
                 return;
             }
 
-            // Optional: block double check-in
             string status = selectedReservationRow.Cells[6].Value?.ToString();
             if (status != "Reserved")
             {
@@ -347,10 +397,8 @@ namespace HotelReservationAndManagementSystem.User_Control
             }
 
             bool success = db.CheckInFromReservation(
-                int.Parse(RID),                         // Reservation_ID
-                txtBoxClientID1.Text,                  // ClientName or ClientID (match DAL)
-                int.Parse(comboBoxNo1.SelectedItem.ToString()),
-                comboBoxType1.SelectedItem.ToString(),
+                int.Parse(RID),
+                txtBoxClientID1.Text,
                 dateTimePickerIn1.Value,
                 dateTimePickerOut1.Value
             );
@@ -359,8 +407,14 @@ namespace HotelReservationAndManagementSystem.User_Control
             {
                 MessageBox.Show("Check-In successful.");
 
-                // Update reservation status
-                db.UpdateReservationStatus(int.Parse(RID), "CheckedIn");
+                // ✅ FIX 3-B: refresh reservation list
+                db.DisplayAndSearch(
+                    "SELECT Reservation_ID, Client_ID, Room_Number, Room_Type, " +
+                    "Reservation_In, Reservation_Out, Reservation_Status " +
+                    "FROM Reservation_Table " +
+                    "WHERE Reservation_Status = 'Reserved'",
+                    dataGridViewReservation
+                );
 
                 Clear1();
                 tabControlReservation.SelectedTab = tabPageSearchRervation;

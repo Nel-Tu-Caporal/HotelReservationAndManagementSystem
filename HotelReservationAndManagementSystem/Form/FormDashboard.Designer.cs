@@ -46,6 +46,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -54,9 +55,8 @@
             this.panel5 = new System.Windows.Forms.Panel();
             this.linkLabelLogOut = new System.Windows.Forms.LinkLabel();
             this.labelDateAndTime = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.userControlCheckInAndCheckOut1 = new HotelReservationAndManagementSystem.User_Control.UserControlCheckInAndCheckOut();
             this.userControlSetting1 = new HotelReservationAndManagementSystem.User_Control.UserControlSetting();
             this.userControlClient1 = new HotelReservationAndManagementSystem.User_Control.UserControlClient();
@@ -66,11 +66,11 @@
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.lblLogoLabel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // panel2
@@ -267,6 +267,18 @@
             this.panel6.Size = new System.Drawing.Size(307, 10);
             this.panel6.TabIndex = 1;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.Wheat;
+            this.pictureBox2.Image = global::HotelReservationAndManagementSystem.Properties.Resources.download;
+            this.pictureBox2.Location = new System.Drawing.Point(-5, -2);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(306, 235);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 0;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.label1);
@@ -360,10 +372,6 @@
             this.labelDateAndTime.Text = "?";
             this.labelDateAndTime.Click += new System.EventHandler(this.labelDateAndTime_Click);
             // 
-            // timer1
-            // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // pictureBox1
             // 
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -375,17 +383,9 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // pictureBox2
+            // timer1
             // 
-            this.pictureBox2.BackColor = System.Drawing.Color.Wheat;
-            this.pictureBox2.Image = global::HotelReservationAndManagementSystem.Properties.Resources.download;
-            this.pictureBox2.Location = new System.Drawing.Point(-5, -2);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(306, 235);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // userControlCheckInAndCheckOut1
             // 
@@ -454,7 +454,8 @@
             this.userControlBillsAndPayment1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.userControlBillsAndPayment1.Name = "userControlBillsAndPayment1";
             this.userControlBillsAndPayment1.Size = new System.Drawing.Size(1469, 416);
-            this.userControlBillsAndPayment1.TabIndex = 1;
+            this.userControlBillsAndPayment1.TabIndex = 0;
+            this.userControlBillsAndPayment1.Visible = false;
             // 
             // Hotel
             // 
@@ -484,6 +485,7 @@
             this.panel3.ResumeLayout(false);
             this.lblLogoLabel.ResumeLayout(false);
             this.lblLogoLabel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel4.ResumeLayout(false);
@@ -491,7 +493,6 @@
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
 
         }
