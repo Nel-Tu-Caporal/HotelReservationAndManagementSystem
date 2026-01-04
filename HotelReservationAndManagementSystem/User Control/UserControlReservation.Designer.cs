@@ -416,7 +416,7 @@
             this.btnCancelReservation.TabIndex = 40;
             this.btnCancelReservation.Text = "Cancel";
             this.btnCancelReservation.UseVisualStyleBackColor = false;
-            this.btnCancelReservation.Click += new System.EventHandler(this.btnCancelReservation_Click);
+            this.btnCancelReservation.Click += new System.EventHandler(this.btnCheckInReservation_Click);
             // 
             // label1
             // 
@@ -552,6 +552,7 @@
             this.Name = "UserControlReservation";
             this.Size = new System.Drawing.Size(1102, 462);
             this.Load += new System.EventHandler(this.UserControlReservation_Load);
+            this.Click += new System.EventHandler(this.UserControlReservation_Click);
             this.tabControlReservation.ResumeLayout(false);
             this.tabPageAddReservation.ResumeLayout(false);
             this.tabPageAddReservation.PerformLayout();

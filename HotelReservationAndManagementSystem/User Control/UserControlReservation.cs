@@ -4,12 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Globalization;
 
 namespace HotelReservationAndManagementSystem.User_Control
 {
@@ -51,6 +52,49 @@ namespace HotelReservationAndManagementSystem.User_Control
             RID = "";
         }
 
+
+        private bool BindSelectedReservation()
+        {
+            if (selectedReservationRow == null)
+                return false;
+
+            if (selectedReservationRow.Cells[0].Value == null)
+                return false;
+
+            RID = selectedReservationRow.Cells[0].Value.ToString();
+
+            txtBoxClientID1.Text =
+                selectedReservationRow.Cells[1].Value?.ToString() ?? "";
+
+            string roomNo =
+                selectedReservationRow.Cells[2].Value?.ToString();
+
+            string roomType =
+                selectedReservationRow.Cells[3].Value?.ToString();
+
+            if (string.IsNullOrEmpty(roomNo) || string.IsNullOrEmpty(roomType))
+                return false;
+
+            comboBoxType1.SelectedItem = roomType;
+
+            db.RoomTypeAndNo(
+                "SELECT Room_Number FROM Room_Table " +
+                "WHERE Room_Type = '" + roomType + "' " +
+                "AND (Room_Free = 'Yes' OR Room_Number = " + roomNo + ")",
+                comboBoxNo1
+            );
+
+            comboBoxNo1.SelectedItem = roomNo;
+            No = roomNo;
+
+            if (selectedReservationRow.Cells[4].Value != null)
+                dateTimePickerIn1.Value = Convert.ToDateTime(selectedReservationRow.Cells[4].Value);
+
+            if (selectedReservationRow.Cells[5].Value != null)
+                dateTimePickerOut1.Value = Convert.ToDateTime(selectedReservationRow.Cells[5].Value);
+
+            return true;
+        }
         private void tabPage1_Click(object sender, EventArgs e)
         {
 
@@ -100,19 +144,16 @@ namespace HotelReservationAndManagementSystem.User_Control
                 return;
             }
 
-            // DATE VALIDATION
             if (dateTimePickerOut.Value.Date <= dateTimePickerIn.Value.Date)
             {
                 MessageBox.Show(
                     "Check-out date must be later than check-in date.",
                     "Invalid Dates",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+                    MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validate numeric values
             if (!int.TryParse(txtBoxClientID.Text, out int clientId))
             {
                 MessageBox.Show("Client ID must be a number.");
@@ -125,21 +166,39 @@ namespace HotelReservationAndManagementSystem.User_Control
                 return;
             }
 
-            // Call AddReservation with correct types
-            bool check = db.AddReservation(
-                comboBoxType.SelectedItem.ToString(),
-                roomNo,
-                clientId,
-                dateTimePickerIn.Value,   // DateTime
-                dateTimePickerOut.Value   // DateTime
-            );
-
-            if (check)
+            try
             {
-                db.UpdateReservationRoom(comboBoxNo.SelectedItem.ToString(), "No");
-                Clear();
+                bool check = db.AddReservation(
+                    comboBoxType.SelectedItem.ToString(),
+                    roomNo,
+                    clientId,
+                    dateTimePickerIn.Value,
+                    dateTimePickerOut.Value);
+
+                if (check)
+                {
+                    db.UpdateReservationRoom(
+                        comboBoxNo.SelectedItem.ToString(),
+                        "No");
+
+                    MessageBox.Show(
+                        "Reservation added successfully.",
+                        "Success",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    Clear();
+                }
             }
-        }
+            catch (SqlException)
+            {
+                MessageBox.Show(
+                    "Client ID does not exist.\nPlease add the client first.",
+                    "Invalid Client",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }   
 
         private void tabPageSearchRervation_Enter(object sender, EventArgs e)
         {
@@ -205,49 +264,33 @@ WHERE Client_ID = " + txtBoxSearchClientID.Text;
 
         private void dataGridViewReservation_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-           if (e.RowIndex == -1) return;
 
-            selectedReservationRow = dataGridViewReservation.Rows[e.RowIndex];
+            if (e.RowIndex < 0) return;
 
+            var row = dataGridViewReservation.Rows[e.RowIndex];
+
+            if (row.Cells[6].Value == null)
+                return;
+
+            string status = row.Cells[6].Value.ToString();
+
+            if (status != "Reserved")
+            {
+                MessageBox.Show(
+                    "Only RESERVED reservations can be modified.",
+                    "Action Not Allowed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+                return;
+            }
+
+            selectedReservationRow = row;
             tabControlReservation.SelectedTab = tabPageUpdateAndCancelReservation;
         }
 
         private void btnUpdateReservation_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(RID))
-            {
-                MessageBox.Show("Please first select row from table.", "Selection of row.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            if (comboBoxType1.SelectedIndex == 0 || comboBoxNo1.SelectedIndex == 0 || string.IsNullOrWhiteSpace(txtBoxClientID1.Text))
-            {
-                MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            bool check = db.UpdateReservation(
-    int.Parse(RID),                              
-    comboBoxType1.SelectedItem.ToString(),       
-    int.Parse(comboBoxNo1.SelectedItem.ToString()),
-    int.Parse(txtBoxClientID1.Text),              
-    dateTimePickerIn1.Value,                     
-    dateTimePickerOut1.Value                  
-);
-
-            // Update old room to free
-            if (!string.IsNullOrEmpty(No))
-                db.UpdateReservationRoom(No, "Yes");
-
-            // Update new room to occupied
-            db.UpdateReservationRoom(comboBoxNo1.SelectedItem.ToString(), "No");
-
-            if (check)
-                db.UpdateReservationRoom(comboBoxNo.SelectedItem.ToString(), "No");
-            Clear1();
-        } 
-            private void btnCancelReservation_Click(object sender, EventArgs e)
-            {
             if (string.IsNullOrEmpty(RID))
             {
                 MessageBox.Show(
@@ -259,53 +302,65 @@ WHERE Client_ID = " + txtBoxSearchClientID.Text;
                 return;
             }
 
-            // 🔒 Allow cancel ONLY if status is Reserved
-            string status = selectedReservationRow.Cells[6].Value?.ToString();
-            if (status != "Reserved")
+            if (comboBoxType1.SelectedIndex == 0 ||
+                comboBoxNo1.SelectedIndex == 0 ||
+                string.IsNullOrWhiteSpace(txtBoxClientID1.Text))
             {
                 MessageBox.Show(
-                    "Only RESERVED reservations can be cancelled.",
-                    "Cancel Not Allowed",
+                    "Please fill out all fields.",
+                    "Required Fields",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning
                 );
                 return;
             }
 
-            DialogResult result = MessageBox.Show(
-                "Do you want to cancel this reservation?",
-                "Cancel Reservation",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
+            // Update reservation FIRST
+            bool updated = db.UpdateReservation(
+                int.Parse(RID),
+                comboBoxType1.SelectedItem.ToString(),
+                int.Parse(comboBoxNo1.SelectedItem.ToString()),
+                int.Parse(txtBoxClientID1.Text),
+                dateTimePickerIn1.Value,
+                dateTimePickerOut1.Value
             );
 
-            if (result != DialogResult.Yes)
-                return;
-
-            // ✅ CORRECT: cancel (update status), not delete
-            bool success = db.CancelReservation(int.Parse(RID));
-
-            if (success)
-            {
-                // Free the room
-                if (!string.IsNullOrEmpty(No))
-                    db.UpdateReservationRoom(No, "Yes");
-
-                MessageBox.Show("Reservation cancelled successfully.");
-
-                Clear1();
-                tabControlReservation.SelectedTab = tabPageSearchRervation;
-            }
-            else
+            //  Stop if update failed
+            if (!updated)
             {
                 MessageBox.Show(
-                    "Reservation could not be cancelled.",
-                    "Error",
+                    "Reservation could not be updated.",
+                    "Update Failed",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );
-                }
+                return;
             }
+
+            // ✅ Free old room (if changed)
+            if (!string.IsNullOrEmpty(No) &&
+                No != comboBoxNo1.SelectedItem.ToString())
+            {
+                db.UpdateReservationRoom(No, "Yes");
+            }
+
+            // ✅ Occupy new room
+            db.UpdateReservationRoom(
+                comboBoxNo1.SelectedItem.ToString(),
+                "No"
+            );
+
+            MessageBox.Show(
+                "Reservation updated successfully.",
+                "Success",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+
+            Clear1();
+            tabControlReservation.SelectedTab = tabPageSearchRervation;
+        }
+            
         private void tabPageUpdateAndCancelReservation_Leave(object sender, EventArgs e)
         {
             Clear1();
@@ -354,34 +409,20 @@ WHERE Client_ID = " + txtBoxSearchClientID.Text;
 
         private void tabPageUpdateAndCancelReservation_Enter(object sender, EventArgs e)
         {
-            if (selectedReservationRow == null) return;
+            if (!BindSelectedReservation())
+            {
+                MessageBox.Show(
+                    "Please select a valid reservation.",
+                    "Invalid Selection",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
 
-            RID = selectedReservationRow.Cells[0].Value.ToString();
-            txtBoxClientID1.Text = selectedReservationRow.Cells[1].Value.ToString();
-
-            string roomNo = selectedReservationRow.Cells[2].Value.ToString();
-            string roomType = selectedReservationRow.Cells[3].Value.ToString();
-
-            comboBoxType1.SelectedItem = roomType;
-
-            // 🔥 KEY FIX: load free rooms + current reserved room
-            db.RoomTypeAndNo(
-                "SELECT Room_Number FROM Room_Table " +
-                "WHERE Room_Type = '" + roomType + "' " +
-                "AND (Room_Free = 'Yes' OR Room_Number = " + roomNo + ") " +
-                "ORDER BY Room_Number",
-                comboBoxNo1
-            );
-
-            comboBoxNo1.SelectedItem = roomNo;
-
-            No = roomNo;
-
-            dateTimePickerIn1.Value = Convert.ToDateTime(selectedReservationRow.Cells[4].Value);
-            dateTimePickerOut1.Value = Convert.ToDateTime(selectedReservationRow.Cells[5].Value);
+                tabControlReservation.SelectedTab = tabPageSearchRervation;
+            }
         }
 
-        private void btnCheckInReservation_Click(object sender, EventArgs e)
+        private void btnCheckInReservation_Click (object sender, EventArgs e)  // CANCEL RESERVATION BTN
         {
             if (string.IsNullOrEmpty(RID))
             {
@@ -389,36 +430,77 @@ WHERE Client_ID = " + txtBoxSearchClientID.Text;
                 return;
             }
 
-            string status = selectedReservationRow.Cells[6].Value?.ToString();
-            if (status != "Reserved")
+            // Make sure room is selected
+            if (comboBoxNo1.SelectedItem == null || comboBoxType1.SelectedItem == null)
             {
-                MessageBox.Show("This reservation is already checked in or cancelled.");
+                MessageBox.Show("Invalid room selection.");
                 return;
             }
 
+            DialogResult confirm = MessageBox.Show(
+                "Proceed with CHECK-IN for this reservation?",
+                "Check-In Reservation",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (confirm != DialogResult.Yes)
+                return;
+
+            int reservationId = int.Parse(RID);
+            int roomNumber = int.Parse(comboBoxNo1.SelectedItem.ToString());
+            string roomType = comboBoxType1.SelectedItem.ToString();
+
+            // You can improve this later by fetching real client name
+            string clientName = txtBoxClientID1.Text;
+
+            // TEMP room rate (replace with DB value if you have one)
+            decimal roomRate = 1000m;
+
             bool success = db.CheckInFromReservation(
-                int.Parse(RID),
-                txtBoxClientID1.Text,
-                dateTimePickerIn1.Value,
-                dateTimePickerOut1.Value
+                reservationId,
+                clientName,
+                roomNumber,
+                roomType,
+                roomRate,
+                DateTime.Now,                 // actual check-in
+                dateTimePickerOut1.Value      // expected checkout
             );
 
-            if (success)
+            if (!success)
             {
-                MessageBox.Show("Check-In successful.");
-
-                // ✅ FIX 3-B: refresh reservation list
-                db.DisplayAndSearch(
-                    "SELECT Reservation_ID, Client_ID, Room_Number, Room_Type, " +
-                    "Reservation_In, Reservation_Out, Reservation_Status " +
-                    "FROM Reservation_Table " +
-                    "WHERE Reservation_Status = 'Reserved'",
-                    dataGridViewReservation
-                );
-
-                Clear1();
-                tabControlReservation.SelectedTab = tabPageSearchRervation;
+                MessageBox.Show(
+                    "This reservation is already checked in or invalid.",
+                    "Check-In Failed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
             }
+
+            MessageBox.Show(
+                "Guest checked in successfully!",
+                "Check-In Complete",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+
+            // 🔄 Refresh grid
+            db.DisplayAndSearch(
+                @"SELECT Reservation_ID,
+                 Client_ID,
+                 Room_Number,
+                 Room_Type,
+                 Reservation_In,
+                 Reservation_Out,
+                 Reservation_Status
+          FROM Reservation_Table",
+                dataGridViewReservation);
+
+            Clear1();
+            tabControlReservation.SelectedTab = tabPageSearchRervation;
+        }
+
+        private void UserControlReservation_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void comboBoxRoomType_SelectedIndexChanged(object sender, EventArgs e)

@@ -172,16 +172,20 @@
                 return true;
             }
 
-            public void DisplayAndSearch(string query, DataGridView dgv)
+           public void DisplayAndSearch(string query, DataGridView dgv)
+          {
+            using (SqlConnection con = GetConnection())
             {
-                using (SqlConnection connection = GetConnection())
-                using (SqlCommand cmd = new SqlCommand(query, connection))
-                using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    DataTable table = new DataTable();
-                    adapter.Fill(table);
-                    dgv.DataSource = table;
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    dgv.AutoGenerateColumns = true;
+                    dgv.DataSource = dt;
                 }
+            }
             }
 
             public bool AddClient(string FirstName, string LastName, string Phone, string Address)
@@ -398,7 +402,12 @@
                     }
                 }
                 }
-        public bool AddReservation(string type,int roomNo,int clientId,DateTime checkIn,DateTime checkOut)
+        public bool AddReservation(
+     string type,
+     int roomNo,
+     int clientId,
+     DateTime checkIn,
+     DateTime checkOut)
         {
             using (SqlConnection connection = GetConnection())
             {
@@ -406,7 +415,6 @@
 
                 try
                 {
-                    
                     string reservationQuery = @"
 INSERT INTO Reservation_Table
 (Room_Number, Room_Type, Client_ID, Reservation_In, Reservation_Out, Reservation_Status)
@@ -419,10 +427,10 @@ VALUES (@No, @Type, @CID, @In, @Out, 'Reserved')";
                         cmd.Parameters.Add("@CID", SqlDbType.Int).Value = clientId;
                         cmd.Parameters.Add("@In", SqlDbType.Date).Value = checkIn;
                         cmd.Parameters.Add("@Out", SqlDbType.Date).Value = checkOut;
+
                         cmd.ExecuteNonQuery();
                     }
 
-                    // 2ARK ROOM AS NOT FREE
                     string updateRoom = @"
 UPDATE Room_Table
 SET Room_Free = 'No'
@@ -437,156 +445,140 @@ WHERE Room_Number = @RoomNo";
                     transaction.Commit();
                     return true;
                 }
-                catch (Exception ex)
+                catch
                 {
                     transaction.Rollback();
-                    MessageBox.Show(ex.Message);
-                    return false;
+                    throw; // 🔥 IMPORTANT: let UserControl handle the error
                 }
             }
+        
         }
-        public bool CheckInFromReservation( int reservationId,string clientName,DateTime checkIn, DateTime expectedCheckOut)
-        {
-            using (SqlConnection connection = GetConnection())
+            public bool CheckInFromReservation(
+         int reservationId,
+         string clientName,
+         int roomNumber,
+         string roomType,
+         decimal roomRate,
+         DateTime checkInDate,
+         DateTime expectedCheckOutDate
+     )
             {
-                SqlTransaction transaction = connection.BeginTransaction();
-
-                try
+                using (SqlConnection con = GetConnection())
                 {
-                    // 1Prevent double check-in
-                    string checkQuery = @"
-SELECT COUNT(*) FROM CheckInOut_Table
-WHERE Reservation_ID = @RID AND Status = 'CheckedIn'";
-
-                    using (SqlCommand cmd = new SqlCommand(checkQuery, connection, transaction))
-                    {
-                        cmd.Parameters.Add("@RID", SqlDbType.Int).Value = reservationId;
-                        int exists = (int)cmd.ExecuteScalar();
-                        if (exists > 0)
-                            throw new Exception("Reservation already checked in.");
-                    }
-
-                    //  Insert Check-In
-                    string insertCheckIn = @"
-INSERT INTO CheckInOut_Table
-(Reservation_ID, ClientName, Room_Number, Room_Type,
- CheckInDate, ExpectedCheckOutDate, RoomRate, Status)
-SELECT
-    r.Reservation_ID,
-    @ClientName,
-    r.Room_Number,
-    r.Room_Type,
-    @CheckIn,
-    @ExpectedOut,
-    rm.Room_Rate,
-    'CheckedIn'
-FROM Reservation_Table r
-JOIN Room_Table rm ON r.Room_Number = rm.Room_Number
-WHERE r.Reservation_ID = @RID
-  AND r.Reservation_Status = 'Reserved'";
-
-                    using (SqlCommand cmd = new SqlCommand(insertCheckIn, connection, transaction))
-                    {
-                        cmd.Parameters.Add("@RID", SqlDbType.Int).Value = reservationId;
-                        cmd.Parameters.Add("@ClientName", SqlDbType.VarChar).Value = clientName;
-                        cmd.Parameters.Add("@CheckIn", SqlDbType.DateTime).Value = checkIn;
-                        cmd.Parameters.Add("@ExpectedOut", SqlDbType.DateTime).Value = expectedCheckOut;
-
-                        if (cmd.ExecuteNonQuery() == 0)
-                            throw new Exception("Check-in failed.");
-                    }
-
-                    // 3 Update Reservation Status
-                    string updateReservation = @"
-UPDATE Reservation_Table
-SET Reservation_Status = 'CheckedIn'
-WHERE Reservation_ID = @RID";
-
-                    using (SqlCommand cmd = new SqlCommand(updateReservation, connection, transaction))
-                    {
-                        cmd.Parameters.Add("@RID", SqlDbType.Int).Value = reservationId;
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    // Lock the room
-                    string updateRoom = @"
-UPDATE Room_Table
-SET Room_Free = 'No'
-WHERE Room_Number = (
-    SELECT Room_Number FROM Reservation_Table WHERE Reservation_ID = @RID
-)";
-
-                    using (SqlCommand cmd = new SqlCommand(updateRoom, connection, transaction))
-                    {
-                        cmd.Parameters.Add("@RID", SqlDbType.Int).Value = reservationId;
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    transaction.Commit();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    MessageBox.Show(ex.Message, "Check-In Error");
-                    return false;
-                }
-            }
-        }
-        public void UpdateReservationStatus(int reservationId, string status)
-            {
-                string query =
-                    "UPDATE Reservation_Table SET Reservation_Status = @Status " +
-                    "WHERE Reservation_ID = @ReservationID";
-
-                using (SqlConnection connection = GetConnection())
-                using (SqlCommand cmd = new SqlCommand(query, connection))
-                {
-                    cmd.Parameters.Add("@ReservationID", SqlDbType.Int).Value = reservationId;
-                    cmd.Parameters.Add("@Status", SqlDbType.VarChar, 20).Value = status;
-                    cmd.ExecuteNonQuery();
-                }
-            }
-
-            public bool UpdateReservation(
-        int reservationId,
-        string roomType,
-        int roomNumber,
-        int clientId,
-        DateTime checkIn,
-        DateTime checkOut)
-            {
-                string cmdText =
-                    "UPDATE Reservation_Table SET " +
-                    "Room_Type = @RoomType, " +
-                    "Room_Number = @RoomNumber, " +
-                    "Client_ID = @ClientID, " +
-                    "Reservation_In = @CheckIn, " +
-                    "Reservation_Out = @CheckOut " +
-                    "WHERE Reservation_ID = @ReservationID";
-
-                using (SqlConnection connection = GetConnection())
-                using (SqlCommand cmd = new SqlCommand(cmdText, connection))
-                {
-                    cmd.Parameters.Add("@ReservationID", SqlDbType.Int).Value = reservationId;
-                    cmd.Parameters.Add("@RoomType", SqlDbType.VarChar, 6).Value = roomType;
-                    cmd.Parameters.Add("@RoomNumber", SqlDbType.Int).Value = roomNumber;
-                    cmd.Parameters.Add("@ClientID", SqlDbType.Int).Value = clientId;
-                    cmd.Parameters.Add("@CheckIn", SqlDbType.Date).Value = checkIn;
-                    cmd.Parameters.Add("@CheckOut", SqlDbType.Date).Value = checkOut;
+                    SqlTransaction tx = con.BeginTransaction();
 
                     try
                     {
-                        return cmd.ExecuteNonQuery() > 0;
+                    // 1️⃣ Prevent duplicate active check-in
+                    string existsQuery = @"
+SELECT COUNT(*)
+FROM CheckInOut_Table
+WHERE Reservation_ID = @RID
+  AND ActualCheckOutDate IS NULL";
+
+                    using (SqlCommand checkCmd = new SqlCommand(existsQuery, con, tx))
+                        {
+                            checkCmd.Parameters.Add("@RID", SqlDbType.Int).Value = reservationId;
+                            int exists = (int)checkCmd.ExecuteScalar();
+                            if (exists > 0)
+                                return false;
+                        }
+
+                        // 2️⃣ INSERT check-in
+                        string insertQuery = @"
+                    INSERT INTO CheckInOut_Table
+                    (Reservation_ID, ClientName, Room_Number, Room_Type,
+                     CheckInDate, ExpectedCheckOutDate, RoomRate,
+                     Status, PaymentStatus)
+                    VALUES
+                    (@RID, @ClientName, @RoomNo, @RoomType,
+                     @CheckIn, @ExpectedOut, @Rate,
+                     'CheckedIn', 'Pending')";
+
+                        using (SqlCommand cmd = new SqlCommand(insertQuery, con, tx))
+                        {
+                            cmd.Parameters.Add("@RID", SqlDbType.Int).Value = reservationId;
+                            cmd.Parameters.Add("@ClientName", SqlDbType.VarChar).Value = clientName;
+                            cmd.Parameters.Add("@RoomNo", SqlDbType.Int).Value = roomNumber;
+                            cmd.Parameters.Add("@RoomType", SqlDbType.VarChar).Value = roomType;
+                            cmd.Parameters.Add("@CheckIn", SqlDbType.DateTime).Value = checkInDate;
+                            cmd.Parameters.Add("@ExpectedOut", SqlDbType.DateTime).Value = expectedCheckOutDate;
+                            cmd.Parameters.Add("@Rate", SqlDbType.Decimal).Value = roomRate;
+
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 3️⃣ Update reservation status
+                        string updateReservation = @"
+                    UPDATE Reservation_Table
+                    SET Reservation_Status = 'CheckedIn'
+                    WHERE Reservation_ID = @RID";
+
+                        using (SqlCommand cmd = new SqlCommand(updateReservation, con, tx))
+                        {
+                            cmd.Parameters.Add("@RID", SqlDbType.Int).Value = reservationId;
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        tx.Commit();
+                        return true;
                     }
-                    catch (SqlException ex)
+                    catch
                     {
-                        MessageBox.Show(ex.Message);
+                        tx.Rollback();
                         return false;
                     }
                 }
             }
-            public int Count(string query)
+
+        public bool UpdateReservation(
+    int reservationId,
+    string roomType,
+    int roomNumber,
+    int clientId,
+    DateTime dateIn,
+    DateTime dateOut)
+        {
+            try
+            {
+                using (SqlConnection con = GetConnection())
+                {
+                    string query = @"
+UPDATE Reservation_Table
+SET 
+    Room_Type = @RoomType,
+    Room_Number = @RoomNumber,
+    Client_ID = @ClientID,
+    Reservation_In = @DateIn,
+    Reservation_Out = @DateOut
+WHERE Reservation_ID = @ReservationID
+  AND Reservation_Status = 'Reserved'";
+
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@RoomType", SqlDbType.VarChar).Value = roomType;
+                        cmd.Parameters.Add("@RoomNumber", SqlDbType.Int).Value = roomNumber;
+                        cmd.Parameters.Add("@ClientID", SqlDbType.Int).Value = clientId;
+                        cmd.Parameters.Add("@DateIn", SqlDbType.Date).Value = dateIn;
+                        cmd.Parameters.Add("@DateOut", SqlDbType.Date).Value = dateOut;
+                        cmd.Parameters.Add("@ReservationID", SqlDbType.Int).Value = reservationId;
+
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "UpdateReservation Error:\n" + ex.Message,
+                    "DAL Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+                return false;
+            }
+        }
+        public int Count(string query)
             {
                 SqlConnection connection = GetConnection();
                 SqlCommand sqlCommand = new SqlCommand(query, connection);

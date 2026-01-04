@@ -31,7 +31,17 @@
             this.tabControlCheckInCheckOut = new System.Windows.Forms.TabControl();
             this.tabPageCheckInList = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnCancelCheckIn = new System.Windows.Forms.Button();
             this.dataGridViewCheckInList = new System.Windows.Forms.DataGridView();
+            this.CheckInOut_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Reservation_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClientName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Room_Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Room_Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CheckInDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExpectedCheckOutDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RoomRate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPageCheckOut = new System.Windows.Forms.TabPage();
             this.label7 = new System.Windows.Forms.Label();
             this.lblCheckInOutDate = new System.Windows.Forms.Label();
@@ -43,16 +53,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnCancelCheckIn = new System.Windows.Forms.Button();
-            this.CheckInOut_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Reservation_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClientName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Room_Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Room_Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CheckInDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExpectedCheckOutDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RoomRate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControlCheckInCheckOut.SuspendLayout();
             this.tabPageCheckInList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCheckInList)).BeginInit();
@@ -96,6 +96,20 @@
             this.label1.TabIndex = 43;
             this.label1.Text = "Check In List:";
             // 
+            // btnCancelCheckIn
+            // 
+            this.btnCancelCheckIn.BackColor = System.Drawing.Color.Brown;
+            this.btnCancelCheckIn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCancelCheckIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancelCheckIn.ForeColor = System.Drawing.Color.White;
+            this.btnCancelCheckIn.Location = new System.Drawing.Point(584, 278);
+            this.btnCancelCheckIn.Name = "btnCancelCheckIn";
+            this.btnCancelCheckIn.Size = new System.Drawing.Size(155, 52);
+            this.btnCancelCheckIn.TabIndex = 42;
+            this.btnCancelCheckIn.Text = "Cancel Check In";
+            this.btnCancelCheckIn.UseVisualStyleBackColor = false;
+            this.btnCancelCheckIn.Click += new System.EventHandler(this.btnCancelCheckIn_Click);
+            // 
             // dataGridViewCheckInList
             // 
             this.dataGridViewCheckInList.AllowUserToAddRows = false;
@@ -118,11 +132,85 @@
             this.dataGridViewCheckInList.ReadOnly = true;
             this.dataGridViewCheckInList.RowHeadersWidth = 62;
             this.dataGridViewCheckInList.RowTemplate.Height = 28;
-            this.dataGridViewCheckInList.Size = new System.Drawing.Size(977, 211);
+            this.dataGridViewCheckInList.Size = new System.Drawing.Size(925, 211);
             this.dataGridViewCheckInList.TabIndex = 14;
             this.dataGridViewCheckInList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCheckInList_CellClick);
             this.dataGridViewCheckInList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewReservation_CellContentClick);
             this.dataGridViewCheckInList.Enter += new System.EventHandler(this.dataGridViewCheckInList_Enter);
+            // 
+            // CheckInOut_ID
+            // 
+            this.CheckInOut_ID.DataPropertyName = "CheckInOut_ID";
+            this.CheckInOut_ID.HeaderText = "CheckInOut ID";
+            this.CheckInOut_ID.MinimumWidth = 8;
+            this.CheckInOut_ID.Name = "CheckInOut_ID";
+            this.CheckInOut_ID.ReadOnly = true;
+            this.CheckInOut_ID.Visible = false;
+            // 
+            // Reservation_ID
+            // 
+            this.Reservation_ID.DataPropertyName = "Reservation_ID";
+            this.Reservation_ID.HeaderText = "Reservation ID";
+            this.Reservation_ID.MinimumWidth = 8;
+            this.Reservation_ID.Name = "Reservation_ID";
+            this.Reservation_ID.ReadOnly = true;
+            this.Reservation_ID.Visible = false;
+            // 
+            // ClientName
+            // 
+            this.ClientName.DataPropertyName = "ClientName";
+            this.ClientName.HeaderText = "Client Name";
+            this.ClientName.MinimumWidth = 8;
+            this.ClientName.Name = "ClientName";
+            this.ClientName.ReadOnly = true;
+            // 
+            // Room_Number
+            // 
+            this.Room_Number.DataPropertyName = "Room_Number";
+            this.Room_Number.HeaderText = "Room No.";
+            this.Room_Number.MinimumWidth = 8;
+            this.Room_Number.Name = "Room_Number";
+            this.Room_Number.ReadOnly = true;
+            // 
+            // Room_Type
+            // 
+            this.Room_Type.DataPropertyName = "Room_Type";
+            this.Room_Type.HeaderText = "Room Type";
+            this.Room_Type.MinimumWidth = 8;
+            this.Room_Type.Name = "Room_Type";
+            this.Room_Type.ReadOnly = true;
+            // 
+            // CheckInDate
+            // 
+            this.CheckInDate.DataPropertyName = "CheckInDate";
+            this.CheckInDate.HeaderText = "CheckIn Date";
+            this.CheckInDate.MinimumWidth = 8;
+            this.CheckInDate.Name = "CheckInDate";
+            this.CheckInDate.ReadOnly = true;
+            // 
+            // ExpectedCheckOutDate
+            // 
+            this.ExpectedCheckOutDate.DataPropertyName = "ExpectedCheckOutDate";
+            this.ExpectedCheckOutDate.HeaderText = "ExpectedCheckOut Date";
+            this.ExpectedCheckOutDate.MinimumWidth = 8;
+            this.ExpectedCheckOutDate.Name = "ExpectedCheckOutDate";
+            this.ExpectedCheckOutDate.ReadOnly = true;
+            // 
+            // RoomRate
+            // 
+            this.RoomRate.DataPropertyName = "RoomRate";
+            this.RoomRate.HeaderText = "Room Rate";
+            this.RoomRate.MinimumWidth = 8;
+            this.RoomRate.Name = "RoomRate";
+            this.RoomRate.ReadOnly = true;
+            // 
+            // Status
+            // 
+            this.Status.DataPropertyName = "Status";
+            this.Status.HeaderText = "Status";
+            this.Status.MinimumWidth = 8;
+            this.Status.Name = "Status";
+            this.Status.ReadOnly = true;
             // 
             // tabPageCheckOut
             // 
@@ -249,94 +337,6 @@
             this.label3.TabIndex = 38;
             this.label3.Text = "Actual Check Out Date:";
             this.label3.Click += new System.EventHandler(this.label3_Click);
-            // 
-            // btnCancelCheckIn
-            // 
-            this.btnCancelCheckIn.BackColor = System.Drawing.Color.Brown;
-            this.btnCancelCheckIn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnCancelCheckIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancelCheckIn.ForeColor = System.Drawing.Color.White;
-            this.btnCancelCheckIn.Location = new System.Drawing.Point(584, 278);
-            this.btnCancelCheckIn.Name = "btnCancelCheckIn";
-            this.btnCancelCheckIn.Size = new System.Drawing.Size(155, 52);
-            this.btnCancelCheckIn.TabIndex = 42;
-            this.btnCancelCheckIn.Text = "Cancel Check In";
-            this.btnCancelCheckIn.UseVisualStyleBackColor = false;
-            this.btnCancelCheckIn.Click += new System.EventHandler(this.btnCancelCheckIn_Click);
-            // 
-            // CheckInOut_ID
-            // 
-            this.CheckInOut_ID.DataPropertyName = "CheckInOut_ID";
-            this.CheckInOut_ID.HeaderText = "CheckInOut ID";
-            this.CheckInOut_ID.MinimumWidth = 8;
-            this.CheckInOut_ID.Name = "CheckInOut_ID";
-            this.CheckInOut_ID.ReadOnly = true;
-            this.CheckInOut_ID.Visible = false;
-            // 
-            // Reservation_ID
-            // 
-            this.Reservation_ID.DataPropertyName = "Reservation_ID";
-            this.Reservation_ID.HeaderText = "Reservation ID";
-            this.Reservation_ID.MinimumWidth = 8;
-            this.Reservation_ID.Name = "Reservation_ID";
-            this.Reservation_ID.ReadOnly = true;
-            this.Reservation_ID.Visible = false;
-            // 
-            // ClientName
-            // 
-            this.ClientName.DataPropertyName = "ClientName";
-            this.ClientName.HeaderText = "Client Name";
-            this.ClientName.MinimumWidth = 8;
-            this.ClientName.Name = "ClientName";
-            this.ClientName.ReadOnly = true;
-            // 
-            // Room_Number
-            // 
-            this.Room_Number.DataPropertyName = "Room_Number";
-            this.Room_Number.HeaderText = "Room No.";
-            this.Room_Number.MinimumWidth = 8;
-            this.Room_Number.Name = "Room_Number";
-            this.Room_Number.ReadOnly = true;
-            // 
-            // Room_Type
-            // 
-            this.Room_Type.DataPropertyName = "Room_Type";
-            this.Room_Type.HeaderText = "Room Type";
-            this.Room_Type.MinimumWidth = 8;
-            this.Room_Type.Name = "Room_Type";
-            this.Room_Type.ReadOnly = true;
-            // 
-            // CheckInDate
-            // 
-            this.CheckInDate.DataPropertyName = "CheckInDate";
-            this.CheckInDate.HeaderText = "CheckIn Date";
-            this.CheckInDate.MinimumWidth = 8;
-            this.CheckInDate.Name = "CheckInDate";
-            this.CheckInDate.ReadOnly = true;
-            // 
-            // ExpectedCheckOutDate
-            // 
-            this.ExpectedCheckOutDate.DataPropertyName = "ExpectedCheckOutDate";
-            this.ExpectedCheckOutDate.HeaderText = "ExpectedCheckOut Date";
-            this.ExpectedCheckOutDate.MinimumWidth = 8;
-            this.ExpectedCheckOutDate.Name = "ExpectedCheckOutDate";
-            this.ExpectedCheckOutDate.ReadOnly = true;
-            // 
-            // RoomRate
-            // 
-            this.RoomRate.DataPropertyName = "RoomRate";
-            this.RoomRate.HeaderText = "Room Rate";
-            this.RoomRate.MinimumWidth = 8;
-            this.RoomRate.Name = "RoomRate";
-            this.RoomRate.ReadOnly = true;
-            // 
-            // Status
-            // 
-            this.Status.DataPropertyName = "Status";
-            this.Status.HeaderText = "Status";
-            this.Status.MinimumWidth = 8;
-            this.Status.Name = "Status";
-            this.Status.ReadOnly = true;
             // 
             // UserControlCheckInAndCheckOut
             // 

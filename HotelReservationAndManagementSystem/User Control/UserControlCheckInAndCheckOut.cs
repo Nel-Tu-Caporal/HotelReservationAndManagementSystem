@@ -57,15 +57,21 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void LoadCheckInList()
         {
-            string query =
-                "SELECT c.CheckInOut_ID, c.Reservation_ID, " +
-                "cl.Client_FirstName + ' ' + cl.Client_LastName AS ClientName, " +
-                "r.Room_Number, r.Room_Type, " +
-                "c.CheckInDate, c.ExpectedCheckOutDate, c.RoomRate, c.Status " +
-                "FROM CheckInOut_Table c " +
-                "JOIN Reservation_Table r ON c.Reservation_ID = r.Reservation_ID " +
-                "JOIN Client_Table cl ON r.Client_ID = cl.Client_ID " +
-                "WHERE c.Status = 'CheckedIn'";
+            string query = @"
+        SELECT
+            c.CheckInOut_ID,
+            c.Reservation_ID,
+            c.ClientName,
+            c.Room_Number,
+            c.Room_Type,
+            c.CheckInDate,
+            c.ExpectedCheckOutDate,
+            c.RoomRate,
+            c.Status
+        FROM CheckInOut_Table c
+        WHERE c.ActualCheckOutDate IS NULL
+          AND c.Status = 'CheckedIn'
+    ";
 
             db.DisplayAndSearch(query, dataGridViewCheckInList);
         }
