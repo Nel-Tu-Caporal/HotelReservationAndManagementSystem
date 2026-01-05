@@ -155,7 +155,7 @@ namespace HotelReservationAndManagementSystem
             userControlReservation1.Hide();
             userControlReservation1.Show();
             userControlCheckInAndCheckOut1.Hide();
-            userControlBillsAndPayment1.Clear();
+            userControlBillsAndPayment1.Hide();
 
         }
 
