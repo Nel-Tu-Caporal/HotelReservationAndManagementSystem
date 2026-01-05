@@ -6,7 +6,15 @@ using System.Threading.Tasks;
 
 namespace HotelReservationAndManagementSystem.Models
 {
-    internal class Room
+    public abstract class Room
     {
+        public int RoomNumber { get; set; }
+        public decimal Price { get; set; }
+        public string Status { get; set; } // Available / Occupied
+
+        public bool IsAvailable()
+        {
+            return Status == "Available";
+        }
     }
 }

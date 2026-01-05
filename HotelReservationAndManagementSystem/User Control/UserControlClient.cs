@@ -1,4 +1,6 @@
-﻿using HotelReservationAndManagementSystem.References;
+﻿using HotelReservationAndManagementSystem.Models;
+using HotelReservationAndManagementSystem.Models.Users;
+using HotelReservationAndManagementSystem.References;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
+using HotelReservationAndManagementSystem.Models.Client;
 
 namespace HotelReservationAndManagementSystem.User_Control
 {
@@ -51,10 +54,7 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         }
 
-        private void btnAddUserNamePassword_Click(object sender, EventArgs e)
-        {
-
-        }
+      
 
         private void txtBoxPassword_TextChanged(object sender, EventArgs e)
         {
@@ -66,11 +66,7 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         }
 
-        private void lblAddUsername_Click(object sender, EventArgs e)
-        {
-
-        }
-
+     
         private void labelAddClient_Click(object sender, EventArgs e)
         {
 
@@ -137,19 +133,45 @@ namespace HotelReservationAndManagementSystem.User_Control
         private void btnAddClient_Click(object sender, EventArgs e)
         {
             bool check;
-            if(txtBoxFirstName.Text.Trim() == string.Empty || txtBoxLastName.Text.Trim () == string.Empty || txtBoxPhoneNumber.Text.Trim() == String.Empty || txtBoxAddress.Text.Trim() == string.Empty)
-           
-                MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            else
+            if (txtBoxFirstName.Text.Trim() == string.Empty ||
+                txtBoxLastName.Text.Trim() == string.Empty ||
+                txtBoxPhoneNumber.Text.Trim() == string.Empty ||
+                txtBoxAddress.Text.Trim() == string.Empty)
             {
-                check = db.AddClient(txtBoxFirstName.Text.Trim(), txtBoxLastName.Text.Trim(),txtBoxPhoneNumber.Text.Trim(),txtBoxAddress.Text.Trim());
-                if (check)
-                    Clear();
+                MessageBox.Show(
+                    "Please fill out all fields.",
+                    "Required all fields.",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+                return;
+            }
 
+            // 1️⃣ Create Client model
+            Client client = new Client
+            {
+                FirstName = txtBoxFirstName.Text.Trim(),
+                LastName = txtBoxLastName.Text.Trim(),
+                Phone = txtBoxPhoneNumber.Text.Trim(),
+                Address = txtBoxAddress.Text.Trim()
+            };
 
+            // 2️⃣ Call existing DAL (unchanged)
+            check = db.AddClient(
+                client.FirstName,
+                client.LastName,
+                client.Phone,
+                client.Address
+            );
+
+            // 3️⃣ Clear UI
+            if (check)
+            {
+                Clear();
             }
         }
+        
 
         private void btnDelete_Leave(object sender, EventArgs e)
         {
@@ -182,47 +204,112 @@ namespace HotelReservationAndManagementSystem.User_Control
         {
 
             bool check;
-            if (ID != "")
+
+            if (ID == "")
             {
-                if (txtBoxFirstName1.Text.Trim() == string.Empty || txtBoxLastName1.Text.Trim() == string.Empty || txtBoxPhone1.Text.Trim() == String.Empty || txtBoxAddress1.Text.Trim() == string.Empty)
-
-                    MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                else
-                {
-                    check = db.UpdateClient(ID, txtBoxFirstName1.Text.Trim(), txtBoxLastName1.Text.Trim(), txtBoxPhone1.Text.Trim(), txtBoxAddress1.Text.Trim());
-                    if (check)
-                        Clear1();
-                }
+                MessageBox.Show(
+                    "Please first select row from table.",
+                    "Selection Required",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+                return;
             }
-            else
-                MessageBox.Show("Please first select row from table.", "Selection of row.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            if (txtBoxFirstName1.Text.Trim() == string.Empty ||
+                txtBoxLastName1.Text.Trim() == string.Empty ||
+                txtBoxPhone1.Text.Trim() == string.Empty ||
+                txtBoxAddress1.Text.Trim() == string.Empty)
+            {
+                MessageBox.Show(
+                    "Please fill out all fields.",
+                    "Required all fields.",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+                return;
+            }
+
+            //  Create Client model
+            Client client = new Client
+            {
+                ClientID = int.Parse(ID),
+                FirstName = txtBoxFirstName1.Text.Trim(),
+                LastName = txtBoxLastName1.Text.Trim(),
+                Phone = txtBoxPhone1.Text.Trim(),
+                Address = txtBoxAddress1.Text.Trim()
+            };
+
+            //  Call DAL (UNCHANGED)
+            check = db.UpdateClient(
+                client.ClientID.ToString(),
+                client.FirstName,
+                client.LastName,
+                client.Phone,
+                client.Address
+            );
+
+            //  Clear UI
+            if (check)
+            {
+                Clear1();
+            }
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
             bool check;
-            if (ID != "")
+
+            if (ID == "")
             {
-                if (txtBoxFirstName1.Text.Trim() == string.Empty || txtBoxLastName1.Text.Trim() == string.Empty)
-
-                    MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                else
-                {
-                    DialogResult result = MessageBox.Show("Are you want to delete this client?", "Client delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (DialogResult.Yes == result)
-                    {
-                        check = db.DeleteClient(ID);
-                        if (check)
-                            Clear1();
-
-                    }
-                }
-
+                MessageBox.Show(
+                    "Please first select row from table.",
+                    "Selection Required",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+                return;
             }
-            else
-                MessageBox.Show("Please first select row from table.", "Selection of row.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            if (txtBoxFirstName1.Text.Trim() == string.Empty ||
+                txtBoxLastName1.Text.Trim() == string.Empty ||
+                txtBoxPhone1.Text.Trim() == string.Empty ||
+                txtBoxAddress1.Text.Trim() == string.Empty)
+            {
+                MessageBox.Show(
+                    "Please fill out all fields.",
+                    "Required all fields.",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+                return;
+            }
+
+            //  Create Client model
+            Client client = new Client
+            {
+                ClientID = int.Parse(ID),
+                FirstName = txtBoxFirstName1.Text.Trim(),
+                LastName = txtBoxLastName1.Text.Trim(),
+                Phone = txtBoxPhone1.Text.Trim(),
+                Address = txtBoxAddress1.Text.Trim()
+            };
+
+            // Call DAL 
+            check = db.UpdateClient(
+                client.ClientID.ToString(),
+                client.FirstName,
+                client.LastName,
+                client.Phone,
+                client.Address
+            );
+
+            //  Clear UI
+            if (check)
+            {
+                Clear1();
+            }
+
         }
 
         private void tabPageClientDeleteUpdate_Leave(object sender, EventArgs e)

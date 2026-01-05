@@ -1,4 +1,6 @@
-﻿    using System;
+﻿    using HotelReservationAndManagementSystem.Models;
+using HotelReservationAndManagementSystem.Models.Users;
+    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
@@ -9,7 +11,7 @@
     using System.Windows.Forms;
 
 
-    namespace HotelReservationAndManagementSystem.References
+namespace HotelReservationAndManagementSystem.References
     {
         public class DBConnector1
         {
@@ -188,7 +190,37 @@
             }
             }
 
-            public bool AddClient(string FirstName, string LastName, string Phone, string Address)
+        public Guest GetGuestById(int clientId)
+        {
+            Guest guest = null;
+
+            string query = "SELECT * FROM Client_Table WHERE Client_ID = @ClientID";
+
+            using (SqlConnection con = GetConnection())
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.Add("@ClientID", SqlDbType.Int).Value = clientId;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            guest = new Guest
+                            {
+                                UserID = Convert.ToInt32(reader["Client_ID"]),
+                                FullName = reader["Client_FirstName"] + " " + reader["Client_LastName"],
+                                Phone = reader["Client_Phone"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+
+            return guest;
+        }
+
+        public bool AddClient(string FirstName, string LastName, string Phone, string Address)
             {
                 string cmdText = "INSERT INTO Client_Table VALUES (@Client_FirstName, @Client_LastName, @Client_Phone, @Client_Address)";
                 SqlConnection connection = GetConnection();

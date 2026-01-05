@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace HotelReservationAndManagementSystem.Models.Rooms
 {
-    internal class SuiteRoom
+    public class SuiteRoom : Room
     {
+        public SuiteRoom()
+        {
+            Price = 4000;
+            Status = "Available";
+        }   
     }
 }
