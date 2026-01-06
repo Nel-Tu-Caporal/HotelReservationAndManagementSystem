@@ -8,10 +8,16 @@ namespace HotelReservationAndManagementSystem.Models.Rooms
 {
     public class SuiteRoom : Room
     {
+
+        public override string RoomType => "Suite";
         public SuiteRoom()
         {
             Price = 4000;
             Status = "Available";
-        }   
+        }
+        public override decimal GetPricePerNight()
+        {
+            return Price * 1.20m; // 20% premium
+        }
     }
 }

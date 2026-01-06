@@ -10,6 +10,8 @@ namespace HotelReservationAndManagementSystem.Models
     public class FrontDeskStaff : User
     {
         public override string Role => "FrontDesk";
-    }
-}
 
+        public override bool CanManageUsers() => false;
+    }
+
+}

@@ -1,5 +1,5 @@
 ﻿    using HotelReservationAndManagementSystem.Models;
-using HotelReservationAndManagementSystem.Models.Users;
+    using HotelReservationAndManagementSystem.Models.Users;
     using System;
     using System.Collections.Generic;
     using System.Data;
@@ -9,12 +9,13 @@ using HotelReservationAndManagementSystem.Models.Users;
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Forms;
+    using HotelReservationAndManagementSystem.Interface;
 
 
 namespace HotelReservationAndManagementSystem.References
     {
-        public class DBConnector1
-        {
+        public class DBConnector1 : IUserRepository 
+    {
             private bool check = false;
 
             private SqlConnection GetConnection()
@@ -35,7 +36,7 @@ namespace HotelReservationAndManagementSystem.References
 
             public bool IsValidNamePass(string Username, string Password)
             {
-                // Fix: Initialize 'check' outside the try block so it is accessible for 'return'
+                //  Initialize 'check' outside the try block so it is accessible for 'return'
                 bool check = false;
 
                 try

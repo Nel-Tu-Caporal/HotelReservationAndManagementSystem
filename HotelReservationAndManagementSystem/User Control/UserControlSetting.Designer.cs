@@ -41,7 +41,7 @@
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textBoxSearchRoom = new System.Windows.Forms.TextBox();
+            this.textBoxSearchUserName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lblSearchUser = new System.Windows.Forms.Label();
             this.tabPageUpdateAndDeleteUser = new System.Windows.Forms.TabPage();
@@ -161,7 +161,7 @@
             // tabPageSearchUSer
             // 
             this.tabPageSearchUSer.Controls.Add(this.dataGridViewUser);
-            this.tabPageSearchUSer.Controls.Add(this.textBoxSearchRoom);
+            this.tabPageSearchUSer.Controls.Add(this.textBoxSearchUserName);
             this.tabPageSearchUSer.Controls.Add(this.label1);
             this.tabPageSearchUSer.Controls.Add(this.lblSearchUser);
             this.tabPageSearchUSer.Location = new System.Drawing.Point(4, 4);
@@ -172,6 +172,7 @@
             this.tabPageSearchUSer.TabIndex = 1;
             this.tabPageSearchUSer.Text = "Search User";
             this.tabPageSearchUSer.UseVisualStyleBackColor = true;
+            this.tabPageSearchUSer.Click += new System.EventHandler(this.tabPageSearchUSer_Click);
             this.tabPageSearchUSer.Enter += new System.EventHandler(this.tabPageSearchUSer_Enter);
             this.tabPageSearchUSer.Leave += new System.EventHandler(this.tabPageSearchUSer_Leave);
             // 
@@ -221,14 +222,14 @@
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
             // 
-            // textBoxSearchRoom
+            // textBoxSearchUserName
             // 
-            this.textBoxSearchRoom.Location = new System.Drawing.Point(139, 64);
-            this.textBoxSearchRoom.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBoxSearchRoom.Name = "textBoxSearchRoom";
-            this.textBoxSearchRoom.Size = new System.Drawing.Size(337, 32);
-            this.textBoxSearchRoom.TabIndex = 4;
-            this.textBoxSearchRoom.TextChanged += new System.EventHandler(this.textBoxSearchUserName_TextChanged);
+            this.textBoxSearchUserName.Location = new System.Drawing.Point(139, 64);
+            this.textBoxSearchUserName.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.textBoxSearchUserName.Name = "textBoxSearchUserName";
+            this.textBoxSearchUserName.Size = new System.Drawing.Size(337, 32);
+            this.textBoxSearchUserName.TabIndex = 4;
+            this.textBoxSearchUserName.TextChanged += new System.EventHandler(this.textBoxSearchUserName_TextChanged);
             // 
             // label1
             // 
@@ -360,6 +361,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "UserControlSetting";
             this.Size = new System.Drawing.Size(1469, 531);
+            this.Load += new System.EventHandler(this.UserControlSetting_Load);
             this.tabControlUser.ResumeLayout(false);
             this.tabPageAddUser.ResumeLayout(false);
             this.tabPageAddUser.PerformLayout();
@@ -385,7 +387,7 @@
         private System.Windows.Forms.Label lblUserName;
         private System.Windows.Forms.Label lblSearchUser;
         private System.Windows.Forms.DataGridView dataGridViewUser;
-        private System.Windows.Forms.TextBox textBoxSearchRoom;
+        private System.Windows.Forms.TextBox textBoxSearchUserName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage tabPageUpdateAndDeleteUser;
         private System.Windows.Forms.Button btnUpdate;

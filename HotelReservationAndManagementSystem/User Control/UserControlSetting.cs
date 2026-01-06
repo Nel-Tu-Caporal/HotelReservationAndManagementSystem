@@ -1,4 +1,8 @@
-﻿using HotelReservationAndManagementSystem.References;
+﻿using HotelReservationAndManagementSystem.Interface;
+using HotelReservationAndManagementSystem.Models;
+using HotelReservationAndManagementSystem.Models.Services;
+using HotelReservationAndManagementSystem.Models.Users;
+using HotelReservationAndManagementSystem.References;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,14 +19,16 @@ namespace HotelReservationAndManagementSystem.User_Control
     
     public partial class UserControlSetting : UserControl
     {
-        DBConnector1 db;
+        
+
         private string ID = "";
-        public UserControlSetting()
+        private IUserService _userService;
+        
+
+         public UserControlSetting()
         {
             InitializeComponent();
-
-            db = new DBConnector1();    
-
+            _userService = new UserService(new DBConnector1());
         }
         public void Clear()
         {
@@ -59,54 +65,51 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void textBoxSearchUserName_TextChanged(object sender, EventArgs e)
         {
-            db.DisplayAndSearch("SELECT * FROM User_Table WHERE User_Name LIKE '%" + textBoxSearchRoom.Text + "%'", dataGridViewUser);
+            _userService.SearchUsers(textBoxSearchUserName.Text.Trim(),dataGridViewUser);
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            bool check;
-            if (ID != "")
+            if (ID == "")
             {
-                if (txtBoxUserName1.Text.Trim() == string.Empty || txtBoxPassword1.Text.Trim() == string.Empty)
-
-                    MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                else
-                {
-                    check = db.UpdateUser(ID, txtBoxUserName1.Text.Trim(), txtBoxPassword1.Text.Trim());
-                    if (check)
-                        Clear1();
-                }
+                MessageBox.Show("Select a user first.");
+                return;
             }
-            else
-                MessageBox.Show("Please first select row from table.", "Selection of row.", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+            if (string.IsNullOrWhiteSpace(txtBoxUserName1.Text) ||
+                string.IsNullOrWhiteSpace(txtBoxPassword1.Text))
+            {
+                MessageBox.Show("Please fill out all fields.");
+                return;
+            }
+
+            SystemUser user = new SystemUser(
+                txtBoxUserName1.Text.Trim(),
+                txtBoxPassword1.Text.Trim()
+            );
+
+            if (_userService.UpdateUser(int.Parse(ID), user))
+                Clear1();
         }
+
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            bool check;
-            if (ID != "")
+            if (ID == "")
             {
-                if (txtBoxUserName1.Text.Trim() == string.Empty || txtBoxPassword1.Text.Trim() == string.Empty)
-
-                    MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                else
-                {
-                    DialogResult result = MessageBox.Show("Are you want to delete this user?", "User delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (DialogResult.Yes == result)
-                    {
-                        check = db.DeleteUser(ID);
-                        if (check)
-                            Clear1();
-
-                    }
-                }
-              
+                MessageBox.Show("Select a user first.");
+                return;
             }
-            else
-                MessageBox.Show("Please first select row from table.", "Selection of row.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            if (MessageBox.Show(
+                "Are you sure?",
+                "Delete User",
+                MessageBoxButtons.YesNo
+            ) != DialogResult.Yes)
+                return;
+
+            if (_userService.DeleteUser(int.Parse(ID)))
+                Clear1();
         }
 
         private void label4_Click(object sender, EventArgs e)
@@ -127,12 +130,12 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void tabPageSearchUSer_Enter(object sender, EventArgs e)
         {
-            db.DisplayAndSearch("SELECT * FROM User_Table", dataGridViewUser);
+            _userService.LoadUsers(dataGridViewUser);
         }
 
         private void tabPageSearchUSer_Leave(object sender, EventArgs e)
         {
-            textBoxSearchRoom.Clear();
+            textBoxSearchUserName.Clear();
         }
 
         private void tabPageUpdateAndDeleteUser_Leave(object sender, EventArgs e)
@@ -142,20 +145,23 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void btnAddUserNamePassword_Click(object sender, EventArgs e)
         {
-            bool check;
-            if(txtBoxUserName.Text.Trim() == string.Empty || txtBoxPassword.Text.Trim() == string.Empty)
-            
-                MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK,MessageBoxIcon.Information);
-
-            else
+            if (string.IsNullOrWhiteSpace(txtBoxUserName.Text) ||
+                string.IsNullOrWhiteSpace(txtBoxPassword.Text))
             {
-                check = db.AddUser(txtBoxUserName.Text.Trim(), txtBoxPassword.Text.Trim());
-                if(check)
-                Clear();
-
-                
+                MessageBox.Show("Please fill out all fields.");
+                return;
             }
+
+            SystemUser user = new SystemUser(
+                txtBoxUserName.Text.Trim(),
+                txtBoxPassword.Text.Trim()
+            );
+
+            if (_userService.AddUser(user))
+                Clear();
         }
+        
+        
 
         private void dataGridViewUser_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -175,6 +181,16 @@ namespace HotelReservationAndManagementSystem.User_Control
         }
 
         private void tabPageUpdateAndDeleteUser_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPageSearchUSer_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UserControlSetting_Load(object sender, EventArgs e)
         {
 
         }

@@ -8,10 +8,16 @@ namespace HotelReservationAndManagementSystem.Models
 {
     public class StandardRoom : Room
     {
+
+        public override string RoomType => "Standard";
         public StandardRoom()
         {
             Price = 1500;
             Status = "Available";
+        }
+        public override decimal GetPricePerNight()
+        {
+            return Price;
         }
 
     }

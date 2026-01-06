@@ -9,23 +9,43 @@ namespace HotelReservationAndManagementSystem.Models.Services
 {
     public class ReservationService
     {
-        private List<Reservation> reservations = new List<Reservation>();
+        private List<Reservation1> reservations = new List<Reservation1>();
+        private List<PaymentService> payments = new List<PaymentService>();
 
-        public bool CreateReservation(Guest guest, Room room, DateTime checkIn, DateTime checkOut)
+        public PaymentService CreatePayment(Reservation1 reservation, string paymentMethod)
         {
+            PaymentService payment = new PaymentService(reservation, paymentMethod);
+            payments.Add(payment);
+            return payment;
+        }
+
+        public bool CreateReservation(
+            Guest guest,
+            Room room,
+            DateTime checkIn,
+            DateTime checkOut)
+        {
+            // 1. Validate room availability
             if (!room.IsAvailable())
                 return false;
 
-            room.Status = "Occupied";
+            // 2. Create reservation
+            Reservation1 reservation = new Reservation1(
+                guest,
+                room,
+                checkIn,
+                checkOut
+            );
 
-            reservations.Add(new Reservation
-            {
-                Guest = guest,
-                Room = room,
-                CheckInDate = checkIn,
-                CheckOutDate = checkOut,
-                Status = "Reserved"
-            });
+            // 3. Validate dates
+            if (!reservation.IsValidDate())
+                return false;
+
+            // 4. Update room state
+            room.MarkAsOccupied();
+
+            // 5. Save reservation
+            reservations.Add(reservation);
 
             return true;
         }

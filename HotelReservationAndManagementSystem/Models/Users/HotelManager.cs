@@ -10,6 +10,9 @@ namespace HotelReservationAndManagementSystem.Models
     public class HotelManager : User
     {
         public override string Role => "Admin";
+
+
+
+        public override bool CanManageUsers() => true;
     }
 }
-

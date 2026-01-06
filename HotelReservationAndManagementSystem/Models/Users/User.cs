@@ -9,8 +9,9 @@ namespace HotelReservationAndManagementSystem.Models
     public abstract class User
     {
         public int UserID { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
+
+        public string Username { get; private set; }
+        public string Password { get; private set; }
 
         protected User()
         {
@@ -20,10 +21,22 @@ namespace HotelReservationAndManagementSystem.Models
 
         protected User(string username, string password)
         {
+            UpdateCredentials(username, password);
+        }
+
+        public void UpdateCredentials(string username, string password)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+                throw new ArgumentException("Username required");
+
+            if (string.IsNullOrWhiteSpace(password))
+                throw new ArgumentException("Password required");
+
             Username = username;
             Password = password;
         }
 
         public abstract string Role { get; }
+        public abstract bool CanManageUsers();
     }
 }

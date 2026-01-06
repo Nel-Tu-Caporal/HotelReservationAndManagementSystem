@@ -110,9 +110,21 @@
     <Compile Include="Form\FormLogIn.Designer.cs">
       <DependentUpon>FormLogIn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interface\ICheckInOutRepository.cs" />
+    <Compile Include="Interface\IClientRepository.cs" />
+    <Compile Include="Interface\IPaymentRepository.cs" />
+    <Compile Include="Interface\IReservationRepository.cs" />
+    <Compile Include="Interface\IRoomRepository.cs" />
+    <Compile Include="Interface\IUserRepository.cs" />
+    <Compile Include="Interface\IUserService.cs" />
     <Compile Include="Models\Client\Client.cs" />
-    <Compile Include="Models\Reservation\Reservation.cs" />
+    <Compile Include="Models\Reservation\CheckInOut.cs" />
+    <Compile Include="Models\Reservation\Reservation1.cs" />
+    <Compile Include="Models\Services\PaymentService.cs" />
     <Compile Include="Models\Services\ReservationService.cs" />
+    <Compile Include="Models\Services\RoomService.cs" />
+    <Compile Include="Models\Services\Service.cs" />
+    <Compile Include="Models\Services\UserService.cs" />
     <Compile Include="Models\Users\HotelManager.cs" />
     <Compile Include="Models\Rooms\DeluxeRoom.cs" />
     <Compile Include="Models\Rooms\SuiteRoom.cs" />
@@ -120,6 +132,7 @@
     <Compile Include="Models\Rooms\Room.cs" />
     <Compile Include="Models\Rooms\StandardRoom.cs" />
     <Compile Include="Models\Users\Guest.cs" />
+    <Compile Include="Models\Users\SystemUser .cs" />
     <Compile Include="Models\Users\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
