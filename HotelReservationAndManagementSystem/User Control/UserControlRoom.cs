@@ -1,4 +1,7 @@
-﻿using HotelReservationAndManagementSystem.References;
+﻿using HotelReservationAndManagementSystem.Interface.Service;
+using HotelReservationAndManagementSystem.Models.Services;
+using HotelReservationAndManagementSystem.References;
+using HotelReservationAndManagementSystem.Repo;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,16 +17,19 @@ namespace HotelReservationAndManagementSystem.User_Control
     public partial class UserControlRoom : UserControl
     {
 
-        DBConnector1 db;
+        private readonly IRoomService _roomService;
 
         private string No = "", Free = "";
 
         public UserControlRoom()
         {
             InitializeComponent();
-            db = new DBConnector1();
-        }
 
+            
+            var db = new DBConnector1();
+            var repo = new RoomRepository(db);
+            _roomService = new RoomService(repo);
+        }
         public void Clear()
         {
             comboBoxType.SelectedIndex = 0;
@@ -73,24 +79,24 @@ namespace HotelReservationAndManagementSystem.User_Control
         private void btnAddRoom_Click(object sender, EventArgs e)
         {
 
-            if (radioButtonYes.Checked)
-                Free = "Yes";
-            if (radioButtonNo.Checked)
-                Free = "No";
-            bool check;
-            if (comboBoxType.SelectedIndex == 0 || txtBoxPhoneNo.Text.Trim() == string.Empty || Free== "")
+            Free = radioButtonYes.Checked ? "Yes" :
+            radioButtonNo.Checked ? "No" : "";
 
-                MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            else
+            if (comboBoxType.SelectedIndex == 0 || txtBoxPhoneNo.Text == "" || Free == "")
             {
-                check = db.AddRoom(comboBoxType.SelectedItem.ToString(), txtBoxPhoneNo.Text.Trim(),Free);
-                if (check)
-                    Clear();
-                tabControlRoom.SelectedTab = tabPageAddRoom;
-
+                MessageBox.Show("Please fill out all fields.");
+                return;
             }
+
+            bool success = _roomService.AddRoom(
+                comboBoxType.SelectedItem.ToString(),
+                txtBoxPhoneNo.Text.Trim()
+            );
+
+            if (success)
+                Clear();
         }
+        
 
         private void radioButtonYes_CheckedChanged(object sender, EventArgs e)
         {
@@ -129,8 +135,8 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void txtBoxSearchRoom_TextChanged(object sender, EventArgs e)
         {
-            db.DisplayAndSearch("SELECT * FROM Room_Table WHERE Room_Number LIKE '%" + txtBoxSearchRoomNo.Text + "%'", dataGridViewRoom);
-        
+            _roomService.LoadRooms(dataGridViewRoom);
+
         }
 
         private void txtBoxPhoneNo_TextChanged(object sender, EventArgs e)
@@ -156,8 +162,8 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void tabPageSearchRoom_Enter(object sender, EventArgs e)
         {
-            
-            db.DisplayAndSearch("SELECT * FROM Room_Table", dataGridViewRoom);
+
+            _roomService.LoadRooms(dataGridViewRoom);
         }
 
         private void dataGridViewRoom_Leave(object sender, EventArgs e)
@@ -187,62 +193,40 @@ namespace HotelReservationAndManagementSystem.User_Control
         private void btnUpdate_Click(object sender, EventArgs e)
         {
 
-            if (radioButtonYes1.Checked)
-                Free = "Yes";
-            if (radioButtonNo1.Checked)
-                Free = "No";
+            Free = radioButtonYes1.Checked ? "Yes" :
+           radioButtonNo1.Checked ? "No" : "";
 
-            bool check;
-            if (No != "")
+            if (No == "")
             {
-                if (comboBoxType1.SelectedIndex == 0 || txtBoxPhoneNo1.Text.Trim() == string.Empty || Free == "")
+                MessageBox.Show("Please select a room first.");
+                return;
+            }
 
-                    MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-           
-                else
-                {
-                    check = db.UpdateRoom(No, comboBoxType1.SelectedItem.ToString(), txtBoxPhoneNo1.Text.Trim(),Free);
-                    if (check)
-                        Clear1();
-                }
-            }   
-            else
-                MessageBox.Show("Please first select row from table.", "Selection of row.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            bool success = _roomService.UpdateRoom(
+                No,
+                comboBoxType1.SelectedItem.ToString(),
+                txtBoxPhoneNo1.Text.Trim()
+            );
 
+            if (success)
+                Clear1();
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
 
-            if (radioButtonYes1.Checked)
-                Free = "Yes";
-            if (radioButtonNo1.Checked)
-                Free = "No";
-
-            bool check;
-            if (No != "")
+            if (No == "")
             {
-                if (comboBoxType1.SelectedIndex == 0 || txtBoxPhoneNo1.Text.Trim() == string.Empty || Free == "")
-
-                    MessageBox.Show("Please fill out all fields.", "Required all fields.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                else
-                {
-
-                    DialogResult result = MessageBox.Show("Are you want to delete this Room?", "Room delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (DialogResult.Yes == result)
-                    {
-                        check = db.DeleteRoom(No);
-                        if (check)
-                            Clear1();
-
-                    }
-                }
-
+                MessageBox.Show("Please select a room first.");
+                return;
             }
-            else
-                MessageBox.Show("Please first select row from table.", "Selection of row.", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+            if (MessageBox.Show("Delete this room?", "Confirm",
+                MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                if (_roomService.DeleteRoom(No))
+                    Clear1();
+            }
         }
 
         private void dataGridViewRoom_CellContentClick(object sender, DataGridViewCellEventArgs e)

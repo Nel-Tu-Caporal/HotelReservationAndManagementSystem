@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HotelReservationAndManagementSystem.Models.Client
 {
-    public class Client
+    public class Client1
     {
         public int ClientID { get; set; }
         public string FirstName { get; set; }

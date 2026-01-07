@@ -448,6 +448,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "UserControlClient";
             this.Size = new System.Drawing.Size(1102, 462);
+            this.Load += new System.EventHandler(this.UserControlClient_Load);
             this.tabControlClient.ResumeLayout(false);
             this.tabPageAddClient.ResumeLayout(false);
             this.tabPageAddClient.PerformLayout();

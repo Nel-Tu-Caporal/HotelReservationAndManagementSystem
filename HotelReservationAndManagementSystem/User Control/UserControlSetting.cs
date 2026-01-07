@@ -28,7 +28,7 @@ namespace HotelReservationAndManagementSystem.User_Control
          public UserControlSetting()
         {
             InitializeComponent();
-            _userService = new UserService(new DBConnector1());
+            _userService = new UserRepository(new DBConnector1());
         }
         public void Clear()
         {

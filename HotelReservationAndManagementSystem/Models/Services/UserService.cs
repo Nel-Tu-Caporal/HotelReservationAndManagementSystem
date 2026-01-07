@@ -4,11 +4,11 @@ using System.Windows.Forms;
 
 namespace HotelReservationAndManagementSystem.Models.Services
 {
-    public class UserService : IUserService
+    public class UserRepository : IUserService
     {
         private readonly IUserRepository _repo;
 
-        public UserService(IUserRepository repo)
+        public UserRepository(IUserRepository repo)
         {
             _repo = repo;
         }
