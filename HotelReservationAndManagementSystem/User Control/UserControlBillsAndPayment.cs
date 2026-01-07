@@ -1,4 +1,5 @@
-﻿using HotelReservationAndManagementSystem.References;
+﻿using HotelReservationAndManagementSystem.Interface.Services;
+using HotelReservationAndManagementSystem.References;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,22 +13,30 @@ using System.Windows.Forms;
 
 namespace HotelReservationAndManagementSystem.User_Control
 {
+
     public partial class UserControlBillsAndPayment : UserControl
     {
+        private IPaymentService _paymentService;
 
-        DBConnector1 db;
+        private int reservationId = 0;
+        private int checkInOutId = 0;
+        private decimal totalAmount = 0;
 
-        private DataGridViewRow selectedBillingRow = null;
-
-        private decimal paymentTotalAmount;
-        private int checkInOutID;
-        private int reservationID;
-        private decimal totalAmount;
+       
         public UserControlBillsAndPayment()
         {
             InitializeComponent();
-            db = new DBConnector1();
         }
+
+        public void SetService(IPaymentService service)
+        {
+            _paymentService = service;
+        }
+         private bool IsDesignMode()
+        {
+            return LicenseManager.UsageMode == LicenseUsageMode.Designtime;
+        }
+
 
         public void Clear()
         {
@@ -40,117 +49,25 @@ namespace HotelReservationAndManagementSystem.User_Control
             dateTimePickerCheckInDate.Value = DateTime.Now;
             dateTimePickerCheckOutDate.Value = DateTime.Now;
         }
-        private void LoadBillingDetails()
+        private void LoadBillingList()
         {
-            if (reservationID == 0)
-            {
-                MessageBox.Show("No reservation selected.");
-                return;
-            }
-
-            DataTable dt = db.GetBillingDetails(reservationID);
-
-            if (dt.Rows.Count == 0)
-            {
-                MessageBox.Show("No billing record found.");
-                return;
-            }
-
-            DataRow row = dt.Rows[0];
-
-            // store CheckInOutID (important for payment later)
-            checkInOutID = Convert.ToInt32(row["CheckInOut_ID"]);
-
-            txtBoxRoomNo.Text = row["Room_Number"].ToString();
-            txtBoxRoomType.Text = row["Room_Type"].ToString();
-            txtBoxTotalDays.Text = row["TotalDays"].ToString();
-            txtBoxRatePerDay.Text = row["RoomRate"].ToString();
-            txtBoxTotalAmount.Text = row["TotalAmount"].ToString();
-
-            dateTimePickerCheckInDate.Value =
-                Convert.ToDateTime(row["CheckInDate"]);
-
-            dateTimePickerCheckOutDate.Value =
-                Convert.ToDateTime(row["ExpectedCheckOutDate"]);
+            DataTable dt = _paymentService.GetCheckedOutList();
+            dataGridViewBilling.DataSource = dt;
+        }
+        private void LoadBillingDetails(int reservationId)
+        {
+            DataTable dt = _paymentService.GetBillingDetails(reservationId);
+            dataGridViewBillingDetails.DataSource = dt;
         }
 
         private void ConfigureBillingGrid()
         {
-            dataGridViewBilling.AutoGenerateColumns = false;
-            dataGridViewBilling.AllowUserToAddRows = false;
+            dataGridViewBilling.AutoGenerateColumns = true;
             dataGridViewBilling.ReadOnly = true;
             dataGridViewBilling.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewBilling.MultiSelect = false;
-
-            dataGridViewBilling.Columns.Clear();
-
-            dataGridViewBilling.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "CheckInOut_ID",
-                DataPropertyName = "CheckInOut_ID",
-                Visible = false
-            });
-            dataGridViewBilling.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Reservation_ID",
-                DataPropertyName = "Reservation_ID",
-                HeaderText = "Reservation",
-                Width = 90
-            });
-
-            dataGridViewBilling.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ClientName",
-                DataPropertyName = "ClientName",
-                HeaderText = "Client Name",
-                Width = 150
-            });
-
-            dataGridViewBilling.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Room_Number",
-                DataPropertyName = "Room_Number",
-                HeaderText = "Room No",
-                Width = 80
-            });
-
-            dataGridViewBilling.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Room_Type",
-                DataPropertyName = "Room_Type",
-                HeaderText = "Room Type",
-                Width = 90
-            });
-
-            dataGridViewBilling.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "TotalDays",
-                DataPropertyName = "TotalDays",
-                HeaderText = "Days",
-                Width = 60
-            });
-
-            dataGridViewBilling.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "TotalAmount",
-                DataPropertyName = "TotalAmount",
-                HeaderText = "Total Amount",
-                Width = 110,
-                DefaultCellStyle =
-        {
-            Format = "C2",
-            Alignment = DataGridViewContentAlignment.MiddleRight
         }
-            });
-
-            dataGridViewBilling.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "PaymentStatus",
-                DataPropertyName = "PaymentStatus",
-                HeaderText = "Payment",
-                Width = 90
-            });
-        }
+        
 
 
         private void tabPage1_Click(object sender, EventArgs e)
@@ -203,7 +120,7 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void txtBoxAmountPaid_TextChanged(object sender, EventArgs e)
         {
             if (!decimal.TryParse(txtBoxAmountPaid.Text, out decimal paid))
             {
@@ -266,10 +183,21 @@ namespace HotelReservationAndManagementSystem.User_Control
         {
             if (e.RowIndex < 0) return;
 
-            selectedBillingRow = dataGridViewBilling.Rows[e.RowIndex];
+            DataRowView drv =
+                dataGridViewBilling.Rows[e.RowIndex].DataBoundItem as DataRowView;
 
+            if (drv == null) return;
+
+            checkInOutId = Convert.ToInt32(drv["CheckInOut_ID"]);
+            reservationId = Convert.ToInt32(drv["Reservation_ID"]);
+            totalAmount = Convert.ToDecimal(drv["TotalAmount"]);
+
+            txtBoxTotalAmount.Text = totalAmount.ToString("0.00");
+
+            LoadBillingDetails(reservationId);
             tabControlBillsAndPayment.SelectedTab = tabPageBilling;
         }
+
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
@@ -341,77 +269,71 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void UserControlBillsAndPayment_Load(object sender, EventArgs e)
         {
+            if (IsDesignMode() || _paymentService == null)
+                return;
+
             ConfigureBillingGrid();
+            LoadBillingList();
         }
 
         private void btnPay_Click(object sender, EventArgs e)
         {
            
-            if (checkInOutID == 0 || reservationID == 0)
+           if (_paymentService == null)
             {
-                MessageBox.Show("No billing selected.");
+                MessageBox.Show("Service not initialized.");
+                return;
+            }
+
+            if (checkInOutId == 0 || reservationId == 0)
+            {
+                MessageBox.Show("Select billing first.");
+                return;
+            }
+
+            if (!decimal.TryParse(txtBoxAmountPaid.Text, out decimal paid))
+            {
+                MessageBox.Show("Invalid payment amount.");
+                return;
+            }
+
+            if (paid < totalAmount)
+            {
+                MessageBox.Show("Insufficient amount.");
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(comboBoxPaymentMethod.Text))
             {
-                MessageBox.Show("Please select a payment method.");
+                MessageBox.Show("Select payment method.");
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(txtBoxAmountPaid.Text))
-            {
-                MessageBox.Show("Please enter amount paid.");
-                return;
-            }
+            int clientId = _paymentService.GetClientIdFromReservation(reservationId);
+            decimal change = paid - totalAmount;
 
-            if (!decimal.TryParse(txtBoxAmountPaid.Text, out decimal amountPaid))
-            {
-                MessageBox.Show("Invalid amount paid.");
-                return;
-            }
-
-            if (amountPaid < totalAmount)
-            {
-                MessageBox.Show("Amount paid is insufficient.");
-                return;
-            }
-
-            
-            decimal changeAmount = amountPaid - totalAmount;
-            txtBoxChange.Text = changeAmount.ToString("0.00");
-
-            int clientId = db.GetClientIdFromReservation(reservationID);
-            if (clientId == 0)
-            {
-                MessageBox.Show("Client not found.");
-                return;
-            }
-
-            bool paymentSaved = db.AddPayment(
-                checkInOutID,
-                reservationID,
+            bool success = _paymentService.AddPayment(
+                checkInOutId,
+                reservationId,
                 clientId,
                 totalAmount,
-                amountPaid,
-                changeAmount,
+                paid,
+                change,
                 comboBoxPaymentMethod.Text
             );
 
-            if (!paymentSaved)
+            if (!success)
             {
                 MessageBox.Show("Payment failed.");
                 return;
             }
 
-            db.UpdateCheckInOutPaymentStatus(checkInOutID);
+            _paymentService.UpdateCheckInOutPaymentStatus(checkInOutId);
 
-          
-            lblPaymentStatus.Text = "Paid";
-            lblPaymentStatus.ForeColor = Color.Green;
+            MessageBox.Show("Payment successful.");
 
-            MessageBox.Show("Payment completed successfully.");
-
+            Clear();
+            LoadBillingList();
             tabControlBillsAndPayment.SelectedTab = tabPageSelectBilling;
         }
 

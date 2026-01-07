@@ -460,9 +460,9 @@
             this.txtBoxAmountPaid.Name = "txtBoxAmountPaid";
             this.txtBoxAmountPaid.Size = new System.Drawing.Size(366, 32);
             this.txtBoxAmountPaid.TabIndex = 39;
-            this.txtBoxAmountPaid.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.txtBoxAmountPaid.TextChanged += new System.EventHandler(this.txtBoxAmountPaid_TextChanged);
             // 
-            // comboBoxPaymentMethod
+            // txtBoxAmountPaid
             // 
             this.comboBoxPaymentMethod.FormattingEnabled = true;
             this.comboBoxPaymentMethod.Items.AddRange(new object[] {

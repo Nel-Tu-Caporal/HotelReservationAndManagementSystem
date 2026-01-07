@@ -10,8 +10,8 @@ namespace HotelReservationAndManagementSystem.Interface
     public interface IReservationRepository
     {
         bool AddReservation(string type, int roomNo, int clientId, DateTime inDate, DateTime outDate);
+
         bool UpdateReservation(int reservationId, string type, int roomNo, int clientId, DateTime inDate, DateTime outDate);
-        bool CancelReservation(int reservationId);
 
         bool CheckInFromReservation(
             int reservationId,
@@ -22,11 +22,11 @@ namespace HotelReservationAndManagementSystem.Interface
             DateTime checkIn,
             DateTime expectedOut
         );
-        bool CheckOutReservation(int reservationId);
-
-        int GetReservationId(int clientId, int roomNo);
 
         void DisplayAndSearch(string query, DataGridView dgv);
+
+        void RoomTypeAndNo(string query, ComboBox comboBox);
+
+        void UpdateReservationRoom(string roomNo, string free);
     }
 }
-

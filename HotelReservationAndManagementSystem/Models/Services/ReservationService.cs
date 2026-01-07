@@ -13,108 +13,72 @@ namespace HotelReservationAndManagementSystem.Models.Services
 {
     public class ReservationService : IReservationService
     {
-        private readonly ReservationRepository _repo;
+        private readonly IReservationRepository _repo;
 
-        public ReservationService(ReservationRepository repo)
+        public ReservationService(IReservationRepository repo)
         {
             _repo = repo;
         }
 
-        // ================= ADD =================
         public bool AddReservation(string roomType, int roomNo, int clientId,
                                    DateTime checkIn, DateTime checkOut)
         {
-            if (checkOut <= checkIn) return false;
-
-            bool added = _repo.AddReservation(
-                roomType,
-                roomNo,
-                clientId,
-                checkIn,
-                checkOut
-            );
-
-            if (!added) return false;
-
-            // ✅ correct DAL call
-            _repo.UpdateReservationRoom(roomNo.ToString(), "No");
-
-            return true;
+            return _repo.AddReservation(roomType, roomNo, clientId, checkIn, checkOut);
         }
 
-        // ================= LOAD =================
         public void LoadReservations(DataGridView dgv)
         {
-            _repo.LoadReservations(dgv);
+            _repo.DisplayAndSearch("SELECT * FROM Reservation_Table", dgv);
         }
 
         public void SearchByClient(string clientId, DataGridView dgv)
         {
-            _repo.SearchReservationByClient(clientId, dgv);
+            _repo.DisplayAndSearch(
+                "SELECT * FROM Reservation_Table WHERE Client_ID LIKE '%" + clientId + "%'",
+                dgv
+            );
         }
 
-        // ================= UPDATE =================
-        public bool UpdateReservation(int reservationId,
-                                      string roomType,
-                                      int roomNo,
-                                      int clientId,
-                                      DateTime checkIn,
-                                      DateTime checkOut,
-                                      string oldRoomNo)
+        public bool UpdateReservation(int reservationId, string roomType, int roomNo,
+                                      int clientId, DateTime checkIn,
+                                      DateTime checkOut, string oldRoomNo)
         {
-            if (reservationId <= 0) return false;
-            if (checkOut <= checkIn) return false;
-
             bool updated = _repo.UpdateReservation(
-                reservationId,
-                roomType,
-                roomNo,
-                clientId,
-                checkIn,
-                checkOut
+                reservationId, roomType, roomNo, clientId, checkIn, checkOut
             );
 
-            if (!updated) return false;
-
-            // ✅ free old room if changed
-            if (!string.IsNullOrEmpty(oldRoomNo) &&
-                oldRoomNo != roomNo.ToString())
+            if (updated && oldRoomNo != roomNo.ToString())
             {
                 _repo.UpdateReservationRoom(oldRoomNo, "Yes");
+                _repo.UpdateReservationRoom(roomNo.ToString(), "No");
             }
 
-            // ✅ occupy new room
-            _repo.UpdateReservationRoom(roomNo.ToString(), "No");
-
-            return true;
+            return updated;
         }
 
-        // ================= CHECK-IN =================
-        public bool CheckIn(int reservationId,
-                            string clientName,
-                            int roomNo,
-                            string roomType,
-                            DateTime expectedCheckOut)
+        public bool CheckIn(int reservationId, string clientName, int roomNo,
+                            string roomType, DateTime expectedCheckOut)
         {
-            if (reservationId <= 0) return false;
-            if (roomNo <= 0) return false;
-
-            decimal roomRate = 1000m; // TEMP (same as UC)
+            decimal rate = 0;
 
             return _repo.CheckInFromReservation(
                 reservationId,
                 clientName,
                 roomNo,
                 roomType,
-                roomRate,
+                rate,
                 DateTime.Now,
                 expectedCheckOut
             );
         }
 
-        // ================= ROOMS =================
-        public void LoadRoomNumbers(string query, ComboBox comboBox)
+        public void LoadRoomNumbers(string roomType, string oldRoomNo, ComboBox comboBox)
         {
+            string query =
+                "SELECT Room_Number FROM Room_Table " +
+                "WHERE Room_Type = '" + roomType + "' " +
+                "AND (Room_Free = 'Yes' OR Room_Number = '" + oldRoomNo + "')";
+
             _repo.RoomTypeAndNo(query, comboBox);
         }
     }

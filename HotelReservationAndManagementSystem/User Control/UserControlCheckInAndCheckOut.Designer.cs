@@ -290,7 +290,7 @@
             this.btnCheckOut.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCheckOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCheckOut.ForeColor = System.Drawing.Color.White;
-            this.btnCheckOut.Location = new System.Drawing.Point(584, 278);
+            this.btnCheckOut.Location = new System.Drawing.Point(586, 287);
             this.btnCheckOut.Name = "btnCheckOut";
             this.btnCheckOut.Size = new System.Drawing.Size(155, 52);
             this.btnCheckOut.TabIndex = 43;

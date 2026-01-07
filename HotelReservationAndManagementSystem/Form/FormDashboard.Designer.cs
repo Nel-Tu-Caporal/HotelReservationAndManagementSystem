@@ -57,12 +57,12 @@
             this.labelDateAndTime = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.userControlCheckInAndCheckOut1 = new HotelReservationAndManagementSystem.User_Control.UserControlCheckInAndCheckOut();
+            this.userControlBillsAndPayment1 = new HotelReservationAndManagementSystem.User_Control.UserControlBillsAndPayment();
+            this.userControlCheckInAndCheckOut1 = new HotelReservationAndManagementSystem.User_Control.UserControlCheckInAndCheckOut(); // errpr part
             this.userControlSetting1 = new HotelReservationAndManagementSystem.User_Control.UserControlSetting();
             this.userControlClient1 = new HotelReservationAndManagementSystem.User_Control.UserControlClient();
             this.userControlRoom1 = new HotelReservationAndManagementSystem.User_Control.UserControlRoom();
             this.userControlReservation1 = new HotelReservationAndManagementSystem.User_Control.UserControlReservation();
-            this.userControlBillsAndPayment1 = new HotelReservationAndManagementSystem.User_Control.UserControlBillsAndPayment();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             this.lblLogoLabel.SuspendLayout();
@@ -387,6 +387,16 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // userControlBillsAndPayment1
+            // 
+            this.userControlBillsAndPayment1.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userControlBillsAndPayment1.Location = new System.Drawing.Point(315, 162);
+            this.userControlBillsAndPayment1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.userControlBillsAndPayment1.Name = "userControlBillsAndPayment1";
+            this.userControlBillsAndPayment1.Size = new System.Drawing.Size(1469, 416);
+            this.userControlBillsAndPayment1.TabIndex = 0;
+            this.userControlBillsAndPayment1.Visible = false;
+            // 
             // userControlCheckInAndCheckOut1
             // 
             this.userControlCheckInAndCheckOut1.BackColor = System.Drawing.Color.White;
@@ -446,16 +456,6 @@
             this.userControlReservation1.TabIndex = 0;
             this.userControlReservation1.Visible = false;
             this.userControlReservation1.Load += new System.EventHandler(this.userControlReservation1_Load);
-            // 
-            // userControlBillsAndPayment1
-            // 
-            this.userControlBillsAndPayment1.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.userControlBillsAndPayment1.Location = new System.Drawing.Point(315, 162);
-            this.userControlBillsAndPayment1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.userControlBillsAndPayment1.Name = "userControlBillsAndPayment1";
-            this.userControlBillsAndPayment1.Size = new System.Drawing.Size(1469, 416);
-            this.userControlBillsAndPayment1.TabIndex = 0;
-            this.userControlBillsAndPayment1.Visible = false;
             // 
             // Hotel
             // 

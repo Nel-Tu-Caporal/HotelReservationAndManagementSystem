@@ -17,14 +17,13 @@
 
     namespace HotelReservationAndManagementSystem.User_Control
     {
-        public partial class UserControlReservation : UserControl
-        {
+    public partial class UserControlReservation : UserControl
+    {
+        private readonly IReservationService _service;
 
-            private readonly IReservationService _service;
-
-            private DataGridViewRow selectedReservationRow = null;
-            private string RID = "";
-            private string OldRoomNo = "";
+        private DataGridViewRow selectedReservationRow = null;
+        private string RID = "";
+        private string OldRoomNo = "";
 
         public UserControlReservation()
         {
@@ -44,6 +43,7 @@
             dateTimePickerOut.Value = DateTime.Now;
             tabControlReservation.SelectedTab = tabPageAddReservation;
         }
+
         private void Clear1()
         {
             comboBoxType1.SelectedIndex = 0;
@@ -54,7 +54,6 @@
             RID = "";
             OldRoomNo = "";
         }
-
 
         private bool BindSelectedReservation()
         {
@@ -67,13 +66,7 @@
             string roomType = selectedReservationRow.Cells[3].Value.ToString();
             comboBoxType1.SelectedItem = roomType;
 
-            _service.LoadRoomNumbers( // error 
-                "SELECT Room_Number FROM Room_Table " +
-                "WHERE Room_Type = '" + roomType + "' " +
-                "AND (Room_Free = 'Yes' OR Room_Number = '" + OldRoomNo + "')",
-                comboBoxNo1
-            );
-
+            _service.LoadRoomNumbers(roomType, OldRoomNo, comboBoxNo1);
             comboBoxNo1.Text = OldRoomNo;
 
             dateTimePickerIn1.Value = Convert.ToDateTime(selectedReservationRow.Cells[4].Value);
@@ -236,10 +229,9 @@
         {
             if (string.IsNullOrEmpty(OldRoomNo)) return;
 
-            _service.LoadRoomNumbers( // error 
-                "SELECT Room_Number FROM Room_Table WHERE Room_Type = '" +
-                comboBoxType1.SelectedItem.ToString() +
-                "' AND (Room_Free = 'Yes' OR Room_Number = '" + OldRoomNo + "')",
+            _service.LoadRoomNumbers(
+                comboBoxType1.SelectedItem.ToString(),
+                OldRoomNo,
                 comboBoxNo1
             );
 
@@ -305,11 +297,13 @@
 
         private void comboBoxRoomType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _service.LoadRoomNumbers( // error 
-                 "SELECT Room_Number FROM Room_Table WHERE Room_Type = '" +
-                 comboBoxType.SelectedItem.ToString() + "' AND Room_Free = 'Yes'",
-                 comboBoxNo
-             );
+            if (comboBoxType.SelectedIndex == 0) return;
+
+            _service.LoadRoomNumbers(
+                comboBoxType.SelectedItem.ToString(),
+                "",
+                comboBoxNo
+            );
         }
 
     }

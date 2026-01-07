@@ -1,4 +1,7 @@
-﻿using HotelReservationAndManagementSystem.References;
+﻿using HotelReservationAndManagementSystem.Interface.Services;
+using HotelReservationAndManagementSystem.Models.Services;
+using HotelReservationAndManagementSystem.References;
+using HotelReservationAndManagementSystem.Repo;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,72 +13,64 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace HotelReservationAndManagementSystem.User_Control
-{
+namespace HotelReservationAndManagementSystem.User_Control { 
+
     public partial class UserControlCheckInAndCheckOut : UserControl
-    {
+{
+    private int selectedReservationId = 0;
+    private int selectedCheckInOutId = 0;
+    private int selectedRoomNumber = 0;
+        private ICheckInOutService _checkInOutService;
 
-        DBConnector1 db;
-
-        private string SelectedCheckInID = "";
-        private string SelectedReservationID = "";
-        private int SelectedRoomNumber = 0;
-        private decimal SelectedRoomRate = 0;
-        private DateTime SelectedCheckInDate;
-
-        private int selectedCheckInOutID = 0;
-        private int selectedRoomNumber = 0;
-
-        private string checkInID = "";
-
-
+        // REQUIRED for WinForms Designer
         public UserControlCheckInAndCheckOut()
         {
             InitializeComponent();
-
-            db = new DBConnector1();
         }
+
+        // Your real constructor
+        public UserControlCheckInAndCheckOut(ICheckInOutService service)
+        {
+            InitializeComponent();
+            _checkInOutService = service;
+        }
+
 
         public void Clear()
         {
-            
-           
+            ClearDisplay();
         }
 
-        private void Clear1()
+        private void ClearDisplay()
         {
+            selectedReservationId = 0;
+            selectedCheckInOutId = 0;
+            selectedRoomNumber = 0;
+
             lblCheckInOutDate.Text = "?";
             lblTotalDaysStayed.Text = "?";
             lblRoomRates.Text = "?";
             lblTotalAmount.Text = "?";
-
-            SelectedCheckInID = "";
-            SelectedReservationID = "";
-            SelectedRoomNumber = 0;
-            SelectedRoomRate = 0;
         }
 
         private void LoadCheckInList()
         {
-            string query = @"
-        SELECT
-            c.CheckInOut_ID,
-            c.Reservation_ID,
-            c.ClientName,
-            c.Room_Number,
-            c.Room_Type,
-            c.CheckInDate,
-            c.ExpectedCheckOutDate,
-            c.RoomRate,
-            c.Status
-        FROM CheckInOut_Table c
-        WHERE c.ActualCheckOutDate IS NULL
-          AND c.Status = 'CheckedIn'
-    ";
+            if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
+                return;
 
-            db.DisplayAndSearch(query, dataGridViewCheckInList);
+            if (_checkInOutService == null)
+                return; // <-- prevents crash
+        }
+        public void SetService(ICheckInOutService service)
+        {
+            _checkInOutService = service;
+            LoadCheckInList();
         }
 
+        private bool IsDesignMode()
+        {
+            return LicenseManager.UsageMode == LicenseUsageMode.Designtime;
+        }
 
         private void dataGridViewReservation_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -140,11 +135,9 @@ namespace HotelReservationAndManagementSystem.User_Control
 
             DataGridViewRow row = dataGridViewCheckInList.Rows[e.RowIndex];
 
-            selectedCheckInOutID = Convert.ToInt32(row.Cells["CheckInOut_ID"].Value);
+            selectedCheckInOutId = Convert.ToInt32(row.Cells["CheckInOut_ID"].Value);
+            selectedReservationId = Convert.ToInt32(row.Cells["Reservation_ID"].Value);
             selectedRoomNumber = Convert.ToInt32(row.Cells["Room_Number"].Value);
-
-            //  REQUIRED FOR CHECK-OUT
-            SelectedReservationID = row.Cells["Reservation_ID"].Value.ToString();
 
             DateTime checkInDate = Convert.ToDateTime(row.Cells["CheckInDate"].Value);
             DateTime today = DateTime.Today;
@@ -156,11 +149,9 @@ namespace HotelReservationAndManagementSystem.User_Control
             lblTotalDaysStayed.Text = totalDays.ToString();
             lblRoomRates.Text = roomRate.ToString("0.00");
             lblTotalAmount.Text = (totalDays * roomRate).ToString("0.00");
-
-
         }
 
-        
+
 
         private void tabPageCheckOut_Enter(object sender, EventArgs e)
         {
@@ -169,29 +160,22 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void btnCheckOut_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(SelectedReservationID))
+            if (_checkInOutService == null)
+            {
+                MessageBox.Show("Service not initialized.");
+                return;
+            }
+
+            if (selectedReservationId == 0)
             {
                 MessageBox.Show("Select a checked-in record first.");
                 return;
             }
 
-            int reservationId = Convert.ToInt32(SelectedReservationID);
-
-            bool success = db.CheckOutReservation(reservationId);
-
-            if (success)
+            if (_checkInOutService.CheckOut(selectedReservationId))
             {
                 LoadCheckInList();
-
-                // reset UI
-                SelectedReservationID = "";
-                selectedCheckInOutID = 0;
-                selectedRoomNumber = 0;
-
-                lblCheckInOutDate.Text = "?";
-                lblTotalDaysStayed.Text = "?";
-                lblRoomRates.Text = "?";
-                lblTotalAmount.Text = "?";
+                ClearDisplay();
             }
         }
 
@@ -199,7 +183,11 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void UserControlCheckInAndCheckOut_Load(object sender, EventArgs e)
         {
-            LoadCheckInList();
+            if (IsDesignMode() || _checkInOutService == null)
+                return;
+
+          
+            ClearDisplay();
         }
 
         private void comboBoxRoomType_SelectedIndexChanged(object sender, EventArgs e)
@@ -220,7 +208,7 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void UserControlCheckInAndCheckOut_Enter(object sender, EventArgs e)
         {
-            LoadCheckInList();
+            
         }
 
         private void tabControlCheckInCheckOut_Enter(object sender, EventArgs e)
@@ -234,33 +222,22 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void btnCancelCheckIn_Click(object sender, EventArgs e)
         {
-            if (selectedCheckInOutID == 0)
+            if (_checkInOutService == null)
+            {
+                MessageBox.Show("Service not initialized.");
+                return;
+            }
+
+            if (selectedCheckInOutId == 0)
             {
                 MessageBox.Show("Select a check-in first.");
                 return;
             }
 
-            bool success = db.CancelCheckIn(
-                selectedCheckInOutID,
-                selectedRoomNumber
-            );
-
-            if (success)
+            if (_checkInOutService.CancelCheckIn(selectedCheckInOutId, selectedRoomNumber))
             {
-                MessageBox.Show(
-                    $"Check-in cancelled successfully.\nRoom {selectedRoomNumber}");
-
-                
                 LoadCheckInList();
-
-                // reset state
-                selectedCheckInOutID = 0;
-                selectedRoomNumber = 0;
-
-                lblCheckInOutDate.Text = "?";
-                lblTotalDaysStayed.Text = "?";
-                lblRoomRates.Text = "?";
-                lblTotalAmount.Text = "?";
+                ClearDisplay();
             }
         }
 

@@ -617,11 +617,38 @@ WHERE Reservation_ID = @ReservationID
                 SqlCommand sqlCommand = new SqlCommand(query, connection);
                 return (int)sqlCommand.ExecuteScalar();
             }
+        public DataTable GetCheckedInList()
+        {
+            DataTable table = new DataTable();
 
-      
+            string query = @"
+SELECT
+    c.CheckInOut_ID,
+    c.Reservation_ID,
+    c.ClientName,
+    c.Room_Number,
+    c.Room_Type,
+    c.CheckInDate,
+    c.ExpectedCheckOutDate,
+    c.RoomRate,
+    c.Status
+FROM CheckInOut_Table c
+WHERE c.Status = 'CheckedIn'";
+
+            using (SqlConnection con = GetConnection())
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                da.Fill(table);
+            }
+
+            return table;
+        }
 
 
-            public bool CheckOutReservation(int ReservationID)
+
+
+        public bool CheckOutReservation(int ReservationID)
             {
                 using (SqlConnection connection = GetConnection())
                 {

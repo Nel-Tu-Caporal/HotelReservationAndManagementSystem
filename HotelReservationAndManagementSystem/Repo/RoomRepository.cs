@@ -1,17 +1,18 @@
-﻿using HotelReservationAndManagementSystem.References;
+﻿using HotelReservationAndManagementSystem.Interface;
+using HotelReservationAndManagementSystem.References;
+using HotelReservationAndManagementSystem.References;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using HotelReservationAndManagementSystem.Interface;
-using HotelReservationAndManagementSystem.References;
 using System.Windows.Forms;
 
 namespace HotelReservationAndManagementSystem.Repo
 {
-    public class RoomRepository : IRoomRepository // error 
+    public class RoomRepository : IRoomRepository
     {
         private readonly DBConnector1 _db;
 
@@ -20,14 +21,14 @@ namespace HotelReservationAndManagementSystem.Repo
             _db = db;
         }
 
-        public bool AddRoom(string type, string phone, string free)
+        public bool AddRoom(string type, string phone, bool free)
         {
-            return _db.AddRoom(type, phone, free);
+            return _db.AddRoom(type, phone, free ? "Yes" : "No");
         }
 
-        public bool UpdateRoom(string no, string type, string phone, string free)
+        public bool UpdateRoom(string no, string type, string phone, bool free)
         {
-            return _db.UpdateRoom(no, type, phone, free);
+            return _db.UpdateRoom(no, type, phone, free ? "Yes" : "No");
         }
 
         public bool DeleteRoom(string no)
@@ -35,14 +36,22 @@ namespace HotelReservationAndManagementSystem.Repo
             return _db.DeleteRoom(no);
         }
 
-        public void LoadRooms(string query, DataGridView dgv)
+        //  use existing DAL method
+        public void LoadRooms(DataGridView dgv)
         {
-            _db.DisplayAndSearch(query, dgv);
+            _db.DisplayAndSearch(
+                "SELECT Room_Number, Room_Type, Room_Phone, Room_Free FROM Room_Table",
+                dgv
+            );
         }
 
-        public void LoadRoomNumbers(string query, ComboBox cb)
+        //  use existing DAL method
+        public void LoadAvailableRooms(ComboBox cb)
         {
-            _db.RoomTypeAndNo(query, cb);
+            _db.RoomTypeAndNo(
+                "SELECT Room_Number FROM Room_Table WHERE Room_Free = 'Yes'",
+                cb
+            );
         }
     }
 }

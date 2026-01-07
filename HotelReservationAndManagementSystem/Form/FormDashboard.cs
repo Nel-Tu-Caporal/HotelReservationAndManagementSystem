@@ -1,4 +1,8 @@
-﻿using Microsoft.Win32;
+﻿using HotelReservationAndManagementSystem.Models.Services;
+using HotelReservationAndManagementSystem.References;
+using HotelReservationAndManagementSystem.Repo;
+using HotelReservationAndManagementSystem.User_Control;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +22,11 @@ namespace HotelReservationAndManagementSystem
         public Hotel()
         {
             InitializeComponent();
+            var db = new DBConnector1();
+            var repo = new CheckInOutRepository(db);
+            var service = new CheckInOutService(repo);
+
+            userControlCheckInAndCheckOut1.SetService(service);
         }
 
         private void MovePanel(Control btn)

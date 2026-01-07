@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace HotelReservationAndManagementSystem.Repo
 {
-    public class ReservationRepository
+    public class ReservationRepository : IReservationRepository
     {
         private readonly DBConnector1 _db;
 
@@ -19,81 +19,36 @@ namespace HotelReservationAndManagementSystem.Repo
             _db = db;
         }
 
-        // ================= ADD =================
-        public bool AddReservation(
-            string roomType,
-            int roomNo,
-            int clientId,
-            DateTime checkIn,
-            DateTime checkOut)
+        public bool AddReservation(string type, int roomNo, int clientId, DateTime inDate, DateTime outDate)
         {
-            return _db.AddReservation(
-                roomType,
-                roomNo,
-                clientId,
-                checkIn,
-                checkOut
-            );
+            return _db.AddReservation(type, roomNo, clientId, inDate, outDate);
         }
 
-        // ================= LOAD =================
-        public void LoadReservations(DataGridView dgv)
+        public bool UpdateReservation(int reservationId, string type, int roomNo, int clientId, DateTime inDate, DateTime outDate)
         {
-            _db.DisplayAndSearch(
-                "SELECT * FROM Reservation_Table",
-                dgv
-            );
+            return _db.UpdateReservation(reservationId, type, roomNo, clientId, inDate, outDate);
         }
 
-        public void SearchReservationByClient(string clientId, DataGridView dgv)
-        {
-            _db.DisplayAndSearch(
-                "SELECT * FROM Reservation_Table WHERE Client_ID LIKE '%" + clientId + "%'",
-                dgv
-            );
-        }
-
-        // ================= UPDATE =================
-        public bool UpdateReservation(
-            int reservationId,
-            string roomType,
-            int roomNo,
-            int clientId,
-            DateTime checkIn,
-            DateTime checkOut)
-        {
-            return _db.UpdateReservation(
-                reservationId,
-                roomType,
-                roomNo,
-                clientId,
-                checkIn,
-                checkOut
-            );
-        }
-
-        // ================= CHECK-IN =================
-        public bool CheckInFromReservation(
-            int reservationId,
-            string clientName,
-            int roomNo,
-            string roomType,
-            decimal roomRate,
-            DateTime checkIn,
-            DateTime expectedCheckOut)
+        public bool CheckInFromReservation(int reservationId, string clientName, int roomNumber,
+                                           string roomType, decimal roomRate,
+                                           DateTime checkIn, DateTime expectedOut)
         {
             return _db.CheckInFromReservation(
                 reservationId,
                 clientName,
-                roomNo,
+                roomNumber,
                 roomType,
                 roomRate,
                 checkIn,
-                expectedCheckOut
+                expectedOut
             );
         }
 
-        // ================= ROOMS =================
+        public void DisplayAndSearch(string query, DataGridView dgv)
+        {
+            _db.DisplayAndSearch(query, dgv);
+        }
+
         public void RoomTypeAndNo(string query, ComboBox comboBox)
         {
             _db.RoomTypeAndNo(query, comboBox);

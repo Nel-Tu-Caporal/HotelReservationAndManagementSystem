@@ -22,6 +22,6 @@ namespace HotelReservationAndManagementSystem.Interface.Services
         bool CheckIn(int reservationId, string clientName, int roomNo,
                      string roomType, DateTime expectedCheckOut);
 
-        void LoadRoomNumbers(string query, ComboBox comboBox);
+        void LoadRoomNumbers(string roomType, string oldRoomNo, ComboBox comboBox);
     }
 }

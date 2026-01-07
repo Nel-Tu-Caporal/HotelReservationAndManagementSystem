@@ -89,9 +89,10 @@ namespace HotelReservationAndManagementSystem.User_Control
             }
 
             bool success = _roomService.AddRoom(
-                comboBoxType.SelectedItem.ToString(),
-                txtBoxPhoneNo.Text.Trim()
-            );
+    comboBoxType.SelectedItem.ToString(),
+    txtBoxPhoneNo.Text.Trim(),
+    radioButtonYes.Checked
+);
 
             if (success)
                 Clear();
@@ -203,10 +204,11 @@ namespace HotelReservationAndManagementSystem.User_Control
             }
 
             bool success = _roomService.UpdateRoom(
-                No,
-                comboBoxType1.SelectedItem.ToString(),
-                txtBoxPhoneNo1.Text.Trim()
-            );
+    No,
+    comboBoxType1.SelectedItem.ToString(),
+    txtBoxPhoneNo1.Text.Trim(),
+    radioButtonYes1.Checked
+);
 
             if (success)
                 Clear1();
