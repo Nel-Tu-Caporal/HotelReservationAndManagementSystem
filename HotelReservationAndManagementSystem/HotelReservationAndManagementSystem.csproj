@@ -116,50 +116,47 @@
     <Compile Include="Interface\Repository\IReservationRepository.cs" />
     <Compile Include="Interface\Repository\IRoomRepository.cs" />
     <Compile Include="Interface\Repository\IUserRepository.cs" />
-    <Compile Include="Interface\IUserService.cs" />
-    <Compile Include="Interface\Services\CheckInCheckOut.cs" />
+    <Compile Include="Interface\Services\IUserService.cs" />
+    <Compile Include="Interface\Services\ICheckInCheckOut.cs" />
     <Compile Include="Interface\Services\IClientService.cs" />
     <Compile Include="Interface\Services\IReservationService.cs" />
     <Compile Include="Interface\Services\IRoomService.cs" />
     <Compile Include="Interface\Services\IPaymentService.cs" />
-    <Compile Include="Models\ClientFolder\Client1.cs" />
-    <Compile Include="Models\Reservation\CheckInOut.cs" />
-    <Compile Include="Models\Reservation\Reservation1.cs" />
-    <Compile Include="Models\Services\CheckInCheckOutService.cs" />
-    <Compile Include="Models\Services\ClientService.cs" />
-    <Compile Include="Models\Services\PaymentService.cs" />
-    <Compile Include="Models\Services\ReservationService.cs" />
-    <Compile Include="Models\Services\RoomService.cs" />
-    <Compile Include="Models\Services\Service.cs" />
+    <Compile Include="trash\ClientFolder\Client1.cs" />
+    <Compile Include="trash\Reservation\CheckInOut.cs" />
+    <Compile Include="trash\Reservation\Reservation1.cs" />
+    <Compile Include="Services\CheckInCheckOutService.cs" />
+    <Compile Include="Services\ClientService.cs" />
+    <Compile Include="Services\PaymentService.cs" />
+    <Compile Include="Services\ReservationService.cs" />
+    <Compile Include="Services\RoomService.cs" />
+    <Compile Include="Services\Service.cs" />
     <Compile Include="Repo\CheckInCheckOutRepository.cs" />
     <Compile Include="Repo\PaymentRepository.cs" />
     <Compile Include="Repo\ReservationRepository.cs" />
     <Compile Include="Repo\RoomRepository.cs" />
-    <Compile Include="Models\Services\UserService.cs" />
-    <Compile Include="Models\Users\HotelManager.cs" />
-    <Compile Include="Models\Rooms\DeluxeRoom.cs" />
-    <Compile Include="Models\Rooms\SuiteRoom.cs" />
-    <Compile Include="Models\Users\FrontDeskStaff.cs" />
+    <Compile Include="Services\UserService.cs" />
+    <Compile Include="trash\Users\HotelManager.cs" />
+    <Compile Include="trash\Users\FrontDeskStaff.cs" />
     <Compile Include="Models\Rooms\Room.cs" />
-    <Compile Include="Models\Rooms\StandardRoom.cs" />
-    <Compile Include="Models\Users\Guest.cs" />
-    <Compile Include="Models\Users\SystemUser .cs" />
-    <Compile Include="Models\Users\User.cs" />
+    <Compile Include="trash\Users\Guest.cs" />
+    <Compile Include="trash\Users\SystemUser .cs" />
+    <Compile Include="trash\Users\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DAL\DBConnector1.cs" />
     <Compile Include="Repo\ClientRepository.cs" />
-    <Compile Include="User Control\UserControlBillsAndPayment.cs">
+    <Compile Include="User Control\UserControlPayment.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="User Control\UserControlBillsAndPayment.Designer.cs">
-      <DependentUpon>UserControlBillsAndPayment.cs</DependentUpon>
+    <Compile Include="User Control\UserControlPayment.Designer.cs">
+      <DependentUpon>UserControlPayment.cs</DependentUpon>
     </Compile>
-    <Compile Include="User Control\UserControlCheckInAndCheckOut.cs">
+    <Compile Include="User Control\UserControlCheckOut.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="User Control\UserControlCheckInAndCheckOut.Designer.cs">
-      <DependentUpon>UserControlCheckInAndCheckOut.cs</DependentUpon>
+    <Compile Include="User Control\UserControlCheckOut.Designer.cs">
+      <DependentUpon>UserControlCheckOut.cs</DependentUpon>
     </Compile>
     <Compile Include="User Control\UserControlClient.cs">
       <SubType>UserControl</SubType>
@@ -202,11 +199,11 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="User Control\UserControlBillsAndPayment.resx">
-      <DependentUpon>UserControlBillsAndPayment.cs</DependentUpon>
+    <EmbeddedResource Include="User Control\UserControlPayment.resx">
+      <DependentUpon>UserControlPayment.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="User Control\UserControlCheckInAndCheckOut.resx">
-      <DependentUpon>UserControlCheckInAndCheckOut.cs</DependentUpon>
+    <EmbeddedResource Include="User Control\UserControlCheckOut.resx">
+      <DependentUpon>UserControlCheckOut.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="User Control\UserControlClient.resx">
       <DependentUpon>UserControlClient.cs</DependentUpon>

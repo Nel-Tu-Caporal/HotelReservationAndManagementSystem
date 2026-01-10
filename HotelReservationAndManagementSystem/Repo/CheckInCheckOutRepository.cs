@@ -6,8 +6,9 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using HotelReservationAndManagementSystem.Models;
 
-    namespace HotelReservationAndManagementSystem.Repo
+namespace HotelReservationAndManagementSystem.Repo
     {
     public class CheckInOutRepository : ICheckInOutRepository
     {
@@ -43,10 +44,25 @@
             return _db.CheckOutReservation(reservationId);
         }
 
-     
         public DataTable GetCheckedInList()
         {
-            return _db.GetCheckedInList();
+            DataTable dt = _db.GetCheckedInList();
+
+            if (dt == null)
+                return new DataTable();
+
+            // Ensure RoomRate exists (safe for grid)
+            if (!dt.Columns.Contains("RoomRate"))
+            {
+                dt.Columns.Add("RoomRate", typeof(decimal));
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    row["RoomRate"] = 0m;
+                }
+            }
+
+            return dt;
         }
 
         public bool CancelCheckIn(int checkInOutId, int roomNumber)

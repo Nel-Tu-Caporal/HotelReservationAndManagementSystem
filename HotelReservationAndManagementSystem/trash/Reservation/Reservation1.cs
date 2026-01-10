@@ -34,7 +34,7 @@ namespace HotelReservationAndManagementSystem.Models
 
         public decimal CalculateTotalCost()
         {
-            return GetTotalNights() * Room.GetPricePerNight();
+            return GetTotalNights() * Room.RoomRate;
         }
 
         public bool IsValidDate()

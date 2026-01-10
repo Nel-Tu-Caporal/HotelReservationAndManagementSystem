@@ -20,11 +20,12 @@
             );
 
             bool CheckOut(int reservationId);
+            bool CheckOutReservation(int reservationId);
 
-       
 
-       
-            DataTable LoadCheckedInList();
+
+
+        DataTable LoadCheckedInList();
             bool CancelCheckIn(int checkInOutId, int roomNumber);
        
         }

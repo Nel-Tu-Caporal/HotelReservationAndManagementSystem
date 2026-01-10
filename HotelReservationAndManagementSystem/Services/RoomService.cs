@@ -52,5 +52,9 @@ namespace HotelReservationAndManagementSystem.Models.Services
         {
             _repo.LoadAvailableRooms(cb);
         }
+        public DataTable SearchRoomByNumber(int roomNo)
+        {
+            return _repo.SearchRoomByNumber(roomNo); // error
+        }
     }
 }

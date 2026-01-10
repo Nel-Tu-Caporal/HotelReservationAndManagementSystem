@@ -41,10 +41,6 @@
             this.lblRoom = new System.Windows.Forms.Label();
             this.tabPageSearchRoom = new System.Windows.Forms.TabPage();
             this.dataGridViewRoom = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtBoxSearchRoomNo = new System.Windows.Forms.TextBox();
             this.labelRoom = new System.Windows.Forms.Label();
             this.lblSearchRoom = new System.Windows.Forms.Label();
@@ -59,6 +55,11 @@
             this.lblRoomNo = new System.Windows.Forms.Label();
             this.lblType1 = new System.Windows.Forms.Label();
             this.lblUpdateDelete = new System.Windows.Forms.Label();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControlRoom.SuspendLayout();
             this.tabPageAddRoom.SuspendLayout();
             this.tabPageSearchRoom.SuspendLayout();
@@ -229,7 +230,8 @@
             this.Column1,
             this.Column2,
             this.Column3,
-            this.Column4});
+            this.Column4,
+            this.Column5});
             this.dataGridViewRoom.Location = new System.Drawing.Point(6, 113);
             this.dataGridViewRoom.Name = "dataGridViewRoom";
             this.dataGridViewRoom.ReadOnly = true;
@@ -240,38 +242,6 @@
             this.dataGridViewRoom.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoom_CellClick);
             this.dataGridViewRoom.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoom_CellContentClick);
             this.dataGridViewRoom.Leave += new System.EventHandler(this.dataGridViewRoom_Leave);
-            // 
-            // Column1
-            // 
-            this.Column1.DataPropertyName = "Room_Number";
-            this.Column1.HeaderText = "No.";
-            this.Column1.MinimumWidth = 8;
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            // 
-            // Column2
-            // 
-            this.Column2.DataPropertyName = "Room_Type";
-            this.Column2.HeaderText = "Type";
-            this.Column2.MinimumWidth = 8;
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            // 
-            // Column3
-            // 
-            this.Column3.DataPropertyName = "Room_Phone";
-            this.Column3.HeaderText = "Phone";
-            this.Column3.MinimumWidth = 8;
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            // 
-            // Column4
-            // 
-            this.Column4.DataPropertyName = "Room_Free";
-            this.Column4.HeaderText = "isFree?";
-            this.Column4.MinimumWidth = 8;
-            this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
             // 
             // txtBoxSearchRoomNo
             // 
@@ -437,6 +407,46 @@
             this.lblUpdateDelete.TabIndex = 23;
             this.lblUpdateDelete.Text = "Room Update and Delete";
             // 
+            // Column1
+            // 
+            this.Column1.DataPropertyName = "Room_Number";
+            this.Column1.HeaderText = "No.";
+            this.Column1.MinimumWidth = 8;
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            // 
+            // Column2
+            // 
+            this.Column2.DataPropertyName = "Room_Type";
+            this.Column2.HeaderText = "Type";
+            this.Column2.MinimumWidth = 8;
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            // 
+            // Column3
+            // 
+            this.Column3.DataPropertyName = "Room_Phone";
+            this.Column3.HeaderText = "Phone";
+            this.Column3.MinimumWidth = 8;
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            // 
+            // Column4
+            // 
+            this.Column4.DataPropertyName = "Room_Free";
+            this.Column4.HeaderText = "isFree?";
+            this.Column4.MinimumWidth = 8;
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            // 
+            // Column5
+            // 
+            this.Column5.DataPropertyName = "Room_Rate";
+            this.Column5.HeaderText = "Room Rate";
+            this.Column5.MinimumWidth = 8;
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            // 
             // UserControlRoom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 23F);
@@ -493,5 +503,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
     }
 }

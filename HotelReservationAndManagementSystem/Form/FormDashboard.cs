@@ -26,7 +26,7 @@ namespace HotelReservationAndManagementSystem
             var repo = new CheckInOutRepository(db);
             var service = new CheckInOutService(repo);
 
-            userControlCheckInAndCheckOut1.SetService(service);
+            userControlCheckInAndCheckOut1.SetService(service); // error 
         }
 
         private void MovePanel(Control btn)
@@ -37,13 +37,17 @@ namespace HotelReservationAndManagementSystem
 
         private void FormDashboard_Load(object sender, EventArgs e)
         {
-            
-
             timer1.Start();
             labelUserName.Text = Username;
+
+            var db = new DBConnector1();
+            var repo = new CheckInOutRepository(db);
+            var service = new CheckInOutService(repo);
+
+            userControlCheckInAndCheckOut1.SetService(service); 
         }
 
-       
+
 
         private void label2_Click(object sender, EventArgs e)
         {
@@ -81,6 +85,7 @@ namespace HotelReservationAndManagementSystem
             userControlReservation1.Hide();
             userControlCheckInAndCheckOut1.Hide();
             userControlBillsAndPayment1.Hide();
+          
         }
 
         private void buttonDashboard_Click(object sender, EventArgs e)
@@ -94,6 +99,7 @@ namespace HotelReservationAndManagementSystem
             userControlReservation1.Hide();
             userControlCheckInAndCheckOut1.Hide();
             userControlBillsAndPayment1.Hide();
+         
 
 
         }
@@ -102,7 +108,7 @@ namespace HotelReservationAndManagementSystem
         {
             MovePanel(buttonRoom);
             userControlSetting1.Hide();
-              userControlSetting1.Hide();
+            userControlSetting1.Hide();
             userControlClient1.Hide();
             userControlRoom1.Clear();
             userControlRoom1.Show();
@@ -123,6 +129,7 @@ namespace HotelReservationAndManagementSystem
             userControlReservation1.Show();
             userControlCheckInAndCheckOut1.Hide();
             userControlBillsAndPayment1.Hide();
+            
         }
 
         private void buttonCheckInCheckOut_Click(object sender, EventArgs e)
@@ -137,6 +144,7 @@ namespace HotelReservationAndManagementSystem
             userControlCheckInAndCheckOut1.Clear();
             userControlCheckInAndCheckOut1.Show();
             userControlBillsAndPayment1.Hide();
+           
         }
 
         private void buttonBillAndPayment_Click(object sender, EventArgs e)
@@ -151,6 +159,7 @@ namespace HotelReservationAndManagementSystem
             userControlCheckInAndCheckOut1.Hide();
             userControlBillsAndPayment1.Clear();
             userControlBillsAndPayment1.Show();
+           
         }
 
         private void buttonSetting_Click(object sender, EventArgs e)
@@ -165,6 +174,7 @@ namespace HotelReservationAndManagementSystem
             userControlReservation1.Show();
             userControlCheckInAndCheckOut1.Hide();
             userControlBillsAndPayment1.Hide();
+            
 
         }
 
@@ -256,6 +266,11 @@ namespace HotelReservationAndManagementSystem
         }
 
         private void userControlCheckInAndCheckOut1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
         {
 
         }

@@ -16,5 +16,7 @@ namespace HotelReservationAndManagementSystem.Interface.Service
 
         void LoadRooms(DataGridView dgv);
         void LoadAvailableRooms(ComboBox cb);
+
+        DataTable SearchRoomByNumber(int roomNo);
     }
 }

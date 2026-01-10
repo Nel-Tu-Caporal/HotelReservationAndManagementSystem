@@ -1,6 +1,6 @@
 ﻿namespace HotelReservationAndManagementSystem.User_Control
 {
-    partial class UserControlBillsAndPayment
+    partial class UserControlPayment
     {
         /// <summary> 
         /// Required designer variable.
@@ -68,13 +68,17 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CheckInOut_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Client_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCheckInOutID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colReservationID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colClientName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colRoomNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colRoomType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCheckIn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCheckOut = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colRate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTotals = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPaymentStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControlBillsAndPayment.SuspendLayout();
             this.tabPageSelectBilling.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBilling)).BeginInit();
@@ -134,13 +138,17 @@
             this.dataGridViewBilling.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewBilling.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewBilling.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
-            this.CheckInOut_ID,
-            this.Column2,
-            this.Column3,
-            this.Client_ID,
-            this.Column5,
-            this.Column6});
+            this.colCheckInOutID,
+            this.colReservationID,
+            this.colClientName,
+            this.colRoomNo,
+            this.colRoomType,
+            this.colCheckIn,
+            this.colCheckOut,
+            this.colRate,
+            this.colTotal,
+            this.colTotals,
+            this.colPaymentStatus});
             this.dataGridViewBilling.Location = new System.Drawing.Point(32, 105);
             this.dataGridViewBilling.Name = "dataGridViewBilling";
             this.dataGridViewBilling.ReadOnly = true;
@@ -156,6 +164,7 @@
             this.txtBoxSearchReservationID.Name = "txtBoxSearchReservationID";
             this.txtBoxSearchReservationID.Size = new System.Drawing.Size(254, 32);
             this.txtBoxSearchReservationID.TabIndex = 21;
+            this.txtBoxSearchReservationID.TextChanged += new System.EventHandler(this.txtBoxSearchReservationID_TextChanged);
             // 
             // lblId
             // 
@@ -462,11 +471,11 @@
             this.txtBoxAmountPaid.TabIndex = 39;
             this.txtBoxAmountPaid.TextChanged += new System.EventHandler(this.txtBoxAmountPaid_TextChanged);
             // 
-            // txtBoxAmountPaid
+            // comboBoxPaymentMethod
             // 
             this.comboBoxPaymentMethod.FormattingEnabled = true;
             this.comboBoxPaymentMethod.Items.AddRange(new object[] {
-            "Select Payment Method ...",
+            "",
             "Cash",
             "Card",
             "Gcash"});
@@ -524,73 +533,106 @@
             this.label6.TabIndex = 33;
             this.label6.Text = "Client Payment:";
             // 
-            // Column1
+            // colCheckInOutID
             // 
-            this.Column1.DataPropertyName = "Reservation_ID";
-            this.Column1.HeaderText = "ID";
-            this.Column1.MinimumWidth = 8;
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
+            this.colCheckInOutID.DataPropertyName = "CheckInOut_ID";
+            this.colCheckInOutID.HeaderText = "ID";
+            this.colCheckInOutID.MinimumWidth = 8;
+            this.colCheckInOutID.Name = "colCheckInOutID";
+            this.colCheckInOutID.ReadOnly = true;
+            this.colCheckInOutID.Visible = false;
             // 
-            // CheckInOut_ID
+            // colReservationID
             // 
-            this.CheckInOut_ID.DataPropertyName = "CheckInOut_ID";
-            this.CheckInOut_ID.HeaderText = "Check InOut ID";
-            this.CheckInOut_ID.MinimumWidth = 8;
-            this.CheckInOut_ID.Name = "CheckInOut_ID";
-            this.CheckInOut_ID.ReadOnly = true;
-            this.CheckInOut_ID.Visible = false;
+            this.colReservationID.DataPropertyName = "Reservation_ID";
+            this.colReservationID.HeaderText = "ID";
+            this.colReservationID.MinimumWidth = 8;
+            this.colReservationID.Name = "colReservationID";
+            this.colReservationID.ReadOnly = true;
             // 
-            // Column2
+            // colClientName
             // 
-            this.Column2.DataPropertyName = "Room_Type";
-            this.Column2.HeaderText = "Room Type";
-            this.Column2.MinimumWidth = 8;
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
+            this.colClientName.DataPropertyName = "ClientName";
+            this.colClientName.HeaderText = "Client Name";
+            this.colClientName.MinimumWidth = 8;
+            this.colClientName.Name = "colClientName";
+            this.colClientName.ReadOnly = true;
             // 
-            // Column3
+            // colRoomNo
             // 
-            this.Column3.DataPropertyName = "Room_Number";
-            this.Column3.HeaderText = "Room No.";
-            this.Column3.MinimumWidth = 8;
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
+            this.colRoomNo.DataPropertyName = "Room_Number";
+            this.colRoomNo.HeaderText = "Room No";
+            this.colRoomNo.MinimumWidth = 8;
+            this.colRoomNo.Name = "colRoomNo";
+            this.colRoomNo.ReadOnly = true;
             // 
-            // Client_ID
+            // colRoomType
             // 
-            this.Client_ID.DataPropertyName = "Client_ID";
-            this.Client_ID.HeaderText = "Client ID";
-            this.Client_ID.MinimumWidth = 8;
-            this.Client_ID.Name = "Client_ID";
-            this.Client_ID.ReadOnly = true;
+            this.colRoomType.DataPropertyName = "Room_Type";
+            this.colRoomType.HeaderText = "Room Type";
+            this.colRoomType.MinimumWidth = 8;
+            this.colRoomType.Name = "colRoomType";
+            this.colRoomType.ReadOnly = true;
             // 
-            // Column5
+            // colCheckIn
             // 
-            this.Column5.DataPropertyName = "Reservation_In";
-            this.Column5.HeaderText = "In";
-            this.Column5.MinimumWidth = 8;
-            this.Column5.Name = "Column5";
-            this.Column5.ReadOnly = true;
+            this.colCheckIn.DataPropertyName = "CheckInDate";
+            this.colCheckIn.HeaderText = "Check In";
+            this.colCheckIn.MinimumWidth = 8;
+            this.colCheckIn.Name = "colCheckIn";
+            this.colCheckIn.ReadOnly = true;
             // 
-            // Column6
+            // colCheckOut
             // 
-            this.Column6.DataPropertyName = "Reservation_Out";
-            this.Column6.HeaderText = "Out";
-            this.Column6.MinimumWidth = 8;
-            this.Column6.Name = "Column6";
-            this.Column6.ReadOnly = true;
+            this.colCheckOut.DataPropertyName = "ActualCheckOutDate";
+            this.colCheckOut.HeaderText = "Check Out";
+            this.colCheckOut.MinimumWidth = 8;
+            this.colCheckOut.Name = "colCheckOut";
+            this.colCheckOut.ReadOnly = true;
             // 
-            // UserControlBillsAndPayment
+            // colRate
+            // 
+            this.colRate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colRate.DataPropertyName = "TotalDays";
+            this.colRate.HeaderText = "Total Days";
+            this.colRate.MinimumWidth = 8;
+            this.colRate.Name = "colRate";
+            this.colRate.ReadOnly = true;
+            this.colRate.Width = 150;
+            // 
+            // colTotal
+            // 
+            this.colTotal.DataPropertyName = "RoomRate";
+            this.colTotal.HeaderText = "Room  Rate";
+            this.colTotal.MinimumWidth = 8;
+            this.colTotal.Name = "colTotal";
+            this.colTotal.ReadOnly = true;
+            // 
+            // colTotals
+            // 
+            this.colTotals.DataPropertyName = "TotalAmount";
+            this.colTotals.HeaderText = "Total Amount";
+            this.colTotals.MinimumWidth = 8;
+            this.colTotals.Name = "colTotals";
+            this.colTotals.ReadOnly = true;
+            // 
+            // colPaymentStatus
+            // 
+            this.colPaymentStatus.DataPropertyName = "PaymentStatus";
+            this.colPaymentStatus.HeaderText = "Payment Statust";
+            this.colPaymentStatus.MinimumWidth = 8;
+            this.colPaymentStatus.Name = "colPaymentStatus";
+            this.colPaymentStatus.ReadOnly = true;
+            // 
+            // UserControlPayment
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControlBillsAndPayment);
             this.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Name = "UserControlBillsAndPayment";
+            this.Name = "UserControlPayment";
             this.Size = new System.Drawing.Size(1469, 531);
-            this.Load += new System.EventHandler(this.UserControlBillsAndPayment_Load);
             this.tabControlBillsAndPayment.ResumeLayout(false);
             this.tabPageSelectBilling.ResumeLayout(false);
             this.tabPageSelectBilling.PerformLayout();
@@ -645,12 +687,16 @@
         private System.Windows.Forms.TextBox txtBoxTotalAmount1;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label lblStatusPayment;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CheckInOut_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Client_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCheckInOutID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colReservationID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colClientName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colRoomNo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colRoomType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCheckIn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCheckOut;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colRate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTotal;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTotals;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPaymentStatus;
     }
 }

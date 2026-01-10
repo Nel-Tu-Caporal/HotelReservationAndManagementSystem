@@ -1,6 +1,6 @@
 ﻿namespace HotelReservationAndManagementSystem.User_Control
 {
-    partial class UserControlCheckInAndCheckOut
+    partial class UserControlCheckOut
     {
         /// <summary> 
         /// Required designer variable.
@@ -69,7 +69,7 @@
             this.tabControlCheckInCheckOut.SelectedIndex = 0;
             this.tabControlCheckInCheckOut.Size = new System.Drawing.Size(1023, 381);
             this.tabControlCheckInCheckOut.TabIndex = 0;
-            this.tabControlCheckInCheckOut.Enter += new System.EventHandler(this.tabControlCheckInCheckOut_Enter);
+          //this.tabControlCheckInCheckOut.Enter += new System.EventHandler(this.tabControlCheckInCheckOut_Enter);
             // 
             // tabPageCheckInList
             // 
@@ -348,8 +348,8 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "UserControlCheckInAndCheckOut";
             this.Size = new System.Drawing.Size(1102, 462);
-            this.Load += new System.EventHandler(this.UserControlCheckInAndCheckOut_Load);
-            this.Enter += new System.EventHandler(this.UserControlCheckInAndCheckOut_Enter);
+            this.Load += new System.EventHandler(this.UserControlCheckOut_Load);
+            this.Enter += new System.EventHandler(this.UserControlCheckOut_Enter);
             this.tabControlCheckInCheckOut.ResumeLayout(false);
             this.tabPageCheckInList.ResumeLayout(false);
             this.tabPageCheckInList.PerformLayout();

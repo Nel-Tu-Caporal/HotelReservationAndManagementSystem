@@ -57,8 +57,8 @@
             this.labelDateAndTime = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.userControlBillsAndPayment1 = new HotelReservationAndManagementSystem.User_Control.UserControlBillsAndPayment();
-            this.userControlCheckInAndCheckOut1 = new HotelReservationAndManagementSystem.User_Control.UserControlCheckInAndCheckOut(); // errpr part
+            this.userControlBillsAndPayment1 = new HotelReservationAndManagementSystem.User_Control.UserControlPayment();
+            this.userControlCheckInAndCheckOut1 = new HotelReservationAndManagementSystem.User_Control.UserControlCheckOut();
             this.userControlSetting1 = new HotelReservationAndManagementSystem.User_Control.UserControlSetting();
             this.userControlClient1 = new HotelReservationAndManagementSystem.User_Control.UserControlClient();
             this.userControlRoom1 = new HotelReservationAndManagementSystem.User_Control.UserControlRoom();
@@ -92,6 +92,7 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(307, 814);
             this.panel2.TabIndex = 0;
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
             // panel8
             // 
@@ -463,11 +464,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1480, 814);
-            this.Controls.Add(this.userControlBillsAndPayment1);
-            this.Controls.Add(this.userControlCheckInAndCheckOut1);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
+            this.Controls.Add(this.userControlCheckInAndCheckOut1);
+            this.Controls.Add(this.userControlBillsAndPayment1);
             this.Controls.Add(this.userControlSetting1);
             this.Controls.Add(this.userControlClient1);
             this.Controls.Add(this.userControlRoom1);
@@ -529,7 +530,7 @@
         private User_Control.UserControlClient userControlClient1;
         private User_Control.UserControlRoom userControlRoom1;
         private User_Control.UserControlReservation userControlReservation1;
-        private User_Control.UserControlCheckInAndCheckOut userControlCheckInAndCheckOut1;
-        private User_Control.UserControlBillsAndPayment userControlBillsAndPayment1;
+        private User_Control.UserControlCheckOut userControlCheckInAndCheckOut1;
+        private User_Control.UserControlPayment userControlBillsAndPayment1;
     }
 }

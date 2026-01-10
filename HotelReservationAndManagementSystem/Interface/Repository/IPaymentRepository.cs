@@ -12,6 +12,7 @@ namespace HotelReservationAndManagementSystem.Interface
         DataTable GetBillingList();
         DataTable GetBillingDetails(int reservationId);
         int GetClientIdFromReservation(int reservationId);
+        DataTable GetCheckedOutBillingList();
 
         bool AddPayment(
             int checkInOutId,

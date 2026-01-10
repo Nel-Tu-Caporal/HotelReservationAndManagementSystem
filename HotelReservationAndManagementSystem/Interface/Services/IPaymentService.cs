@@ -9,10 +9,11 @@ namespace HotelReservationAndManagementSystem.Interface.Services
 {
     public interface IPaymentService
     {
-        DataTable LoadBillingList();
-        DataTable LoadBillingDetails(int reservationId);
+        DataTable GetBillingList();
+        DataTable GetBillingDetails(int reservationId);
+        DataTable GetCheckedOutBillingList();
 
-        bool Pay(
+        bool ProcessPayment(
             int checkInOutId,
             int reservationId,
             decimal totalAmount,

@@ -20,7 +20,7 @@ namespace HotelReservationAndManagementSystem.Repo
 
         public DataTable GetBillingList()
         {
-            return _db.GetBillingDetails(0); // or separate query if needed
+            return _db.GetUnpaidBillingList();
         }
 
         public DataTable GetBillingDetails(int reservationId)
@@ -55,6 +55,10 @@ namespace HotelReservationAndManagementSystem.Repo
         public void UpdateCheckInOutPaymentStatus(int checkInOutId)
         {
             _db.UpdateCheckInOutPaymentStatus(checkInOutId);
+        }
+        public DataTable GetCheckedOutBillingList()
+        {
+            return _db.GetCheckedOutBillingList();
         }
     }
 }

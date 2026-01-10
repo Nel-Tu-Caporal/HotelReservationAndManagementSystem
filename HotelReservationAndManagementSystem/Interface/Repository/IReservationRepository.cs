@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,5 +29,7 @@ namespace HotelReservationAndManagementSystem.Interface
         void RoomTypeAndNo(string query, ComboBox comboBox);
 
         void UpdateReservationRoom(string roomNo, string free);
+
+        DataTable GetDataTable(string query);
     }
 }

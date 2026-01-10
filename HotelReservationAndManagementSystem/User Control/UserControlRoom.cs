@@ -1,4 +1,5 @@
 ﻿using HotelReservationAndManagementSystem.Interface.Service;
+using HotelReservationAndManagementSystem.Models;
 using HotelReservationAndManagementSystem.Models.Services;
 using HotelReservationAndManagementSystem.References;
 using HotelReservationAndManagementSystem.Repo;
@@ -14,21 +15,23 @@ using System.Windows.Forms;
 
 namespace HotelReservationAndManagementSystem.User_Control
 {
-    public partial class UserControlRoom : UserControl
-    {
-
+        public partial class UserControlRoom : UserControl
+        {
         private readonly IRoomService _roomService;
 
-        private string No = "", Free = "";
+        private string No = "";
+        private string Free = "";
+       
 
-        public UserControlRoom()
+        public UserControlRoom() : this(
+            new RoomService(new RoomRepository(new DBConnector1())))
+        {
+        }
+
+        public UserControlRoom(IRoomService roomService)
         {
             InitializeComponent();
-
-            
-            var db = new DBConnector1();
-            var repo = new RoomRepository(db);
-            _roomService = new RoomService(repo);
+            _roomService = roomService;
         }
         public void Clear()
         {
@@ -49,7 +52,18 @@ namespace HotelReservationAndManagementSystem.User_Control
             No = "";
         }
 
-       
+        private void BindSelectedRoom()
+        {
+            if (string.IsNullOrEmpty(No)) return;
+
+            // Load selected room data into controls
+            comboBoxType1.SelectedItem = comboBoxType.SelectedItem.ToString();
+            txtBoxPhoneNo1.Text = txtBoxPhoneNo.Text;
+            radioButtonYes1.Checked = Free == "Yes";
+            radioButtonNo1.Checked = Free == "No";
+        }
+
+
 
         private void tabPageRoom_Click(object sender, EventArgs e)
         {
@@ -78,26 +92,25 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void btnAddRoom_Click(object sender, EventArgs e)
         {
-
             Free = radioButtonYes.Checked ? "Yes" :
-            radioButtonNo.Checked ? "No" : "";
+                   radioButtonNo.Checked ? "No" : "";
 
-            if (comboBoxType.SelectedIndex == 0 || txtBoxPhoneNo.Text == "" || Free == "")
+            if (comboBoxType.SelectedIndex == 0 || string.IsNullOrWhiteSpace(txtBoxPhoneNo.Text) || string.IsNullOrEmpty(Free))
             {
                 MessageBox.Show("Please fill out all fields.");
                 return;
             }
 
             bool success = _roomService.AddRoom(
-    comboBoxType.SelectedItem.ToString(),
-    txtBoxPhoneNo.Text.Trim(),
-    radioButtonYes.Checked
-);
+                comboBoxType.SelectedItem.ToString(),
+                txtBoxPhoneNo.Text.Trim(),
+                radioButtonYes.Checked
+            );
 
-            if (success)
-                Clear();
+            if (success) Clear();
         }
-        
+
+
 
         private void radioButtonYes_CheckedChanged(object sender, EventArgs e)
         {
@@ -136,7 +149,17 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void txtBoxSearchRoom_TextChanged(object sender, EventArgs e)
         {
-            _roomService.LoadRooms(dataGridViewRoom);
+            if (string.IsNullOrWhiteSpace(txtBoxSearchRoomNo.Text))
+            {
+                _roomService.LoadRooms(dataGridViewRoom);
+                return;
+            }
+
+            if (!int.TryParse(txtBoxSearchRoomNo.Text, out int roomNo))
+                return;
+
+            dataGridViewRoom.DataSource =
+                _roomService.SearchRoomByNumber(roomNo);
 
         }
 
@@ -174,62 +197,54 @@ namespace HotelReservationAndManagementSystem.User_Control
 
         private void dataGridViewRoom_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0) return;
 
-            if(e.RowIndex != -1)
-            {
-                DataGridViewRow  row = dataGridViewRoom.Rows[e.RowIndex];
-                No = row.Cells[0].Value.ToString();
-                comboBoxType1.SelectedItem = row.Cells[1].Value.ToString(); 
-                txtBoxPhoneNo1.Text = row.Cells[2].Value.ToString();
-                Free = row.Cells[3].Value.ToString();
-                if(Free == "Yes")
-                    radioButtonYes1.Checked = true;
-                if (Free == "No")
-                    radioButtonNo1.Checked = true;
+            var row = dataGridViewRoom.Rows[e.RowIndex];
+            No = row.Cells[0].Value.ToString();
+            comboBoxType1.SelectedItem = row.Cells[1].Value.ToString();
+            txtBoxPhoneNo1.Text = row.Cells[2].Value.ToString();
+            Free = row.Cells[3].Value.ToString();
 
-            }
-
+            radioButtonYes1.Checked = Free == "Yes";
+            radioButtonNo1.Checked = Free == "No";
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-
             Free = radioButtonYes1.Checked ? "Yes" :
-           radioButtonNo1.Checked ? "No" : "";
+                   radioButtonNo1.Checked ? "No" : "";
 
-            if (No == "")
+            if (string.IsNullOrEmpty(No))
             {
                 MessageBox.Show("Please select a room first.");
                 return;
             }
 
             bool success = _roomService.UpdateRoom(
-    No,
-    comboBoxType1.SelectedItem.ToString(),
-    txtBoxPhoneNo1.Text.Trim(),
-    radioButtonYes1.Checked
-);
+                No,
+                comboBoxType1.SelectedItem.ToString(),
+                txtBoxPhoneNo1.Text.Trim(),
+                radioButtonYes1.Checked
+            );
 
-            if (success)
-                Clear1();
+            if (success) Clear1();
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-
-            if (No == "")
+            if (string.IsNullOrEmpty(No))
             {
                 MessageBox.Show("Please select a room first.");
                 return;
             }
 
-            if (MessageBox.Show("Delete this room?", "Confirm",
-                MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Delete this room?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 if (_roomService.DeleteRoom(No))
                     Clear1();
             }
         }
+
 
         private void dataGridViewRoom_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {

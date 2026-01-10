@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,19 +10,30 @@ namespace HotelReservationAndManagementSystem.Interface.Services
 {
     public interface IReservationService
     {
-        bool AddReservation(string roomType, int roomNo, int clientId,
-                            DateTime checkIn, DateTime checkOut);
+        bool AddReservation(string type, int roomNo, int clientId, DateTime inDate, DateTime outDate);
 
-        void LoadReservations(DataGridView dgv);
+       
+        List<int> GetAvailableRoomNumbers(string roomType, string oldRoomNo);
 
-        void SearchByClient(string clientId, DataGridView dgv);
+        DataTable GetReservations();
 
-        bool UpdateReservation(int reservationId, string roomType, int roomNo, int clientId,
-                               DateTime checkIn, DateTime checkOut, string oldRoomNo);
 
-        bool CheckIn(int reservationId, string clientName, int roomNo,
-                     string roomType, DateTime expectedCheckOut);
+        DataTable SearchReservationsByClient(int clientId);
 
-        void LoadRoomNumbers(string roomType, string oldRoomNo, ComboBox comboBox);
+        bool UpdateReservation(int reservationId, string type, int roomNo, int clientId, DateTime inDate, DateTime outDate, string oldRoomNo);
+
+        bool CheckIn(
+    int reservationId,
+    string clientName,
+    int roomNumber,
+    string roomType,
+    decimal roomRate,
+    DateTime checkInDate,
+    DateTime expectedOutDate
+);
+        bool CanModifyReservation(int reservationId);
+        bool ClientExists(int clientId);
+        bool CancelReservation(int reservationId, string roomNo);
     }
 }
+

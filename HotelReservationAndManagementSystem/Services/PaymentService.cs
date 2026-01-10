@@ -17,18 +17,22 @@ namespace HotelReservationAndManagementSystem.Models.Services
         {
             _repo = repo;
         }
+        public DataTable GetCheckedOutBillingList()
+        {
+            return _repo.GetCheckedOutBillingList();
+        }
 
-        public DataTable LoadBillingList()
+        public DataTable GetBillingList()
         {
             return _repo.GetBillingList();
         }
 
-        public DataTable LoadBillingDetails(int reservationId)
+        public DataTable GetBillingDetails(int reservationId)
         {
             return _repo.GetBillingDetails(reservationId);
         }
 
-        public bool Pay(
+        public bool ProcessPayment(
             int checkInOutId,
             int reservationId,
             decimal totalAmount,
@@ -39,12 +43,12 @@ namespace HotelReservationAndManagementSystem.Models.Services
                 return false;
 
             int clientId = _repo.GetClientIdFromReservation(reservationId);
-            if (clientId == 0)
+            if (clientId <= 0)
                 return false;
 
             decimal change = amountPaid - totalAmount;
 
-            bool saved = _repo.AddPayment(
+            bool success = _repo.AddPayment(
                 checkInOutId,
                 reservationId,
                 clientId,
@@ -53,11 +57,12 @@ namespace HotelReservationAndManagementSystem.Models.Services
                 change,
                 paymentMethod);
 
-            if (!saved)
+            if (!success)
                 return false;
 
             _repo.UpdateCheckInOutPaymentStatus(checkInOutId);
             return true;
         }
+
     }
 }

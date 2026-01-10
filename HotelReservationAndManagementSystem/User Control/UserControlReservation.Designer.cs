@@ -56,7 +56,6 @@
             this.lblSearchReservation = new System.Windows.Forms.Label();
             this.tabPageUpdateAndCancelReservation = new System.Windows.Forms.TabPage();
             this.btnCheckInReservation = new System.Windows.Forms.Button();
-            this.btnCancelReservation = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.dateTimePickerOut1 = new System.Windows.Forms.DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
@@ -69,6 +68,7 @@
             this.lblRoomNo1 = new System.Windows.Forms.Label();
             this.lblRoomType1 = new System.Windows.Forms.Label();
             this.lblUpdateCancel = new System.Windows.Forms.Label();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.tabControlReservation.SuspendLayout();
             this.tabPageAddReservation.SuspendLayout();
             this.tabPageSearchRervation.SuspendLayout();
@@ -176,7 +176,7 @@
             this.comboBoxType.Name = "comboBoxType";
             this.comboBoxType.Size = new System.Drawing.Size(254, 31);
             this.comboBoxType.TabIndex = 22;
-            this.comboBoxType.SelectedIndexChanged += new System.EventHandler(this.comboBoxRoomType_SelectedIndexChanged);
+            this.comboBoxType.SelectedIndexChanged += new System.EventHandler(this.comboBoxType_SelectedIndexChanged);
             // 
             // txtBoxClientID
             // 
@@ -184,7 +184,6 @@
             this.txtBoxClientID.Name = "txtBoxClientID";
             this.txtBoxClientID.Size = new System.Drawing.Size(254, 32);
             this.txtBoxClientID.TabIndex = 21;
-            this.txtBoxClientID.TextChanged += new System.EventHandler(this.txtBoxClientID_TextChanged);
             // 
             // lblClientID
             // 
@@ -277,7 +276,6 @@
             this.dataGridViewReservation.Size = new System.Drawing.Size(816, 210);
             this.dataGridViewReservation.TabIndex = 13;
             this.dataGridViewReservation.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewReservation_CellClick);
-            this.dataGridViewReservation.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewReservation_CellContentClick);
             // 
             // Column1
             // 
@@ -365,8 +363,8 @@
             // 
             // tabPageUpdateAndCancelReservation
             // 
+            this.tabPageUpdateAndCancelReservation.Controls.Add(this.btnCancel);
             this.tabPageUpdateAndCancelReservation.Controls.Add(this.btnCheckInReservation);
-            this.tabPageUpdateAndCancelReservation.Controls.Add(this.btnCancelReservation);
             this.tabPageUpdateAndCancelReservation.Controls.Add(this.label1);
             this.tabPageUpdateAndCancelReservation.Controls.Add(this.dateTimePickerOut1);
             this.tabPageUpdateAndCancelReservation.Controls.Add(this.label3);
@@ -403,20 +401,6 @@
             this.btnCheckInReservation.Text = "Check In Reservation";
             this.btnCheckInReservation.UseVisualStyleBackColor = false;
             this.btnCheckInReservation.Click += new System.EventHandler(this.btnCheckInReservation_Click);
-            // 
-            // btnCancelReservation
-            // 
-            this.btnCancelReservation.BackColor = System.Drawing.Color.Brown;
-            this.btnCancelReservation.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnCancelReservation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancelReservation.ForeColor = System.Drawing.Color.White;
-            this.btnCancelReservation.Location = new System.Drawing.Point(313, 278);
-            this.btnCancelReservation.Name = "btnCancelReservation";
-            this.btnCancelReservation.Size = new System.Drawing.Size(144, 52);
-            this.btnCancelReservation.TabIndex = 40;
-            this.btnCancelReservation.Text = "Cancel";
-            this.btnCancelReservation.UseVisualStyleBackColor = false;
-            this.btnCancelReservation.Click += new System.EventHandler(this.btnCheckInReservation_Click);
             // 
             // label1
             // 
@@ -480,7 +464,6 @@
             this.comboBoxType1.Size = new System.Drawing.Size(294, 31);
             this.comboBoxType1.TabIndex = 34;
             this.comboBoxType1.SelectedIndexChanged += new System.EventHandler(this.comboBoxType1_SelectedIndexChanged);
-            this.comboBoxType1.TextChanged += new System.EventHandler(this.comboBoxType1_TextChanged);
             // 
             // txtBoxClientID1
             // 
@@ -541,6 +524,20 @@
             this.lblUpdateCancel.TabIndex = 28;
             this.lblUpdateCancel.Text = "Update And Cancel Reservation:";
             // 
+            // btnCancel
+            // 
+            this.btnCancel.BackColor = System.Drawing.Color.Brown;
+            this.btnCancel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancel.ForeColor = System.Drawing.Color.White;
+            this.btnCancel.Location = new System.Drawing.Point(329, 278);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(144, 52);
+            this.btnCancel.TabIndex = 42;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // UserControlReservation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 23F);
@@ -599,7 +596,6 @@
         private System.Windows.Forms.Label lblRoomNo1;
         private System.Windows.Forms.Label lblRoomType1;
         private System.Windows.Forms.Label lblUpdateCancel;
-        private System.Windows.Forms.Button btnCancelReservation;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
@@ -608,5 +604,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.Button btnCheckInReservation;
+        private System.Windows.Forms.Button btnCancel;
     }
 }

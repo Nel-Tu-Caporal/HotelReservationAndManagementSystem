@@ -16,22 +16,25 @@ using System.Windows.Forms;
 namespace HotelReservationAndManagementSystem.User_Control
 {
 
-    
+
     public partial class UserControlSetting : UserControl
     {
-        
-
         private string ID = "";
-        private IUserService _userService;
-        
+        private readonly IUserService _userService;
 
-         public UserControlSetting()
+        // REQUIRED for WinForms Designer
+        public UserControlSetting()
         {
             InitializeComponent();
-            _userService = new UserService(
-    new DBConnector1()
-);
         }
+
+        // DI constructor (used at runtime)
+        public UserControlSetting(IUserService userService)
+        {
+            InitializeComponent();
+            _userService = userService;
+        }
+
         public void Clear()
         {
             txtBoxUserName.Clear();

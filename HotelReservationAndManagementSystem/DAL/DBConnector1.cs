@@ -14,7 +14,7 @@
 
 namespace HotelReservationAndManagementSystem.References
     {
-        public class DBConnector1 : IUserRepository 
+        public class DBConnector1 
     {
             private bool check = false;
 
@@ -310,71 +310,48 @@ namespace HotelReservationAndManagementSystem.References
                 return true;
             }
 
-            public bool AddRoom(string Type, string Phone, string Free)
+        public bool AddRoom(string type, string phone, decimal rate, string free)
+        {
+            string query = @"
+INSERT INTO Room_Table (Room_Type, Room_Phone, Room_Rate, Room_Free)
+VALUES (@Type, @Phone, @Rate, @Free)";
+
+            using (SqlConnection con = GetConnection())
+            using (SqlCommand cmd = new SqlCommand(query, con))
             {
-                string cmdText =
-                    "INSERT INTO Room_Table (Room_Type, Room_Phone, Room_Free) " +
-                    "VALUES (@Type, @Phone, @Free)";
+                cmd.Parameters.Add("@Type", SqlDbType.VarChar).Value = type;
+                cmd.Parameters.Add("@Phone", SqlDbType.VarChar).Value = phone;
+                cmd.Parameters.Add("@Rate", SqlDbType.Decimal).Value = rate;
+                cmd.Parameters.Add("@Free", SqlDbType.VarChar).Value = free;
 
-                using (SqlConnection connection = GetConnection())
-                using (SqlCommand sqlCommand = new SqlCommand(cmdText, connection))
-                {
-                    sqlCommand.Parameters.Add("@Type", SqlDbType.VarChar, 6).Value = Type;
-                    sqlCommand.Parameters.Add("@Phone", SqlDbType.VarChar, 15).Value = Phone;
-                    sqlCommand.Parameters.Add("@Free", SqlDbType.VarChar, 3).Value = Free;
-
-                    try
-                    {
-                        sqlCommand.ExecuteNonQuery();
-                        MessageBox.Show("Added Successfully!", "Room Added");
-                        return true;
-                    }
-                    catch (SqlException ex)
-                    {
-                        if (ex.Number == 2627)
-                            MessageBox.Show("Phone No. already exists.");
-                        else
-                            MessageBox.Show(ex.Message);
-
-                        return false;
-                    }
-                }
+                return cmd.ExecuteNonQuery() > 0;
             }
+        }
 
-            public bool UpdateRoom(string No, string Type, string Phone, string Free)
+        public bool UpdateRoom(string no, string type, string phone, decimal rate, string free)
+        {
+            string query = @"
+UPDATE Room_Table
+SET Room_Type = @Type,
+    Room_Phone = @Phone,
+    Room_Rate = @Rate,
+    Room_Free = @Free
+WHERE Room_Number = @No";
+
+            using (SqlConnection con = GetConnection())
+            using (SqlCommand cmd = new SqlCommand(query, con))
             {
-                string cmdText = "UPDATE Room_Table SET Room_Type = @RoomType, Room_Phone = @RoomPhone, Room_Free = @RoomFree WHERE Room_Number = @RoomNumber";
-                SqlConnection connection = GetConnection();
-                SqlCommand sqlCommand = new SqlCommand(cmdText, connection);
-                sqlCommand.CommandType = CommandType.Text;
-                sqlCommand.Parameters.Add("@RoomNumber", SqlDbType.Int).Value = No;
-                sqlCommand.Parameters.Add("@RoomType", SqlDbType.VarChar).Value = Type;
-                sqlCommand.Parameters.Add("@RoomPhone", SqlDbType.VarChar).Value = Phone;
-                sqlCommand.Parameters.Add("@RoomFree", SqlDbType.VarChar).Value = Free;
-                try
-                {
-                    sqlCommand.ExecuteNonQuery();
-                    MessageBox.Show("Updated Successfully!", "Room Updated", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                }
-                catch (SqlException ex)
-                {
-                    if (ex.Number == 2627)
-                    {
-                        MessageBox.Show("Phone No. already exist.", "Phone No.", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error! \n" + ex.ToString(), "Update Room", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                    }
+                cmd.Parameters.Add("@No", SqlDbType.Int).Value = int.Parse(no);
+                cmd.Parameters.Add("@Type", SqlDbType.VarChar).Value = type;
+                cmd.Parameters.Add("@Phone", SqlDbType.VarChar).Value = phone;
+                cmd.Parameters.Add("@Rate", SqlDbType.Decimal).Value = rate;
+                cmd.Parameters.Add("@Free", SqlDbType.VarChar).Value = free;
 
-                    return false;
-                }
-
-                connection.Close();
-                return true;
+                return cmd.ExecuteNonQuery() > 0;
             }
+        }
 
-            public bool DeleteRoom(string No)
+        public bool DeleteRoom(string No)
             {
                 string cmdText = "DELETE FROM Room_Table WHERE Room_Number = @RoomNumber";
                 SqlConnection connection = GetConnection();
@@ -648,118 +625,134 @@ WHERE c.Status = 'CheckedIn'";
 
 
 
-        public bool CheckOutReservation(int ReservationID)
+        public bool CheckOutReservation(int reservationId)
+        {
+            using (SqlConnection connection = GetConnection())
             {
-                using (SqlConnection connection = GetConnection())
+                SqlTransaction transaction = connection.BeginTransaction();
+
+                try
                 {
-                    SqlTransaction transaction = connection.BeginTransaction();
+                    int checkInOutId;
+                    int roomNumber;
+                    decimal roomRate;
+                    DateTime checkInDate;
+                    string roomType;
 
-                    try
+                    // 1️⃣ Get active check-in
+                    string selectQuery = @"
+SELECT 
+    CheckInOut_ID,
+    Room_Number,
+    RoomRate,
+    Room_Type,
+    CheckInDate
+FROM CheckInOut_Table
+WHERE Reservation_ID = @ReservationID
+  AND Status = 'CheckedIn'";
+
+                    using (SqlCommand selectCmd =
+                        new SqlCommand(selectQuery, connection, transaction))
                     {
-                        int checkInOutId;
-                        int roomNumber;
-                        decimal roomRate;
-                        DateTime checkInDate;
+                        selectCmd.Parameters.Add("@ReservationID", SqlDbType.Int)
+                            .Value = reservationId;
 
-                        // 1️⃣ Get active check-in
-                        string selectQuery = @"
-    SELECT 
-        CheckInOut_ID,
-        Room_Number,
-        RoomRate,
-        CheckInDate
-    FROM CheckInOut_Table
-    WHERE Reservation_ID = @ReservationID
-      AND Status = 'CheckedIn'";
-
-                        using (SqlCommand selectCmd = new SqlCommand(selectQuery, connection, transaction))
+                        using (SqlDataReader reader = selectCmd.ExecuteReader())
                         {
-                            selectCmd.Parameters.Add("@ReservationID", SqlDbType.Int).Value = ReservationID;
+                            if (!reader.Read())
+                                return false;
 
-                            using (SqlDataReader reader = selectCmd.ExecuteReader())
-                            {
-                                if (!reader.Read())
-                                    throw new Exception("No active check-in found.");
-
-                                checkInOutId = Convert.ToInt32(reader["CheckInOut_ID"]);
-                                roomNumber = Convert.ToInt32(reader["Room_Number"]);
-                                roomRate = Convert.ToDecimal(reader["RoomRate"]);
-                                checkInDate = Convert.ToDateTime(reader["CheckInDate"]);
-                            }
+                            checkInOutId = Convert.ToInt32(reader["CheckInOut_ID"]);
+                            roomNumber = Convert.ToInt32(reader["Room_Number"]);
+                            roomRate = Convert.ToDecimal(reader["RoomRate"]);
+                            roomType = reader["Room_Type"].ToString();
+                            checkInDate = Convert.ToDateTime(reader["CheckInDate"]);
                         }
-
-                        // 2️⃣ Compute bill
-                        DateTime checkOutDate = DateTime.Now;
-                        int totalDays = Math.Max(1, (int)Math.Ceiling((checkOutDate - checkInDate).TotalDays));
-                        decimal totalAmount = totalDays * roomRate;
-
-                        // 3️⃣ Update CheckInOut
-                        string updateCheckInOut = @"
-    UPDATE CheckInOut_Table SET
-        ActualCheckOutDate = @CheckOutDate,
-        TotalDays = @TotalDays,
-        TotalAmount = @TotalAmount,
-        PaymentStatus = 'Unpaid',
-        Status = 'CheckedOut'
-    WHERE CheckInOut_ID = @ID";
-
-                        using (SqlCommand cmd = new SqlCommand(updateCheckInOut, connection, transaction))
-                        {
-                            cmd.Parameters.Add("@CheckOutDate", SqlDbType.DateTime).Value = checkOutDate;
-                            cmd.Parameters.Add("@TotalDays", SqlDbType.Int).Value = totalDays;
-                            cmd.Parameters.Add("@TotalAmount", SqlDbType.Decimal).Value = totalAmount;
-                            cmd.Parameters.Add("@ID", SqlDbType.Int).Value = checkInOutId;
-                            cmd.ExecuteNonQuery();
-                        }
-
-                        // 4️⃣ Free the room
-                        string freeRoom = @"
-    UPDATE Room_Table
-    SET Room_Free = 'Yes'
-    WHERE Room_Number = @RoomNo";
-
-                        using (SqlCommand cmd = new SqlCommand(freeRoom, connection, transaction))
-                        {
-                            cmd.Parameters.Add("@RoomNo", SqlDbType.Int).Value = roomNumber;
-                            cmd.ExecuteNonQuery();
-                        }
-
-                        // 5️⃣ ✅ CLOSE THE RESERVATION (THIS FIXES YOUR BUG)
-                        string closeReservation = @"
-    UPDATE Reservation_Table
-    SET Reservation_Status = 'Completed'
-    WHERE Reservation_ID = @ReservationID";
-
-                        using (SqlCommand cmd = new SqlCommand(closeReservation, connection, transaction))
-                        {
-                            cmd.Parameters.Add("@ReservationID", SqlDbType.Int).Value = ReservationID;
-                            cmd.ExecuteNonQuery();
-                        }
-
-                        transaction.Commit();
-
-                        MessageBox.Show(
-                            "Check-Out Successful!",
-                            "Check-Out",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
-
-                        return true;
                     }
-                    catch (Exception ex)
+
+                    // 2️⃣ SAFETY FIX — assign rate if missing
+                    if (roomRate <= 0)
                     {
-                        transaction.Rollback();
-                        MessageBox.Show(
-                            "Check-Out failed:\n" + ex.Message,
-                            "Check-Out Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-
-                        return false;
+                        roomRate =
+                            roomType == "Single" ? 1000 :
+                            roomType == "Double" ? 1500 :
+                            roomType == "Family" ? 2500 :
+                            roomType == "Suite" ? 4000 : 1000;
                     }
+
+                    // 3️⃣ Compute bill
+                    DateTime checkOutDate = DateTime.Now;
+                    int totalDays = Math.Max(1,
+                        (int)Math.Ceiling((checkOutDate - checkInDate).TotalDays));
+                    decimal totalAmount = totalDays * roomRate;
+
+                    // 4️⃣ Update CheckInOut
+                    string updateCheckInOut = @"
+UPDATE CheckInOut_Table SET
+    ActualCheckOutDate = @CheckOutDate,
+    TotalDays = @TotalDays,
+    RoomRate = @RoomRate,
+    TotalAmount = @TotalAmount,
+    PaymentStatus = 'Unpaid',
+    Status = 'CheckedOut'
+WHERE CheckInOut_ID = @ID";
+
+                    using (SqlCommand cmd =
+                        new SqlCommand(updateCheckInOut, connection, transaction))
+                    {
+                        cmd.Parameters.Add("@CheckOutDate", SqlDbType.DateTime)
+                            .Value = checkOutDate;
+                        cmd.Parameters.Add("@TotalDays", SqlDbType.Int)
+                            .Value = totalDays;
+                        cmd.Parameters.Add("@RoomRate", SqlDbType.Decimal)
+                            .Value = roomRate;
+                        cmd.Parameters.Add("@TotalAmount", SqlDbType.Decimal)
+                            .Value = totalAmount;
+                        cmd.Parameters.Add("@ID", SqlDbType.Int)
+                            .Value = checkInOutId;
+
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // 5️⃣ Free room
+                    string freeRoom = @"
+UPDATE Room_Table
+SET Room_Free = 'Yes'
+WHERE Room_Number = @RoomNo";
+
+                    using (SqlCommand cmd =
+                        new SqlCommand(freeRoom, connection, transaction))
+                    {
+                        cmd.Parameters.Add("@RoomNo", SqlDbType.Int)
+                            .Value = roomNumber;
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // 6️⃣ Close reservation
+                    string closeReservation = @"
+UPDATE Reservation_Table
+SET Reservation_Status = 'Completed'
+WHERE Reservation_ID = @ReservationID";
+
+                    using (SqlCommand cmd =
+                        new SqlCommand(closeReservation, connection, transaction))
+                    {
+                        cmd.Parameters.Add("@ReservationID", SqlDbType.Int)
+                            .Value = reservationId;
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    return false;
                 }
             }
-            public bool CancelReservation(int reservationId)
+        }
+        public bool CancelReservation(int reservationId)
             {
                 using (SqlConnection connection = GetConnection())
                 {
@@ -1015,5 +1008,90 @@ WHERE c.Status = 'CheckedIn'";
                     return result != null ? Convert.ToInt32(result) : 0;
                 }
             }
+        public DataTable ExecuteQuery(string query)
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection con = GetConnection()) // works even if GetConnection is private
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                da.Fill(dt);
+            }
+            return dt;
         }
+        public DataTable GetDataTable(string query)
+        {
+            SqlConnection con = GetConnection();
+            SqlDataAdapter da = new SqlDataAdapter(query, con);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            con.Close();
+            return dt;
+        }
+        public DataTable GetUnpaidBillingList()
+        {
+            DataTable table = new DataTable();
+
+            string query = @"
+SELECT
+    CheckInOut_ID,
+    Reservation_ID,
+    ClientName,
+    Room_Number,
+    Room_Type,
+    CheckInDate,
+    ActualCheckOutDate,
+    TotalDays,
+    RoomRate,
+    TotalAmount,
+    PaymentStatus
+FROM CheckInOut_Table
+WHERE PaymentStatus = 'Unpaid'
+  AND Status = 'CheckedOut'
+  AND ActualCheckOutDate IS NOT NULL";
+
+            using (SqlConnection con = GetConnection())
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                da.Fill(table);
+            }
+
+            return table;
+        }
+        public DataTable GetCheckedOutBillingList()
+        {
+            DataTable table = new DataTable();
+
+            string query = @"
+        SELECT
+            CheckInOut_ID,
+            Reservation_ID,
+            ClientName,
+            Room_Number,
+            Room_Type,
+            CheckInDate,
+            ActualCheckOutDate,
+            TotalDays,
+            RoomRate,
+            TotalAmount,
+            PaymentStatus
+        FROM CheckInOut_Table
+        WHERE Status = 'CheckedOut'
+          AND ActualCheckOutDate IS NOT NULL
+    ";
+
+            using (SqlConnection con = GetConnection())
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+            {
+                da.Fill(table);
+            }
+
+            return table;
+        }
+
     }
+
+}
+

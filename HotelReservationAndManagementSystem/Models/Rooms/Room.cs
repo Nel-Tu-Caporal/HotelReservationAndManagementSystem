@@ -6,33 +6,25 @@ using System.Threading.Tasks;
 
 namespace HotelReservationAndManagementSystem.Models
 {
-    public abstract class Room
+    public class Room
     {
-        public int RoomNumber { get; set; }
-        public decimal Price { get; protected set; }
-        public string Status { get; protected set; }
+        public string RoomType { get; }
+        public decimal RoomRate { get; }
 
-        protected Room()
+        public Room(string type)
         {
-            Status = "Available";
-        }
+            RoomType = type;
 
-        public bool IsAvailable()
-        {
-            return Status == "Available";
+            if (type == "Single")
+                RoomRate = 1000m;
+            else if (type == "Double")
+                RoomRate = 1500m;
+            else if (type == "Family")
+                RoomRate = 2500m;
+            else if (type == "Suite")
+                RoomRate = 4000m;
+            else
+                RoomRate = 1000m;
         }
-
-        public void MarkAsOccupied()
-        {
-            Status = "Occupied";
-        }
-
-        public void MarkAsAvailable()
-        {
-            Status = "Available";
-        }
-
-        public abstract string RoomType { get; }
-        public abstract decimal GetPricePerNight();
     }
 }
